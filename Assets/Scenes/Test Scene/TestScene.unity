@@ -330,12 +330,20 @@ MonoBehaviour:
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1039,6 +1047,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7671312196939594498, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
   m_PrefabInstance: {fileID: 1049050237}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1695829787 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7671312196939594496, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
+  m_PrefabInstance: {fileID: 1049050237}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e46b45cd7959c16429c1609997d405b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1755183485
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,26 +2331,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NewMeleeEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 6812212292482767651, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6812212292482767658, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
-      propertyPath: m_Size.x
-      value: 0.8143276
-      objectReference: {fileID: 0}
-    - target: {fileID: 6812212292482767658, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
-      propertyPath: m_Size.y
-      value: 0.35614988
-      objectReference: {fileID: 0}
-    - target: {fileID: 6812212292482767658, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.011745275
-      objectReference: {fileID: 0}
-    - target: {fileID: 6812212292482767658, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.0003269627
-      objectReference: {fileID: 0}
+    - target: {fileID: 6812212292482767659, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1695829787}
     - target: {fileID: 6812212292482767662, guid: 82e00be2945a0b54f838b692f6008bba, type: 3}
       propertyPath: m_RootOrder
       value: 4

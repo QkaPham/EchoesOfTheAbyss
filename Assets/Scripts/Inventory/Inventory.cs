@@ -16,6 +16,12 @@ public class Inventory : ScriptableObject
 
     public static event Action<Item, int> OnInventoryChange;
 
+
+    private void OnEnable()
+    {
+        //UpgradePanel.OnNextRound += SortItems;
+    }
+
     public void Init()
     {
         Items = new List<Item>();
@@ -29,14 +35,23 @@ public class Inventory : ScriptableObject
     public bool Add(Item item)
     {
         int index = Items.FindIndex(item => item == null);
+
         if (index >= 0)
         {
             Items[index] = item;
             OnInventoryChange?.Invoke(item, index);
             return true;
         }
-        return false;
+        else
+        {
+            Items.Add(item);
+            Debug.Log(Items.Count - 1);
+            OnInventoryChange?.Invoke(item, Items.Count - 1);
+            return true;
+        }
+        // return false;
     }
+
     public void Remove(int index)
     {
         var item = Items[index];
@@ -50,5 +65,18 @@ public class Inventory : ScriptableObject
         currency.Gain(item.RecyclePrice);
         OnInventoryChange?.Invoke(null, index);
         Items[index] = null;
+    }
+
+    private void SortItems()
+    {
+        for (int i = 0; i < Items.Count; i++)
+        {
+            if (Items.Count == size) break;
+            if (Items[i] == null)
+            {
+                Items.RemoveAt(i);
+                i--;
+            }
+        }
     }
 }
