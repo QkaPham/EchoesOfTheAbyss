@@ -693,6 +693,8 @@ MonoBehaviour:
   rb: {fileID: 7671312196939594501}
   animator: {fileID: 1695829787}
   rootTransform: {fileID: 7671312195056315809}
+  playerBulletPrefabs: {fileID: 5207439744757054850, guid: d70e8063d283bac4185f363243cc4446, type: 3}
+  firePoint: {fileID: 2081750297}
   TargetPoint: {fileID: 1545370793}
   currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
   stats: {fileID: 11400000, guid: b0e5917c561a06b4c825554028170112, type: 2}
@@ -701,8 +703,6 @@ MonoBehaviour:
   stamina: {fileID: 11400000, guid: 41f00deacf68db94b87cde362ab9aae7, type: 2}
   inventory: {fileID: 11400000, guid: fd9a5ea169fa89147a91b7184d5a40e3, type: 2}
   equipment: {fileID: 11400000, guid: 97cde2f6e3cf43b4d87fa1bc9c4f3ade, type: 2}
-  playerBulletPrefabs: {fileID: 5207439744757054850, guid: d70e8063d283bac4185f363243cc4446, type: 3}
-  firePoint: {fileID: 2081750297}
 --- !u!95 &1695829787
 Animator:
   serializedVersion: 5
@@ -723,6 +723,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!70 &7671312196939594500
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

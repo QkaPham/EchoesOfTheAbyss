@@ -335,7 +335,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
+  player: {fileID: 0}
   currentState: 0
+  nextState: 0
   FlipTransform: {fileID: 6812212291574360863}
   fragment: 5000
   items:
@@ -428,3 +430,4 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

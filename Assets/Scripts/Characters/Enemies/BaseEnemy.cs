@@ -19,7 +19,7 @@ public abstract class BaseEnemy : MonoBehaviour
     public string enemyName;
     [TextArea]
     public string enemyDescription;
-
+    [SerializeField]
     protected Player player;
     protected Vector3 playerPositon => player.transform.position;
     protected float playerDistance => Vector3.Distance(playerPositon, transform.position);
@@ -32,7 +32,10 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField]
     protected EnemyState currentState;
     public EnemyState CurrentState { get => currentState; set => currentState = value; }
-    public EnemyState NextState { get; set; }
+
+    [SerializeField]
+    protected EnemyState nextState;
+    public EnemyState NextState { get => nextState; set => nextState = value; }
 
     [SerializeField]
     protected Transform FlipTransform;
@@ -79,7 +82,8 @@ public abstract class BaseEnemy : MonoBehaviour
         health.Init(this);
         transform.position = position;
         this.fragmentPool = fragmentPool;
-        this.collectibleItemPool = collectibleItemPool; 
+        this.collectibleItemPool = collectibleItemPool;
+        animator.Play("Idle", -1, 0);
         NextState = EnemyState.Idle;
     }
 

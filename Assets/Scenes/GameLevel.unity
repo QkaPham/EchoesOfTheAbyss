@@ -189,18 +189,12 @@ MonoBehaviour:
   enemyTypes:
   - enemyPool: {fileID: 1364777809}
     spawnRate: 0.1
-  - enemyPool: {fileID: 119055166}
-    spawnRate: 0.1
-  - enemyPool: {fileID: 1513383561}
-    spawnRate: 0.1
-  - enemyPool: {fileID: 1471738002}
-    spawnRate: 0.1
   fragmentPool: {fileID: 1652442647}
   itemPool: {fileID: 476505109}
   spawnDistance: 1
   Offset: 1
   mainCamera: {fileID: 1319761096}
-  enemySpawnTime: 1
+  enemySpawnTime: 3
 --- !u!4 &113934209
 Transform:
   m_ObjectHideFlags: 0
@@ -1089,12 +1083,20 @@ MonoBehaviour:
   m_Dithering: 0
   m_ClearDepth: 1
   m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
   m_UseScreenCoordOverride: 0
   m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &1364777807
 GameObject:
   m_ObjectHideFlags: 0
@@ -1276,7 +1278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRound: 0
   roundNumber: 5
-  roundDuration: 20
+  roundDuration: 60
   roundTimer: 0
 --- !u!1 &1652442646
 GameObject:
