@@ -83,7 +83,6 @@ public abstract class BaseEnemy : MonoBehaviour
         transform.position = position;
         this.fragmentPool = fragmentPool;
         this.collectibleItemPool = collectibleItemPool;
-        animator.Play("Idle", -1, 0);
         NextState = EnemyState.Idle;
     }
 

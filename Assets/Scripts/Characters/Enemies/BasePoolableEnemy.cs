@@ -30,7 +30,6 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     public override void Destroy()
     {
         Drop();
-        nextState = EnemyState.Idle;
         Release();
     }
 

@@ -189,6 +189,12 @@ MonoBehaviour:
   enemyTypes:
   - enemyPool: {fileID: 1364777809}
     spawnRate: 0.1
+  - enemyPool: {fileID: 1513383561}
+    spawnRate: 0.1
+  - enemyPool: {fileID: 119055166}
+    spawnRate: 0.1
+  - enemyPool: {fileID: 1471738002}
+    spawnRate: 0.1
   fragmentPool: {fileID: 1652442647}
   itemPool: {fileID: 476505109}
   spawnDistance: 1
