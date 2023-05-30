@@ -111,29 +111,29 @@ public class UpgradePanel : BasePanel
         if (isActive)
         {
             PreventLoseFocus();
-        }
-        if (InputManager.Instance.LevelUp)
-        {
-            OnLevelUpButtonClick();
-        }
-        if (InputManager.Instance.NextRound)
-        {
-            OnNextRoundButtonClick();
-        }
-        if (InputManager.Instance.Equip)
-        {
-            if (SelectedSlotType == SlotType.InventorySlot)
+            if (InputManager.Instance.LevelUp)
             {
-                OnEquipButtonClick();
+                OnLevelUpButtonClick();
             }
-            else if (SelectedSlotType == SlotType.EquipmentSlot)
+            if (InputManager.Instance.NextRound)
             {
-                OnUnequipButtonClick();
+                OnNextRoundButtonClick();
             }
-        }
-        if (InputManager.Instance.Recycle)
-        {
-            OnRecycleButtonClick();
+            if (InputManager.Instance.Equip)
+            {
+                if (SelectedSlotType == SlotType.InventorySlot)
+                {
+                    OnEquipButtonClick();
+                }
+                else if (SelectedSlotType == SlotType.EquipmentSlot)
+                {
+                    OnUnequipButtonClick();
+                }
+            }
+            if (InputManager.Instance.Recycle)
+            {
+                OnRecycleButtonClick();
+            }
         }
     }
 
