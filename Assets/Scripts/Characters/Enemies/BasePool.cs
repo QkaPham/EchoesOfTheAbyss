@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+[Serializable]
 public abstract class BasePool<T> : MonoBehaviour where T : MonoBehaviour, PoolableObject<T>
 {
     [SerializeField]

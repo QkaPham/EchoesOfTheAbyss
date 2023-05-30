@@ -10,7 +10,13 @@ public enum EnemyState
     Attack,
     Hurt,
     Death,
-    Aiming = 5
+    Aiming = 5,
+
+    FireBullet,
+    RushAim,
+    Rush,
+    LaserAim,
+    ShotLaser
 }
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(Animator))]
@@ -27,6 +33,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected Rigidbody2D rb;
     protected Animator animator;
+    [SerializeField]
     protected EnemyHealth health;
 
     [SerializeField]
@@ -68,6 +75,10 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void OnDisable()
     {
 
+    }
+    protected virtual void Start()
+    {
+        
     }
 
     protected virtual void Update()
