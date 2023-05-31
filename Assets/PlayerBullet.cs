@@ -18,6 +18,7 @@ public class PlayerBullet : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -49,8 +50,19 @@ public class PlayerBullet : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.TakeDamage(damage, false);
-            Destroy(gameObject);
+            rb.velocity = rb.velocity*0.1f;
+            Explode();
             //Release();
         }
+    }
+
+    public void Explode()
+    {
+        animator.SetTrigger("Explode");
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }
