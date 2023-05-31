@@ -67,16 +67,16 @@ public class Inventory : ScriptableObject
         Items[index] = null;
     }
 
-    private void SortItems()
-    {
-        for (int i = 0; i < Items.Count; i++)
-        {
-            if (Items.Count == size) break;
-            if (Items[i] == null)
-            {
-                Items.RemoveAt(i);
-                i--;
-            }
-        }
-    }
+    //private void SortItems()
+    //{
+    //    for (int i = 0; i < Items.Count; i++)
+    //    {
+    //        if (Items.Count == size) break;
+    //        if (Items[i] == null)
+    //        {
+    //            Items.RemoveAt(i);
+    //            i--;
+    //        }
+    //    }
+    //}
 }
