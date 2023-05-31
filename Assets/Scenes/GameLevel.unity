@@ -1290,6 +1290,7 @@ MonoBehaviour:
   roundDuration: 20
   roundTimer: 0
   enemySpawn: {fileID: 113934207}
+  vCam: {fileID: 0}
 --- !u!1 &1652442646
 GameObject:
   m_ObjectHideFlags: 0
