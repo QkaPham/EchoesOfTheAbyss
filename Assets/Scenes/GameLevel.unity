@@ -203,6 +203,7 @@ MonoBehaviour:
   Offset: 1
   mainCamera: {fileID: 1319761096}
   enemySpawnTime: 3
+  vCam: {fileID: 1142955491}
 --- !u!4 &113934209
 Transform:
   m_ObjectHideFlags: 0

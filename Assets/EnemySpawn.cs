@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class EnemySpawn : MonoBehaviour
 {
@@ -36,6 +37,9 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private float enemySpawnTime = 1;
 
     private bool isSpawning;
+
+    [SerializeField]
+    private CinemachineVirtualCamera vCam;
 
     private void OnEnable()
     {
@@ -106,12 +110,23 @@ public class EnemySpawn : MonoBehaviour
         }
     }
 
-    public void SpawnBoss()
+    public BossEnemy SpawnBoss()
     {
         GameObject gBoss = Instantiate(BossPrefabs, transform);
         BossEnemy bossEnemy = gBoss.GetComponent<BossEnemy>();
         bossEnemy.Init(player, player.transform.position + Vector3.up * 16f, bulletPool);
+        StartCoroutine(SetCameraFollow(bossEnemy));
+        return bossEnemy;
     }
+
+
+    private IEnumerator SetCameraFollow(BossEnemy bossEnemy)
+    {
+        vCam.Follow = bossEnemy.transform;
+        yield return new WaitForSeconds(2);
+        vCam.Follow = player.transform;
+    }
+
 
     [Serializable]
     private class EnemyType
