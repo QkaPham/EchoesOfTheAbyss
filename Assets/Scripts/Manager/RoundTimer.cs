@@ -1,3 +1,5 @@
+using Cinemachine;
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +26,8 @@ public class RoundTimer : MonoBehaviour
     [SerializeField]
     private EnemySpawn enemySpawn;
 
+    [SerializeField]
+    private CinemachineVirtualCamera vCam;
     private void Start()
     {
         roundTimer = roundDuration;
@@ -83,10 +87,13 @@ public class RoundTimer : MonoBehaviour
         currentRound++;
         if (currentRound == roundNumber)
         {
-            enemySpawn.SpawnBoss();
+           BossEnemy boss = enemySpawn.SpawnBoss();
         }
         Time.timeScale = 1f;
         roundTimer = roundDuration;
         isRoundEnded = false;
     }
+
+    
+
 }
