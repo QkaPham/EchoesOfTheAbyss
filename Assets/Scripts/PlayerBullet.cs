@@ -32,6 +32,10 @@ public class PlayerBullet : MonoBehaviour
         this.damage = damage;
         this.despawnTime = despawnTime;
         rb.velocity = direction * speed;
+
+        float angle = Vector2.SignedAngle(Vector2.up, direction);
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        if (angle < 0) Flip();
     }
 
     public void Despawn()
@@ -50,7 +54,7 @@ public class PlayerBullet : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.TakeDamage(damage, false);
-            rb.velocity = rb.velocity*0.1f;
+            rb.velocity = rb.velocity * 0.1f;
             Explode();
             //Release();
         }
@@ -58,11 +62,16 @@ public class PlayerBullet : MonoBehaviour
 
     public void Explode()
     {
-        animator.SetTrigger("Explode");
+        //animator.SetTrigger("Explode");
     }
 
     public void Destroy()
     {
         Destroy(gameObject);
+    }
+
+    private void Flip()
+    {
+        transform.localScale = new Vector3(-1f, 1, 1);
     }
 }

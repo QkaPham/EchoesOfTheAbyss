@@ -11,7 +11,7 @@ public class Idle : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Idle);
+        animator.SetInteger("State", (int)PlayerState.Idle);
     }
     public override void OnStateExit()
     {

@@ -12,7 +12,7 @@ public class Run : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Run);
+        animator.SetInteger("State", (int)PlayerState.Run);
     }
     public override void OnStateUpdate()
     {

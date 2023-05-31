@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &4758774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2056875999, guid: d672277d91f60054e8a30d32570d6c90, type: 3}
+  m_PrefabInstance: {fileID: 1163887442}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -5299,6 +5310,10 @@ PrefabInstance:
       propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2056875999, guid: d672277d91f60054e8a30d32570d6c90, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1071277163253688339, guid: d672277d91f60054e8a30d32570d6c90, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5483,6 +5498,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6849915974153895042, guid: d672277d91f60054e8a30d32570d6c90, type: 3}
+      propertyPath: volume
+      value: 
+      objectReference: {fileID: 4758774}
     - target: {fileID: 7271912226193111240, guid: d672277d91f60054e8a30d32570d6c90, type: 3}
       propertyPath: m_Name
       value: UIManager

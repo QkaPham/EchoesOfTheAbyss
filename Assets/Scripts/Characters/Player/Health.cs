@@ -52,6 +52,7 @@ public class Health : ScriptableObject
     {
         currentHealth -= FinalDamage(amount, deffense);
         OnHealthChange?.Invoke(-amount, currentHealth, maxHealth);
+        player.Hurt();
         if (currentHealth <= 0)
         {
             OnGameOver?.Invoke();

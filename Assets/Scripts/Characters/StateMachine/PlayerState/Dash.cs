@@ -20,11 +20,13 @@ public class Dash : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
+        
         LastDashTime = Time.time;
         dashDir = InputManager.Instance.DashDir;
+        player.PlayDashEffect(dashDir);
         player.stamina.Consume(player.stats.DashStaminaConsume);
 
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Dash);
+        animator.SetInteger("State", (int)PlayerState.Dash);
         if (dashDir.x > 0 && InputManager.Instance.MouseOnWorld.x > playerPosition.x || dashDir.x < 0 && InputManager.Instance.MouseOnWorld.x < playerPosition.x)
         {
             player.animator.SetBool("DashForward", true);

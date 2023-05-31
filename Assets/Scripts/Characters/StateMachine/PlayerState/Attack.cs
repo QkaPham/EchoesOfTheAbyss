@@ -21,7 +21,7 @@ public class Attack : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Attack);
+        animator.SetInteger("State", (int)PlayerState.Attack);
         lastAttackTime = Time.time;
         AudioManager.Instance.PlaySE("Slash");
         OnStartAttack?.Invoke(player.stats);

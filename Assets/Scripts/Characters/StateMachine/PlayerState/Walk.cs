@@ -13,7 +13,7 @@ public class Walk : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Walk);
+        animator.SetInteger("State", (int)PlayerState.Walk);
     }
     public override void OnStateExit()
     {

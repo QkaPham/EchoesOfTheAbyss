@@ -23,7 +23,7 @@ public class RangeAttack : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        animator.SetInteger("State", (int)PlayerAnimatorParameters.Attack);
+        animator.SetInteger("State", (int)PlayerState.Attack);
         player.mana.Consume(manaConsume);
         lastAttackTime = Time.time;
         player.FireBullet();

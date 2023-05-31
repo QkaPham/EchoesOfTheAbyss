@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.Processors;
-public enum PlayerAnimatorParameters
+public enum PlayerState
 {
     Idle = 0,
     Walk,
@@ -31,6 +31,15 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Transform TargetPoint;
+
+    [SerializeField]
+    private ParticleSystem dashParticle;
+
+    [SerializeField]
+    protected ParticleSystem hurtParticle;
+
+    [SerializeField]
+    protected ParticleSystem DeathParticle;
 
     private StateMachine stateMachine;
 
@@ -88,13 +97,11 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnStartGame += ResetPlayer;
-        //Health.OnGameOver += () => animator.SetTrigger("Death");
     }
 
     private void OnDisable()
     {
         GameManager.OnStartGame -= ResetPlayer;
-        //Health.OnGameOver -= () => animator.SetTrigger("Death");
     }
 
     private void ResetPlayer()
@@ -102,7 +109,7 @@ public class Player : MonoBehaviour
         gameObject.SetActive(true);
         currency.Init();
         stats.Init();
-        health.Init(stats.MaxHealthPoint.Total,this);
+        health.Init(stats.MaxHealthPoint.Total, this);
         mana.Init(stats.MaxStamina);
         stamina.Init(stats.MaxMana);
         inventory.Init();
@@ -134,10 +141,10 @@ public class Player : MonoBehaviour
 
     private void Flip()
     {
-        if (Time.timeScale != 0.0f)
-        {
-            rootTransform.localScale = InputManager.Instance.MouseOnWorld.x < transform.position.x ? new Vector3(-1, 1, 1) : Vector3.one;
-        }
+        if (Time.timeScale == 0.0f || stateMachine.currentState.GetType() == typeof(Dash))
+            return;
+
+        rootTransform.localScale = InputManager.Instance.MouseOnWorld.x < transform.position.x ? new Vector3(-1, 1, 1) : Vector3.one;
     }
 
     public void FireBullet()
@@ -146,9 +153,21 @@ public class Player : MonoBehaviour
         playerBullet.Init(firePoint.position, (InputManager.Instance.MouseOnWorld - (Vector2)firePoint.position).normalized, stats.Attack.Total, 10, 4);
     }
 
+    public void Hurt()
+    {
+
+    }
+
     public void Death()
     {
         animator.SetTrigger("Death");
         weapon.gameObject.SetActive(false);
+    }
+
+    public void PlayDashEffect(Vector2 dashDirection)
+    {
+        float angle = Vector2.SignedAngle(Vector2.right, dashDirection);
+        dashParticle.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        dashParticle.Play();
     }
 }
