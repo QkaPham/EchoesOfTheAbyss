@@ -8,9 +8,12 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-
     public static event Action OnStartGame;
+    public static event Action OnRoundEnd;
+    public static event Action OnStartNextRound;
     public static event Action OnRetryGame;
+    public static event Action OnGameOver;
+    public static event Action OnVictory;
 
     private void Update()
     {
@@ -22,11 +25,11 @@ public class GameManager : Singleton<GameManager>
 
             if (UIManager.Instance.PausePanel.isActive)
             {
-                StartCoroutine(Resume());
+                Resume();
             }
             else
             {
-                StartCoroutine(Pause());
+                Pause();
             }
         }
     }
@@ -49,7 +52,11 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public IEnumerator Pause()
+    public void Pause()
+    {
+        StartCoroutine(DelayPause());
+    }
+    private IEnumerator DelayPause()
     {
         Time.timeScale = 0f;
         UIManager.Instance.PausePanel.Activate(true);
@@ -58,8 +65,12 @@ public class GameManager : Singleton<GameManager>
         yield return null;
         UIManager.Instance.PausePanel.isActive = true;
     }
+    public void Resume()
+    {
+        StartCoroutine(DelayResume());
+    }    
 
-    public IEnumerator Resume()
+    private IEnumerator DelayResume()
     {
         Time.timeScale = 1f;
         UIManager.Instance.PausePanel.Activate(false);
@@ -84,8 +95,23 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.MainMenuPanel.Activate(true);
         UIManager.Instance.PausePanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(false);
+        UIManager.Instance.ActiveDepthOfField(false);
         InputManager.Instance.EnablePlayerInput(false);
     }
+
+    public void RoundEnd()
+    {
+        UIManager.Instance.UpgradePanel.Activate(true);
+        InputManager.Instance.EnablePlayerInput(false);
+        OnRoundEnd?.Invoke();
+    }
+
+    public void StartNextRound()
+    {
+        UIManager.Instance.UpgradePanel.Activate(false);
+        InputManager.Instance.EnablePlayerInput(true);
+        OnStartNextRound?.Invoke();
+    }    
 
     public void GameOver()
     {
@@ -93,6 +119,15 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.GamePanel.Activate(false);
         UIManager.Instance.GameoverPanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(false);
+        OnGameOver?.Invoke();
+    }
+
+    public void Victory()
+    {
+        UIManager.Instance.GamePanel.Activate(false);
+        UIManager.Instance.VictoryPanel.Activate(true);
+        InputManager.Instance.EnablePlayerInput(false);
+        OnVictory?.Invoke();
     }
 
     public void Quit()

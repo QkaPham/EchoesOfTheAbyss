@@ -329,14 +329,14 @@ MonoBehaviour:
   ShotPoint: {fileID: 85687451789523954}
   rushLineRenderer: {fileID: 3883072904809869901}
   moveSpeed: 2
-  attackCycle: 01000000
+  attackCycle: 00000000000000000100000002000000
   RushAimingRange: 12
   rushAimingTime: 0.5
   rushDelayAttackTime: 0.5
   rushSpeed: 25
   rushRange: 16
   rushAttackDamage: 10
-  attackCooldownTime: 4
+  attackCooldownTime: 3
   rushDamageDistance: 1.6
   timeBetweenEachRushDamage: 1
   laserAimingRange: 10
@@ -350,9 +350,7 @@ MonoBehaviour:
   bulletFirePoint: {fileID: 6508360262879965271}
   bulletAttackRange: 10
   bulletAttackDamage: 10
-  bulletPool: {fileID: 0}
   waveNumber: 4
-  counter: 0
   bulletNumber: 4
   bulletAngle: 60
 --- !u!50 &222126207309903211

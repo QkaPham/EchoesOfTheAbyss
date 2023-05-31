@@ -9,7 +9,8 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     {
         base.OnEnable();
         GameManager.OnStartGame += Release;
-        RoundTimer.OnRoundEnd += Release;
+        GameManager.OnRoundEnd += Release;
+        GameManager.OnVictory += Release;
     }
 
     protected override void OnDisable()
@@ -17,7 +18,8 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         base.OnDisable();
         animator.SetTrigger("Reset");
         GameManager.OnStartGame -= Release;
-        RoundTimer.OnRoundEnd -= Release;
+        GameManager.OnRoundEnd -= Release;
+        GameManager.OnVictory -= Release;
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;

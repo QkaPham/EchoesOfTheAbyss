@@ -12,12 +12,12 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - Wall
+  - Obstacle
   - Player
   - Weapon
   - LootDrop
   - Damageable
-  - 
+  - Boundary
   - 
   - 
   - 

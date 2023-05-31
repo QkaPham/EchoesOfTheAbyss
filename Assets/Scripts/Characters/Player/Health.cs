@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Health", menuName = "Scriptable Object/Health")]
 public class Health : ScriptableObject
 {
+    private Player player;
     [SerializeField]
     private float currentHealth;
 
@@ -28,10 +29,11 @@ public class Health : ScriptableObject
         }
     }
 
-    public void Init(float maxHealth)
+    public void Init(float maxHealth,Player player)
     {
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
+        this.player = player;
     }
 
     private void OnEnable()
@@ -53,6 +55,7 @@ public class Health : ScriptableObject
         if (currentHealth <= 0)
         {
             OnGameOver?.Invoke();
+            player.Death();
             GameManager.Instance.GameOver();
         }
     }

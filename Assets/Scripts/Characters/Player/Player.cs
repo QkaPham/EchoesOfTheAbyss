@@ -55,9 +55,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Equipment equipment;
 
+    [SerializeField]
+    private Weapon weapon;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        weapon = GetComponentInChildren<Weapon>();
 
         stateMachine = new StateMachine();
         var idle = new Idle(stateMachine, animator, this);
@@ -84,13 +88,13 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnStartGame += ResetPlayer;
-        Health.OnGameOver += () => animator.SetTrigger("Death");
+        //Health.OnGameOver += () => animator.SetTrigger("Death");
     }
 
     private void OnDisable()
     {
         GameManager.OnStartGame -= ResetPlayer;
-        Health.OnGameOver -= () => animator.SetTrigger("Death");
+        //Health.OnGameOver -= () => animator.SetTrigger("Death");
     }
 
     private void ResetPlayer()
@@ -98,11 +102,12 @@ public class Player : MonoBehaviour
         gameObject.SetActive(true);
         currency.Init();
         stats.Init();
-        health.Init(stats.MaxHealthPoint.Total);
+        health.Init(stats.MaxHealthPoint.Total,this);
         mana.Init(stats.MaxStamina);
         stamina.Init(stats.MaxMana);
         inventory.Init();
         equipment.Init();
+        weapon.gameObject.SetActive(true);
     }
 
     private void Update()
@@ -139,5 +144,11 @@ public class Player : MonoBehaviour
     {
         PlayerBullet playerBullet = Instantiate(playerBulletPrefabs, this.transform).GetComponent<PlayerBullet>();
         playerBullet.Init(firePoint.position, (InputManager.Instance.MouseOnWorld - (Vector2)firePoint.position).normalized, stats.Attack.Total, 10, 4);
+    }
+
+    public void Death()
+    {
+        animator.SetTrigger("Death");
+        weapon.gameObject.SetActive(false);
     }
 }

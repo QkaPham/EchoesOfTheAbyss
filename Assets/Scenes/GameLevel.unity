@@ -186,6 +186,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1969191432}
+  BossPrefabs: {fileID: 3949265461923474693, guid: c848976647af3a24eaa4d86639c9c5df, type: 3}
+  bulletPool: {fileID: 460206536}
   enemyTypes:
   - enemyPool: {fileID: 1364777809}
     spawnRate: 0.1
@@ -1283,9 +1285,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentRound: 0
-  roundNumber: 5
-  roundDuration: 60
+  roundNumber: 3
+  roundDuration: 20
   roundTimer: 0
+  enemySpawn: {fileID: 113934207}
 --- !u!1 &1652442646
 GameObject:
   m_ObjectHideFlags: 0
@@ -6287,7 +6290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1972343788}
   - component: {fileID: 1972343789}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: BorderWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

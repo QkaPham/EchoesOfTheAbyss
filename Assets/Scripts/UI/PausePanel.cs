@@ -26,7 +26,7 @@ public class PausePanel : BasePanel
     }
     public void OnResumeButtonClick()
     {
-        StartCoroutine(GameManager.Instance.Resume());
+        GameManager.Instance.Resume();
     }
 
     public void OnSettingsButtonClick()

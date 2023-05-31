@@ -95,7 +95,6 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected Transform bulletFirePoint;
 
-    [SerializeField]
     protected EnemyBulletPool bulletPool;
 
     [SerializeField]
@@ -108,12 +107,14 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected int waveNumber = 4;
     protected int counter = 0;
-    
+
     [SerializeField]
     protected int bulletNumber = 4;
-    
+
     [SerializeField]
     protected float bulletAngle = 60f;
+
+    public static event Action OnDefeated;
 
     protected override void Start()
     {
@@ -153,6 +154,14 @@ public class BossEnemy : BaseEnemy
                 break;
         }
     }
+
+    public void Init(Player player, Vector3 position, EnemyBulletPool bulletPool)
+    {
+        this.player = player;
+        transform.position = position;
+        this.bulletPool = bulletPool;
+    }
+
     public void ChangeAttackType()
     {
         currentAttackPointer = (currentAttackPointer + 1) % attackCycle.Count;
@@ -376,6 +385,7 @@ public class BossEnemy : BaseEnemy
         if (counter >= waveNumber)
         {
             counter = 0;
+            ChangeAttackType();
             nextState = EnemyState.Idle;
         }
     }
@@ -392,7 +402,7 @@ public class BossEnemy : BaseEnemy
     }
 
 
-    public void FireBullet(Vector2 startPoint, Vector2 originalDirection, float angle, float damage)
+    protected void FireBullet(Vector2 startPoint, Vector2 originalDirection, float angle, float damage)
     {
         EnemyBullet bullet = bulletPool.Get();
         Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
@@ -422,7 +432,8 @@ public class BossEnemy : BaseEnemy
     public override void Death()
     {
         base.Death();
-        Debug.Log("Death");
+        GameManager.Instance.Victory();
+        //OnDefeated?.Invoke();
     }
 
     public override void Destroy()

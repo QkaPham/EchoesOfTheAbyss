@@ -9,6 +9,12 @@ public class EnemySpawn : MonoBehaviour
     private Player player;
 
     [SerializeField]
+    private GameObject BossPrefabs;
+
+    [SerializeField]
+    private EnemyBulletPool bulletPool;
+
+    [SerializeField]
     private List<EnemyType> enemyTypes;
 
     [SerializeField]
@@ -34,9 +40,18 @@ public class EnemySpawn : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnStartGame += () => isSpawning = true;
-        RoundTimer.OnRoundEnd += () => isSpawning = false;
-        UpgradePanel.OnNextRound += () => isSpawning = true;
-        Health.OnGameOver += () => isSpawning = false;
+        GameManager.OnRoundEnd += () => isSpawning = false;
+        GameManager.OnStartNextRound += () => isSpawning = true;
+        GameManager.OnGameOver += () => isSpawning = false;
+        GameManager.OnVictory += () => isSpawning = false;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnStartGame -= () => isSpawning = true;
+        GameManager.OnRoundEnd -= () => isSpawning = false;
+        GameManager.OnStartNextRound -= () => isSpawning = true;
+        GameManager.OnGameOver -= () => isSpawning = false;
+        GameManager.OnVictory -= () => isSpawning = false;
     }
 
     private void Update()
@@ -89,6 +104,13 @@ public class EnemySpawn : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void SpawnBoss()
+    {
+        GameObject gBoss = Instantiate(BossPrefabs, transform);
+        BossEnemy bossEnemy = gBoss.GetComponent<BossEnemy>();
+        bossEnemy.Init(player, player.transform.position + Vector3.up * 16f, bulletPool);
     }
 
     [Serializable]

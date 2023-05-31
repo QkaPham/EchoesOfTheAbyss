@@ -32,17 +32,18 @@ public class Weapon : MonoBehaviour
     protected void OnEnable()
     {
         CharacterStats.OnStatsChange += SpeedUpAttackAnimation;
-        Attack.OnStartAttack += (stats) => OnStartAttack();
-        Health.OnGameOver += () => gameObject.SetActive(false);
+        Attack.OnStartAttack += OnStartAttack;
+        //Health.OnGameOver += () => gameObject.SetActive(false);
     }
 
     protected void OnDisable()
     {
-        Attack.OnStartAttack -= (stats) => OnStartAttack();
-        Health.OnGameOver -= () => gameObject.SetActive(false);
+        CharacterStats.OnStatsChange -= SpeedUpAttackAnimation;
+        Attack.OnStartAttack -= OnStartAttack;
+        //Health.OnGameOver -= () => gameObject.SetActive(false);
     }
 
-    protected void OnStartAttack()
+    protected void OnStartAttack(CharacterStats stats)
     {
         isAttacking = true;
         RotateToMouse();
@@ -61,6 +62,7 @@ public class Weapon : MonoBehaviour
             ResetRotation();
         }
     }
+
     protected void RotateToMouse()
     {
         Vector2 direction = InputManager.Instance.MouseOnWorld - (Vector2)transform.position;

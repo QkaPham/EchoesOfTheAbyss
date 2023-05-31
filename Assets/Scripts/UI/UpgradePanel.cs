@@ -32,7 +32,7 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
-    public static event Action OnNextRound;
+    //public static event Action OnNextRound;
     public static event Action OnLevelUp;
 
     private GameObject currentSelectedObject = null;
@@ -165,8 +165,9 @@ public class UpgradePanel : BasePanel
     public void OnNextRoundButtonClick()
     {
         Activate(false);
-        OnNextRound?.Invoke();
-        InputManager.Instance.EnablePlayerInput(true);
+        //OnNextRound?.Invoke();
+        GameManager.Instance.StartNextRound();
+
     }
 
     private void PreventLoseFocus()

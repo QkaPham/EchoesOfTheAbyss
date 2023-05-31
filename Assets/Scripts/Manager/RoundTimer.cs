@@ -19,8 +19,10 @@ public class RoundTimer : MonoBehaviour
     private bool isRoundEnded = false;
 
     public static event Action<float> OnTimerUpdate;
-    public static event Action OnRoundEnd;
-    //public static event Action OnVictory;
+    // public static event Action OnRoundEnd;
+
+    [SerializeField]
+    private EnemySpawn enemySpawn;
 
     private void Start()
     {
@@ -29,8 +31,15 @@ public class RoundTimer : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnStartGame += OnStartGame;
-        UpgradePanel.OnNextRound += StartNextRound;
+        GameManager.OnStartNextRound += StartNextRound;
     }
+
+    private void OnDisable()
+    {
+        GameManager.OnStartGame -= OnStartGame;
+        GameManager.OnStartNextRound -= StartNextRound;
+    }
+
     void Update()
     {
         RoundUpdate();
@@ -44,29 +53,38 @@ public class RoundTimer : MonoBehaviour
     }
     private void RoundUpdate()
     {
-        roundTimer -= Time.deltaTime;
+        if (currentRound != roundNumber)
+        {
+            roundTimer -= Time.deltaTime;
+        }
         OnTimerUpdate?.Invoke(roundTimer);
 
         if (roundTimer <= 0f && !isRoundEnded)
         {
             isRoundEnded = true;
-            OnRoundEnd?.Invoke();
-            InputManager.Instance.EnablePlayerInput(false);
-            if (currentRound == roundNumber)
-            {
-                //OnVictory?.Invoke();
-                UIManager.Instance.VictoryPanel.Activate(true);
-            }
-            else
-            {
+            GameManager.Instance.RoundEnd();
+            //OnRoundEnd?.Invoke();
+            //InputManager.Instance.EnablePlayerInput(false);
+            //if (currentRound == roundNumber)
+            //{
+            //    //OnVictory?.Invoke();
+            //    UIManager.Instance.VictoryPanel.Activate(true);
+            //}
+            //else
+            //{
 
-                UIManager.Instance.UpgradePanel.Activate(true);
-            }
+            //    UIManager.Instance.UpgradePanel.Activate(true);
+            //}
         }
     }
+
     public void StartNextRound()
     {
         currentRound++;
+        if (currentRound == roundNumber)
+        {
+            enemySpawn.SpawnBoss();
+        }
         Time.timeScale = 1f;
         roundTimer = roundDuration;
         isRoundEnded = false;

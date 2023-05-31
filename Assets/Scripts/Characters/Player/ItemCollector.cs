@@ -19,14 +19,14 @@ public class ItemCollector : MonoBehaviour
 
     private void OnEnable()
     {
-        RoundTimer.OnRoundEnd += ExpandMagnetRadius;
-        UpgradePanel.OnNextRound += ResetMagnetRadius;
+        GameManager.OnRoundEnd += ExpandMagnetRadius;
+        GameManager.OnStartNextRound += ResetMagnetRadius;
     }
 
     private void OnDisable()
     {
-        RoundTimer.OnRoundEnd -= ExpandMagnetRadius;
-        UpgradePanel.OnNextRound -= ResetMagnetRadius;
+        GameManager.OnRoundEnd -= ExpandMagnetRadius;
+        GameManager.OnStartNextRound -= ResetMagnetRadius;
     }
 
     private void ExpandMagnetRadius()
