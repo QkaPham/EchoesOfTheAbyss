@@ -48,6 +48,7 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   damagePopupPrefab: {fileID: 1808901579846088661, guid: f0fb4416a6493d848add8f935f70fd52, type: 3}
+  damagePopupPoint: {fileID: 4680690772036527391}
 --- !u!70 &9152297067349826052
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -221,6 +222,7 @@ MonoBehaviour:
   enemyName: 
   enemyDescription: 
   player: {fileID: 0}
+  health: {fileID: 0}
   currentState: 0
   nextState: 0
   FlipTransform: {fileID: 7123257138107155700}
@@ -487,6 +489,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7123257138523166819}
+  - {fileID: 4680690772036527391}
   m_Father: {fileID: 7123257137451411169}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -574,3 +577,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &8090581280673992180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4680690772036527391}
+  m_Layer: 0
+  m_Name: DamagePopupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4680690772036527391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8090581280673992180}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.01, y: 1.84, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7123257138107155700}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

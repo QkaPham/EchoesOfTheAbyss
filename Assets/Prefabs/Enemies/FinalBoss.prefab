@@ -62,6 +62,7 @@ Transform:
   - {fileID: 9032939738643125845}
   - {fileID: 85687451789523954}
   - {fileID: 6508360262879965271}
+  - {fileID: 1983911670980460713}
   m_Father: {fileID: 331291474498248315}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -197,6 +198,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   damagePopupPrefab: {fileID: 1808901579846088661, guid: f0fb4416a6493d848add8f935f70fd52, type: 3}
+  damagePopupPoint: {fileID: 1983911670980460713}
 --- !u!70 &6342309277626180644
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -301,7 +303,7 @@ Transform:
   - {fileID: 1529812364460132169}
   - {fileID: 3048498986722309454}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7703645988981223317
 MonoBehaviour:
@@ -656,6 +658,37 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &8139493101837322302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1983911670980460713}
+  m_Layer: 0
+  m_Name: DamagePopupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1983911670980460713
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8139493101837322302}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.01, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6377379286155959096}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8272769165139327600
 GameObject:
   m_ObjectHideFlags: 0

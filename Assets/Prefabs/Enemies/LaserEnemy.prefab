@@ -84,6 +84,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3791656665578623768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5492677661877344689}
+  m_Layer: 0
+  m_Name: DamagePopupPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5492677661877344689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3791656665578623768}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.009, y: 1.604, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5151409397747472302}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5151409396817030976
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,6 +163,7 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 0
   damagePopupPrefab: {fileID: 1808901579846088661, guid: f0fb4416a6493d848add8f935f70fd52, type: 3}
+  damagePopupPoint: {fileID: 5492677661877344689}
 --- !u!58 &5151409396817030982
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -331,7 +363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5151409397631111258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.11, y: 1.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -356,7 +388,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
+  player: {fileID: 0}
+  health: {fileID: 0}
   currentState: 0
+  nextState: 0
   FlipTransform: {fileID: 5151409397747472302}
   fragment: 5000
   items:
@@ -458,6 +493,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5151409397747472303
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +524,7 @@ Transform:
   m_Children:
   - {fileID: 5151409398544299721}
   - {fileID: 5151409398064979902}
+  - {fileID: 5492677661877344689}
   m_Father: {fileID: 5151409397631111261}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
