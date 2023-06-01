@@ -9,7 +9,7 @@ public class Attack : State
     public float ActiveTime => player.stats.AttackTime;
     public float AttackMoveSpeed => player.stats.AttackMoveSpeed;
     public float CooldownTime => player.stats.AttackCooldownTime;
-    private float lastAttackTime = float.MinValue;
+    private float lastAttackTime = 0f;
 
     public static event Action<CharacterStats> OnStartAttack;
 

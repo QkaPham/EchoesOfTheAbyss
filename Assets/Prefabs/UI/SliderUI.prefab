@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9339623, g: 0.67372686, b: 0.2775454, a: 1}
+  m_Color: {r: 0.36832502, g: 0.8773585, b: 0.86770856, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 6261593142142957351}
   - component: {fileID: 9209553117280736430}
   - component: {fileID: 4882757918933561269}
-  - component: {fileID: 2325023396115706869}
+  - component: {fileID: 5642130202524698186}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -727,7 +727,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9339623, g: 0.67372686, b: 0.2775454, a: 1}
+    m_SelectedColor: {r: 0.36832502, g: 0.8773585, b: 0.86770856, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -774,7 +774,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &2325023396115706869
+--- !u!114 &5642130202524698186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -783,6 +783,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8901957218929960295}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bee6c5fdf8108a4cb8c7978925f8a06, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad75077197bf2a4b838affe4bff646a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

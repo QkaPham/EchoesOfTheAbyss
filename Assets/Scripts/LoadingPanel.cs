@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,33 +15,66 @@ public class LoadingPanel : MonoBehaviour
     [SerializeField]
     private Slider loadingSlider;
 
-    public void Activate()
+    [SerializeField]
+    private CanvasGroup canvasGroup;
+
+    public float fadeValue;
+    public float fadeTime;
+
+    private bool startFlickering;
+
+    private void Awake()
     {
-        StartCoroutine(LoadScene());
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    private IEnumerator LoadScene()
+    private void Start()
+    {
+        canvasGroup.alpha = 0f;
+    }
+
+    public void LoadScene(string scene)
+    {
+        canvasGroup.alpha = 1f;
+        StartCoroutine(Load(scene));
+    }
+
+    private IEnumerator Load(string scene)
     {
         yield return null;
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("GameLevel");
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         asyncOperation.allowSceneActivation = false;
 
         while (!asyncOperation.isDone)
         {
             loadingSlider.value = asyncOperation.progress;
-            loadingText.text = $"Loading Scene: {asyncOperation.progress}%";
+            loadingText.text = $"Loading... {asyncOperation.progress}%";
             if (asyncOperation.progress >= 0.9f)
             {
                 loadingSlider.value = 1f;
-                loadingText.text = $"Press the spacbar to continue";
+                loadingText.text = $"Press any key to continue";
+                if (!startFlickering)
+                {
+                    startFlickering = true;
+                    FlickeringLoadingText();
+                }
                 if (Input.anyKey)
                 {
-                    asyncOperation.allowSceneActivation = true;
-                    GameManager.Instance.StartGame();
-                    gameObject.SetActive(false);
+                    canvasGroup.alpha = 0f;
+                    UIManager.Instance.Fade(1f, 1f, () =>
+                    {
+                        asyncOperation.allowSceneActivation = true;
+                        UIManager.Instance.Fade(0f, 1f, null);
+                    }
+                    );
                 }
             }
             yield return null;
         }
+    }
+
+    private void FlickeringLoadingText()
+    {
+        loadingText.DOFade(fadeValue, fadeTime).SetLoops(-1, LoopType.Yoyo);
     }
 }

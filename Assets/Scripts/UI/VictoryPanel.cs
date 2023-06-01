@@ -12,6 +12,7 @@ public class VictoryPanel : BasePanel
 
     public void OnMainMenuButtonClick()
     {
+        Activate(false);
         GameManager.Instance.ReturnToMainMenu();
     }
 }

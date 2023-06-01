@@ -37,19 +37,15 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.LoadScene("GameLevel");
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "GameLevel")
-        {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-            UIManager.Instance.MainMenuPanel.Activate(false);
-            UIManager.Instance.GamePanel.Activate(true);
-            InputManager.instance.EnablePlayerInput(true);
-            OnStartGame?.Invoke();
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        UIManager.Instance.MainMenuPanel.Activate(false);
+        UIManager.Instance.GamePanel.Activate(true);
+        InputManager.instance.EnablePlayerInput(true);
+        OnStartGame?.Invoke();
     }
 
     public void Pause()
@@ -68,7 +64,7 @@ public class GameManager : Singleton<GameManager>
     public void Resume()
     {
         StartCoroutine(DelayResume());
-    }    
+    }
 
     private IEnumerator DelayResume()
     {
@@ -111,7 +107,7 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.UpgradePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(true);
         OnStartNextRound?.Invoke();
-    }    
+    }
 
     public void GameOver()
     {

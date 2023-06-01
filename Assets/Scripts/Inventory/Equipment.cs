@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 [CreateAssetMenu(fileName = "Equipment", menuName = "Scriptable Object/Equipment")]
 public class Equipment : ScriptableObject

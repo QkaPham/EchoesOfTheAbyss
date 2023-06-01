@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using System;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -35,6 +36,9 @@ public class UIManager : Singleton<UIManager>
     [field: SerializeField]
     public LoadingPanel LoadingPanel { get; set; }
 
+    [field: SerializeField]
+    public FadePanel FadePanel { get; set; }
+
     [SerializeField]
     private Volume volume;
     [SerializeField]
@@ -62,6 +66,7 @@ public class UIManager : Singleton<UIManager>
         GameoverPanel = GetComponentInChildren<GameOverPanel>();
         VictoryPanel = GetComponentInChildren<VictoryPanel>();
         LoadingPanel = GetComponentInChildren<LoadingPanel>();
+        FadePanel = GetComponentInChildren<FadePanel>();
 
         MainMenuPanel.Activate(true);
         GamePanel.Activate(false);
@@ -70,7 +75,7 @@ public class UIManager : Singleton<UIManager>
         UpgradePanel.Activate(false);
         GameoverPanel.Activate(false);
         VictoryPanel.Activate(false);
-        LoadingPanel.gameObject.SetActive(false);
+        //LoadingPanel.gameObject.SetActive(false);
 
         volume = GetComponentInChildren<Volume>();
         if (volume.profile.TryGet<DepthOfField>(out DepthOfField dof))
@@ -94,5 +99,15 @@ public class UIManager : Singleton<UIManager>
     public void ActiveDepthOfField(bool active)
     {
         depthOfField.active = active;
+    }
+
+    public void LoadScene(string scene)
+    {
+        LoadingPanel.LoadScene(scene);
+    }
+
+    public void Fade(float value, float fadeTime, Action onFinish)
+    {
+        FadePanel.FadeOut(value, fadeTime, onFinish);
     }
 }
