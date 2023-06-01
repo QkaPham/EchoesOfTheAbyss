@@ -51,6 +51,7 @@ public class RoundTimer : MonoBehaviour
     private void OnStartGame()
     {
         currentRound = 1;
+        UIManager.Instance.GamePanel.UpdateRoundText(currentRound);
         Time.timeScale = 1f;
         roundTimer = roundDuration;
         isRoundEnded = false;
@@ -67,33 +68,19 @@ public class RoundTimer : MonoBehaviour
         {
             isRoundEnded = true;
             GameManager.Instance.RoundEnd();
-            //OnRoundEnd?.Invoke();
-            //InputManager.Instance.EnablePlayerInput(false);
-            //if (currentRound == roundNumber)
-            //{
-            //    //OnVictory?.Invoke();
-            //    UIManager.Instance.VictoryPanel.Activate(true);
-            //}
-            //else
-            //{
-
-            //    UIManager.Instance.UpgradePanel.Activate(true);
-            //}
         }
     }
 
     public void StartNextRound()
     {
         currentRound++;
+        UIManager.Instance.GamePanel.UpdateRoundText(currentRound);
         if (currentRound == roundNumber)
         {
-           BossEnemy boss = enemySpawn.SpawnBoss();
+            BossEnemy boss = enemySpawn.SpawnBoss();
         }
         Time.timeScale = 1f;
         roundTimer = roundDuration;
         isRoundEnded = false;
     }
-
-    
-
 }
