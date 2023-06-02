@@ -57,6 +57,24 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private GameProgressUI gameProgress;
 
+    [SerializeField]
+    private float moveDuration;
+    [SerializeField]
+    private float fadeDuration;
+
+    [SerializeField]
+    private Vector3 moveDir;
+
+    [SerializeField]
+    private CanvasGroup statsCanvasGroup;
+    [SerializeField]
+    private Vector3 statsMoveDir;
+
+    [SerializeField]
+    private CanvasGroup itemsCanvasGroup;
+    [SerializeField]
+    private Vector3 itemsMoveDir;
+
     private SlotType SelectedSlotType
     {
         get
@@ -106,17 +124,6 @@ public class UpgradePanel : BasePanel
         CharacterStats.OnLevelChange -= (level, cost) => UpdateLevelUpCost(cost);
         Currency.OnCurrencyChange -= UpdateFragmentText;
     }
-    public float moveDuration;
-    public float fadeDuration;
-
-
-    public Vector3 moveDir;
-
-    public CanvasGroup statsCanvasGroup;
-    public Vector3 statsMoveDir;
-
-    public CanvasGroup itemsCanvasGroup;
-    public Vector3 itemsMoveDir;
 
     protected void SetUp()
     {
@@ -146,7 +153,7 @@ public class UpgradePanel : BasePanel
             gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, moveDuration);
 
             statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, moveDuration);
-            statsCanvasGroup.DOFade(0f, Mathf.Clamp(delay*0.5f, 0.01f, delay));
+            statsCanvasGroup.DOFade(0f, Mathf.Clamp(delay * 0.5f, 0.01f, delay));
 
             itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, moveDuration);
             itemsCanvasGroup.DOFade(0f, Mathf.Clamp(delay * 0.5f, 0.01f, delay));
@@ -233,8 +240,7 @@ public class UpgradePanel : BasePanel
     private void UpdateStatsTxt(CharacterStats stats)
     {
         levelTxt.text = $"Lv <size=150%>{stats.Level}";
-        // statsTxt.text = String.Format("{0:0.00}");
-        statsTxt.text = $"{stats.Attack.Total}\n{stats.MaxHealthPoint.Total}\n{stats.Defense.Total}\n{(stats.CriticalHitChance.Total * 100).ToString("F")}%\n{stats.CriticalHitDamage.Total * 100}%\n{stats.Haste.Total * 100}%";
+        statsTxt.text = String.Format("{0:0}\n{1:0}\n{2:0}\n{3:0.0}%\n{4:0.0}%\n{5:0.0}%", stats.Attack.Total, stats.MaxHealthPoint.Total, stats.Defense.Total, stats.CriticalHitChance.Total * 100, stats.CriticalHitDamage.Total * 100, stats.Haste.Total * 100);
     }
 
     private void UpdateFragmentText(int currency)
@@ -244,8 +250,6 @@ public class UpgradePanel : BasePanel
 
     public void OnNextRoundButtonClick()
     {
-        // Activate(false);
-        //OnNextRound?.Invoke();
         GameManager.Instance.StartNextRound();
 
     }

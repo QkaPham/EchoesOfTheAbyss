@@ -12,26 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca6f0164ab6c7b4b831b99459c90c42, type: 3}
   m_Name: Stats
   m_EditorClassIdentifier: 
-  WalkSpeed: 5
-  RunSpeed: 15
-  RunStaminaConsume: 8
+  Level: 1
+  BaseAttack: 12
+  BaseDefense: 5
+  BaseMaxHealth: 100
+  BaseCrit: 0.1
+  BaseCritDamage: 0.5
+  BaseHaste: 0.5
+  AttackGrowth: 2
+  DefenseGrowth: 1
+  MaxHealthGrowth: 10
+  CritGrowth: 0.01
+  CritDamageGrowth: 0.5
+  HasteGrowth: 0.5
+  BaseMoveSpeed: 4
+  RunSpeed: 7
+  RunStaminaConsume: 15
   DashSpeed: 20
   DashTime: 0.2
   DashCooldownTime: 2
   DashStaminaConsume: 20
+  AttackDamageMultifier: 1
   AttackTime: 0.2
-  AttackMoveSpeed: 3
+  AttackMoveSpeed: 2
   BaseAttackCooldownTime: 1
-  Level: 1
+  RangeAttackDamageMultifier: 0.5
+  BaseRangeAttackCooldownTime: 1
+  RangeAttackManaConsume: 20
   MaxStamina: 100
   StaminaRecovery: 15
+  DelayStaminaRecoverTime: 1
   MaxMana: 100
   ManaRecovery: 15
+  DelayManaRecoverTime: 1
   Attack:
     StatType: 0
     Base: 12
-    Modifier: 2.4
-    total: 14.4
+    Modifier: 0
+    total: 0
   Defense:
     StatType: 1
     Base: 5
@@ -40,20 +58,20 @@ MonoBehaviour:
   MaxHealthPoint:
     StatType: 2
     Base: 100
-    Modifier: 400
-    total: 500
+    Modifier: 0
+    total: 100
   CriticalHitChance:
     StatType: 3
-    Base: 0.5
+    Base: 0.1
     Modifier: 0
-    total: 0.5
+    total: 0
   CriticalHitDamage:
     StatType: 4
     Base: 0.5
     Modifier: 0
-    total: 0.5
+    total: 0
   Haste:
     StatType: 5
     Base: 0.5
     Modifier: 0
-    total: 0.5
+    total: 0

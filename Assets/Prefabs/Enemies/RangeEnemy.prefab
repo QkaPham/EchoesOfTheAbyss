@@ -151,7 +151,7 @@ Transform:
   - {fileID: 6001592694410964774}
   - {fileID: 1608997819}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6001592692448738682
 MonoBehaviour:
@@ -378,7 +378,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &6001592693972659218
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,8 +25,6 @@ public class RoundTimer : MonoBehaviour
     [SerializeField]
     private EnemySpawn enemySpawn;
 
-    [SerializeField]
-    private CinemachineVirtualCamera vCam;
     private void Start()
     {
         roundTimer = roundDuration;

@@ -16,35 +16,61 @@ public enum StatType
 [CreateAssetMenu(fileName = "Stats", menuName = "Scriptable Object/Stats")]
 public class CharacterStats : ScriptableObject
 {
-    [Header("Walk Stats")]
-    public float WalkSpeed;
+    [Header("Level")]
+    public int Level = 1;
+    public int LevelUpCost => Level * 1000 + 4000;
 
-    [Header("Run Stats")]
-    public float RunSpeed;
-    public float RunStaminaConsume = 8f;
+    [Header("Starting Stats")]
+    public int BaseAttack = 12;
+    public int BaseDefense = 5;
+    public int BaseMaxHealth = 100;
+    public float BaseCrit = 0.1f;
+    public float BaseCritDamage = 0.5f;
+    public float BaseHaste = 0.5f;
 
-    [Header("Dash Stats")]
-    public float DashSpeed;
-    public float DashTime;
-    public float DashCooldownTime;
+    [Header("Stats Growth")]
+    public int AttackGrowth = 2;
+    public int DefenseGrowth = 1;
+    public int MaxHealthGrowth = 10;
+    public float CritGrowth = 0.01f;
+    public float CritDamageGrowth = 0.5f;
+    public float HasteGrowth = 0.5f;
+
+    [Header("Abilities")]
+    [Header("Move")]
+    public float BaseMoveSpeed = 4f;
+
+    [Header("Run")]
+    public float RunSpeed = 7f;
+    public float RunStaminaConsume = 15f;
+
+    [Header("Dash")]
+    public float DashSpeed = 20f;
+    public float DashTime = 0.2f;
+    public float DashCooldownTime = 2f;
     public float DashStaminaConsume = 20f;
 
-    [Header("Attack Stats")]
-    public float AttackTime;
-    public float AttackMoveSpeed;
-    public float BaseAttackCooldownTime;
+    [Header("Melee Attack")]
+    public float AttackDamageMultifier = 1f;
+    public float AttackTime = 0.2f;
+    public float AttackMoveSpeed = 2f;
+    public float BaseAttackCooldownTime = 1f;
     public float AttackCooldownTime => BaseAttackCooldownTime / (1 + Haste.Total / 100);
 
-    [Header("Level Info")]
-    public int Level = 1;
+    [Header("Range Attack")]
+    public float RangeAttackDamageMultifier = 0.5f;
+    public float BaseRangeAttackCooldownTime = 1f;
+    public float RangeAttackManaConsume = 20f;
 
     [Header("Stamina")]
     public float MaxStamina = 100f;
     public float StaminaRecovery = 15;
+    public float DelayStaminaRecoverTime = 1f;
 
     [Header("Mana")]
     public float MaxMana = 100f;
     public float ManaRecovery = 15;
+    public float DelayManaRecoverTime = 1f;
 
     private List<Stat> stats = new List<Stat>();
     public Stat Attack;
@@ -58,15 +84,20 @@ public class CharacterStats : ScriptableObject
     public static event Action<CharacterStats> OnStatsChange;
     public static event Action<int, int> OnLevelChange;
 
+    private void Reset()
+    {
+        Init();
+    }
+
     public void Init()
     {
         Level = 1;
-        Attack = new Stat(StatType.Attack, 12);
-        Defense = new Stat(StatType.Defense, 5);
-        MaxHealthPoint = new Stat(StatType.MaxHealthPoint, 100);
-        CriticalHitChance = new Stat(StatType.CriticalHitChance, 0.1f);
-        CriticalHitDamage = new Stat(StatType.CriticalHitDamage, 0.5f);
-        Haste = new Stat(StatType.Haste, 0.5f);
+        Attack = new Stat(StatType.Attack, BaseAttack);
+        Defense = new Stat(StatType.Defense, BaseDefense);
+        MaxHealthPoint = new Stat(StatType.MaxHealthPoint, BaseMaxHealth);
+        CriticalHitChance = new Stat(StatType.CriticalHitChance, BaseCrit);
+        CriticalHitDamage = new Stat(StatType.CriticalHitDamage, BaseCritDamage);
+        Haste = new Stat(StatType.Haste, BaseHaste);
 
         stats.AddRange(new Stat[] { Attack, Defense, MaxHealthPoint, CriticalHitChance, CriticalHitDamage, Haste });
         OnLevelChange?.Invoke(Level, LevelUpCost);
@@ -127,16 +158,15 @@ public class CharacterStats : ScriptableObject
     public void LevelUp()
     {
         Level++;
-        Attack.Base += 2;
-        Defense.Base += 1;
-        MaxHealthPoint.Base += 10;
-        CriticalHitChance.Base += 0.01f;
-        CriticalHitDamage.Base += 0.05f;
+        Attack.Base += AttackGrowth;
+        Defense.Base += DefenseGrowth;
+        MaxHealthPoint.Base += MaxHealthGrowth;
+        CriticalHitChance.Base += CritGrowth;
+        CriticalHitDamage.Base += CritDamageGrowth;
+        Haste.Base += HasteGrowth;
         OnStatsChange?.Invoke(this);
         OnLevelChange?.Invoke(Level, LevelUpCost);
     }
-
-    public int LevelUpCost => (Level + 1) * 1000 + 3000;
 }
 
 [Serializable]
