@@ -83,6 +83,7 @@ public class UIManager : Singleton<UIManager>
             depthOfField = dof;
         }
     }
+
     private void Start()
     {
         depthOfField.active = false;
@@ -106,8 +107,8 @@ public class UIManager : Singleton<UIManager>
         LoadingPanel.LoadScene(scene);
     }
 
-    public void Fade(float value, float fadeTime, Action onFinish)
+    public void Fade(float value, float fadeTime)
     {
-        FadePanel.FadeOut(value, fadeTime, onFinish);
+        FadePanel.Fade(value, fadeTime);
     }
 }

@@ -15,65 +15,34 @@ public class GameManager : Singleton<GameManager>
     public static event Action OnGameOver;
     public static event Action OnVictory;
 
-    private void Update()
-    {
-        if (InputManager.Instance.Cancel)
-        {
-            if (!UIManager.Instance.GamePanel.isActive) return;
-            if (UIManager.Instance.UpgradePanel.isActive) return;
-            if (UIManager.Instance.SettingsPanel.isActive) return;
-
-            if (UIManager.Instance.PausePanel.isActive)
-            {
-                Resume();
-            }
-            else
-            {
-                Pause();
-            }
-        }
-    }
-
     public void StartGame()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnGameLevelLoaded;
+        UIManager.Instance.LoadScene("GameLevel");
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnGameLevelLoaded(Scene scene, LoadSceneMode mode)
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnGameLevelLoaded;
         UIManager.Instance.MainMenuPanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(true);
+        UIManager.Instance.Fade(0f, 1f);
         InputManager.instance.EnablePlayerInput(true);
         OnStartGame?.Invoke();
     }
 
     public void Pause()
     {
-        StartCoroutine(DelayPause());
-    }
-    private IEnumerator DelayPause()
-    {
-        Time.timeScale = 0f;
         UIManager.Instance.PausePanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(false);
         UIManager.Instance.ActiveDepthOfField(true);
-        yield return null;
-        UIManager.Instance.PausePanel.isActive = true;
-    }
-    public void Resume()
-    {
-        StartCoroutine(DelayResume());
     }
 
-    private IEnumerator DelayResume()
+    public void Resume()
     {
-        Time.timeScale = 1f;
         UIManager.Instance.PausePanel.Activate(false);
-        InputManager.Instance.EnablePlayerInput(true);
         UIManager.Instance.ActiveDepthOfField(false);
-        yield return null;
-        UIManager.Instance.PausePanel.isActive = false;
+        InputManager.Instance.EnablePlayerInput(true);
     }
 
     public void RetryGame()
@@ -86,18 +55,26 @@ public class GameManager : Singleton<GameManager>
 
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
-        Time.timeScale = 1f;
+        SceneManager.sceneLoaded += OnMainmenuLoaded;
+        UIManager.Instance.LoadScene("MainMenu");
+    }
+
+    private void OnMainmenuLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= OnMainmenuLoaded;
         UIManager.Instance.MainMenuPanel.Activate(true);
         UIManager.Instance.PausePanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(false);
         UIManager.Instance.ActiveDepthOfField(false);
+        UIManager.Instance.Fade(0f, 2f);
         InputManager.Instance.EnablePlayerInput(false);
     }
+
 
     public void RoundEnd()
     {
         UIManager.Instance.UpgradePanel.Activate(true);
+        UIManager.Instance.GamePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(false);
         OnRoundEnd?.Invoke();
     }
@@ -105,13 +82,13 @@ public class GameManager : Singleton<GameManager>
     public void StartNextRound()
     {
         UIManager.Instance.UpgradePanel.Activate(false);
+        UIManager.Instance.GamePanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(true);
         OnStartNextRound?.Invoke();
     }
 
     public void GameOver()
     {
-        //Time.timeScale = 0f;
         UIManager.Instance.GamePanel.Activate(false);
         UIManager.Instance.GameoverPanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(false);
@@ -128,7 +105,7 @@ public class GameManager : Singleton<GameManager>
 
     public void Quit()
     {
-        //TODO: Save
+        //TODO: Save game process
         Application.Quit();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.InputSystem;
 
 public class EnemySpawn : MonoBehaviour
 {
@@ -41,29 +42,39 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera vCam;
 
+    private Action stopSpawn;
+    private Action startSpawn;
+
+    private void Awake()
+    {
+        stopSpawn = () => isSpawning = false;
+        startSpawn = () => isSpawning = true;
+    }
+
     private void OnEnable()
     {
-        GameManager.OnStartGame += () => isSpawning = true;
-        GameManager.OnRoundEnd += () => isSpawning = false;
-        GameManager.OnStartNextRound += () => isSpawning = true;
-        GameManager.OnGameOver += () => isSpawning = false;
-        GameManager.OnVictory += () => isSpawning = false;
+        GameManager.OnStartGame += startSpawn;
+        GameManager.OnRoundEnd += stopSpawn;
+        GameManager.OnStartNextRound += startSpawn;
+        GameManager.OnGameOver += stopSpawn;
+        GameManager.OnVictory += stopSpawn;
     }
+
     private void OnDisable()
     {
-        GameManager.OnStartGame -= () => isSpawning = true;
-        GameManager.OnRoundEnd -= () => isSpawning = false;
-        GameManager.OnStartNextRound -= () => isSpawning = true;
-        GameManager.OnGameOver -= () => isSpawning = false;
-        GameManager.OnVictory -= () => isSpawning = false;
+        GameManager.OnStartGame -= startSpawn;
+        GameManager.OnRoundEnd -= stopSpawn;
+        GameManager.OnStartNextRound -= startSpawn;
+        GameManager.OnGameOver -= stopSpawn;
+        GameManager.OnVictory -= stopSpawn;
     }
 
     private void Update()
     {
-        StartSpawn();
+        Spawn();
     }
 
-    private void StartSpawn()
+    private void Spawn()
     {
         if (lastSpawnTime + enemySpawnTime <= Time.time && isSpawning)
         {

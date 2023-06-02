@@ -21,8 +21,6 @@ public class LoadingPanel : MonoBehaviour
     public float fadeValue;
     public float fadeTime;
 
-    private bool startFlickering;
-
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -41,40 +39,29 @@ public class LoadingPanel : MonoBehaviour
 
     private IEnumerator Load(string scene)
     {
+        Time.timeScale = 1f;
+        UIManager.Instance.Fade(1f, 2f);
+        float startTime = Time.time;
         yield return null;
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         asyncOperation.allowSceneActivation = false;
 
         while (!asyncOperation.isDone)
         {
-            loadingSlider.value = asyncOperation.progress;
-            loadingText.text = $"Loading... {asyncOperation.progress}%";
+
+            //loadingSlider.value = asyncOperation.progress;
+            //loadingText.text = $"Loading... {asyncOperation.progress}%";
             if (asyncOperation.progress >= 0.9f)
             {
-                loadingSlider.value = 1f;
-                loadingText.text = $"Press any key to continue";
-                if (!startFlickering)
-                {
-                    startFlickering = true;
-                    FlickeringLoadingText();
-                }
-                if (Input.anyKey)
+                //loadingSlider.value = 1f;
+                //loadingText.text = $"Press any key to continue";
+                if (Time.time >= startTime + 2f)
                 {
                     canvasGroup.alpha = 0f;
-                    UIManager.Instance.Fade(1f, 1f, () =>
-                    {
-                        asyncOperation.allowSceneActivation = true;
-                        UIManager.Instance.Fade(0f, 1f, null);
-                    }
-                    );
+                    asyncOperation.allowSceneActivation = true;
                 }
             }
             yield return null;
         }
-    }
-
-    private void FlickeringLoadingText()
-    {
-        loadingText.DOFade(fadeValue, fadeTime).SetLoops(-1, LoopType.Yoyo);
     }
 }

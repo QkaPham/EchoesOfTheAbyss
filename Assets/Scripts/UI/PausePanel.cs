@@ -2,28 +2,61 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using System.Collections;
 using UnityEngine.EventSystems;
+using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PausePanel : BasePanel
 {
+    private float lastCancel;
+    private void Update()
+    {
+        if (InputManager.Instance.Cancel)
+        {
+            if (!UIManager.Instance.GamePanel.isActive) return;
+            if (UIManager.Instance.UpgradePanel.isActive) return;
+            if (UIManager.Instance.SettingsPanel.isActive) return;
+            if (Time.unscaledTime > lastCancel + 1.2f)
+            {
+                lastCancel = Time.unscaledTime;
+                if (isActive)
+                {
+                    GameManager.Instance.Resume();
+                }
+                else
+                {
+                    GameManager.Instance.Pause();
+                }
+            }
+        }
+    }
     protected override IEnumerator DelayActivate(bool active, float delay)
     {
-        yield return new WaitForSeconds(delay);
         if (active)
         {
-            isActive = true;
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
-            canvasGroup.alpha = 1;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
+            Time.timeScale = 0f;
+            canvasGroup.DOFade(1, 1).SetUpdate(true).OnComplete(() =>
+            {
+
+                isActive = true;
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            }
+            );
         }
         else
         {
-            isActive = false;
-            canvasGroup.alpha = 0;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
+            canvasGroup.DOFade(0, 0.5f).SetUpdate(true).OnComplete(() =>
+            {
+                isActive = false;
+                Time.timeScale = 1f;
+            });
         }
+        yield return null;
     }
+
     public void OnResumeButtonClick()
     {
         GameManager.Instance.Resume();

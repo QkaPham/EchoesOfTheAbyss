@@ -15,19 +15,14 @@ public class FadePanel : MonoBehaviour
     {
         imgFade = GetComponent<Image>();
         imgFade.color = fadeColor;
+        SetAlpha(1);
+        Fade(0, 5f);
     }
 
-    public void FadeOut(float value, float fadeTime, Action onFinish)
+    public void Fade(float value, float fadeTime)
     {
         if (Time.timeScale != 1) Time.timeScale = 1;
-        SetAlpha(0);
-        Sequence seq = DOTween.Sequence();
-        seq.Append(this.imgFade.DOFade(value, fadeTime));
-        //seq.Append(this.imgFade.DOFade(0, fadeTime));
-        seq.OnComplete(() =>
-        {
-            onFinish?.Invoke();
-        });
+        imgFade.DOFade(value, fadeTime);
     }
 
     private void SetAlpha(float alp)

@@ -21,7 +21,6 @@ public class RoundTimer : MonoBehaviour
     private bool isRoundEnded = false;
 
     public static event Action<float> OnTimerUpdate;
-    // public static event Action OnRoundEnd;
 
     [SerializeField]
     private EnemySpawn enemySpawn;
@@ -75,6 +74,7 @@ public class RoundTimer : MonoBehaviour
     {
         currentRound++;
         UIManager.Instance.GamePanel.UpdateRoundText(currentRound);
+        UIManager.Instance.UpgradePanel.UpdateGameProgress(currentRound);
         if (currentRound == roundNumber)
         {
             BossEnemy boss = enemySpawn.SpawnBoss();

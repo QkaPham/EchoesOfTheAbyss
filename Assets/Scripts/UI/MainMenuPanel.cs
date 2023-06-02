@@ -7,12 +7,15 @@ using DG.Tweening;
 
 public class MainMenuPanel : BasePanel
 {
-    private bool showMainMenu;
+    [Header("Press any key")]
     [SerializeField]
     private TextMeshProUGUI pressAnyKeyText;
-    public float fadeValue;
-    public float fadeTime;
+    [SerializeField]
+    private float fadeValue;
+    [SerializeField]
+    private float fadeTime;
 
+    [Header("Title")]
     [SerializeField]
     private TextMeshProUGUI titleText;
     [SerializeField]
@@ -20,7 +23,7 @@ public class MainMenuPanel : BasePanel
     [SerializeField]
     private float titleDuration;
 
-
+    [Header("Buttons")]
     [SerializeField]
     private CanvasGroup buttonsCanvasGroup;
     [SerializeField]
@@ -28,25 +31,9 @@ public class MainMenuPanel : BasePanel
     [SerializeField]
     private float moveDuration;
 
-
-    protected void Start()
-    {
-        titleText.transform.position -= titleMoveDirection;
-        titleText.transform.DOMove(titleText.transform.position+titleMoveDirection, titleDuration);
-        Color c = titleText.color;
-        c.a = 0f;
-        titleText.color = c;
-        titleText.DOFade(1f, titleDuration);
-
-        FlickeringPressAnyKeyText();
-        Activate(true);
-        buttonsCanvasGroup.transform.position = buttonsCanvasGroup.transform.position - moveDirection;
-        buttonsCanvasGroup.alpha = 0;
-    }
-
     private void Update()
     {
-        if (Input.anyKeyDown && !showMainMenu && isActive)
+        if (Input.anyKeyDown && pressAnyKeyText.gameObject.activeSelf && isActive)
         {
             ShowMainMenu();
         }
@@ -55,6 +42,11 @@ public class MainMenuPanel : BasePanel
     public override void Activate(bool active, float delay = 0)
     {
         base.Activate(active, delay);
+        if (active)
+        {
+            SetUp();
+            MainMenuAnimate();
+        }
     }
 
 
@@ -62,7 +54,6 @@ public class MainMenuPanel : BasePanel
     {
         Activate(false);
         GameManager.Instance.StartGame();
-        UIManager.Instance.LoadScene("GameLevel");
     }
 
     public void OnSettingsButtonClick()
@@ -79,14 +70,46 @@ public class MainMenuPanel : BasePanel
 
     private void ShowMainMenu()
     {
-        showMainMenu = true;
         pressAnyKeyText.gameObject.SetActive(false);
         buttonsCanvasGroup.transform.DOMove(buttonsCanvasGroup.transform.position + moveDirection, moveDuration);
         buttonsCanvasGroup.DOFade(1f, moveDuration);
     }
 
-    private void FlickeringPressAnyKeyText()
+
+    private void SetUp()
     {
-        pressAnyKeyText.DOFade(fadeValue, fadeTime).SetLoops(-1, LoopType.Yoyo);
+        titleText.transform.position -= titleMoveDirection;
+
+        Color c = titleText.color;
+        c.a = 0f;
+        titleText.color = c;
+
+        c = pressAnyKeyText.color;
+        c.a = 0f;
+        pressAnyKeyText.color = c;
+
+        buttonsCanvasGroup.alpha = 0;
+        buttonsCanvasGroup.transform.position = buttonsCanvasGroup.transform.position - moveDirection;
+    }
+
+    private void MainMenuAnimate()
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.SetDelay(.8f);
+        seq.Append(titleText.transform.DOMove(titleText.transform.position + titleMoveDirection, titleDuration));
+        seq.Join(titleText.DOFade(1f, titleDuration));
+        if (pressAnyKeyText.gameObject.activeSelf)
+        {
+            seq.OnComplete(() =>
+                pressAnyKeyText.DOFade(0.8f, fadeTime).SetDelay(0.5f).OnComplete(() =>
+                            pressAnyKeyText.DOFade(fadeValue, fadeTime).SetLoops(-1, LoopType.Yoyo)
+                            )
+            );
+        }
+        else
+        {
+            seq.Join(buttonsCanvasGroup.transform.DOMove(buttonsCanvasGroup.transform.position + moveDirection, moveDuration).SetDelay(0.3f));
+            seq.Join(buttonsCanvasGroup.DOFade(1f, moveDuration).SetDelay(0.3f));
+        }
     }
 }

@@ -31,7 +31,6 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
-    //public static event Action OnNextRound;
     public static event Action OnLevelUp;
 
     private GameObject currentSelectedObject = null;
@@ -48,6 +47,9 @@ public class UpgradePanel : BasePanel
 
     [SerializeField]
     private CharacterStats stats;
+
+    [SerializeField]
+    private GameProgressUI gameProgress;
 
     private SlotType SelectedSlotType
     {
@@ -229,5 +231,10 @@ public class UpgradePanel : BasePanel
         if (SelectedSlotIndex < 0) return;
         var item = SelectedSlotType == SlotType.InventorySlot ? inventory.Items[SelectedSlotIndex] : equipment.Items[SelectedSlotIndex];
         itemDetailUI.UpdateItemDetailUI(item, SelectedSlotType);
+    }
+
+    public void UpdateGameProgress(int round)
+    {
+        gameProgress.UpdateProgress(round);
     }
 }

@@ -27,7 +27,6 @@ public class GamePanel : BasePanel
         Health.OnHealthChange += UpdateHPBar;
         RoundTimer.OnTimerUpdate += UpdateRoundtimerText;
         Currency.OnCurrencyChange += UpdateFragmentText;
- 
     }
 
     private void OnDisable()
