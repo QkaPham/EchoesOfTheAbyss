@@ -20,6 +20,7 @@ public class PausePanel : BasePanel
                 lastCancel = Time.unscaledTime;
                 if (isActive)
                 {
+                    
                     GameManager.Instance.Resume();
                 }
                 else
@@ -34,7 +35,6 @@ public class PausePanel : BasePanel
         if (active)
         {
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
-            Time.timeScale = 0f;
             canvasGroup.DOFade(1, 1).SetUpdate(true).OnComplete(() =>
             {
 
@@ -51,7 +51,6 @@ public class PausePanel : BasePanel
             canvasGroup.DOFade(0, 0.5f).SetUpdate(true).OnComplete(() =>
             {
                 isActive = false;
-                Time.timeScale = 1f;
             });
         }
         yield return null;

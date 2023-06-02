@@ -1,5 +1,8 @@
+using DG.Tweening;
 using System;
+using System.Collections;
 using TMPro;
+using Unity.Mathematics;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +18,9 @@ public class UpgradePanel : BasePanel
 {
     [SerializeField]
     private TextMeshProUGUI statsTxt;
+
+    [SerializeField]
+    private TextMeshProUGUI levelTxt;
 
     [SerializeField]
     private TextMeshProUGUI currencyTxt;
@@ -100,6 +106,76 @@ public class UpgradePanel : BasePanel
         CharacterStats.OnLevelChange -= (level, cost) => UpdateLevelUpCost(cost);
         Currency.OnCurrencyChange -= UpdateFragmentText;
     }
+    public float moveDuration;
+    public float fadeDuration;
+
+
+    public Vector3 moveDir;
+
+    public CanvasGroup statsCanvasGroup;
+    public Vector3 statsMoveDir;
+
+    public CanvasGroup itemsCanvasGroup;
+    public Vector3 itemsMoveDir;
+
+    protected void SetUp()
+    {
+        gameProgress.transform.position -= moveDir;
+
+        statsCanvasGroup.transform.position -= statsMoveDir;
+        statsCanvasGroup.alpha = 0;
+
+        itemsCanvasGroup.transform.position -= itemsMoveDir;
+        itemsCanvasGroup.alpha = .2f;
+    }
+
+    protected void ActiveAnimate(bool active, float delay = 0f)
+    {
+        if (active)
+        {
+            gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, moveDuration);
+
+            statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, moveDuration);
+            statsCanvasGroup.DOFade(1f, fadeDuration);
+
+            itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, moveDuration);
+            itemsCanvasGroup.DOFade(1f, fadeDuration);
+        }
+        else
+        {
+            gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, moveDuration);
+
+            statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, moveDuration);
+            statsCanvasGroup.DOFade(0f, Mathf.Clamp(delay*0.5f, 0.01f, delay));
+
+            itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, moveDuration);
+            itemsCanvasGroup.DOFade(0f, Mathf.Clamp(delay * 0.5f, 0.01f, delay));
+        }
+    }
+
+    protected override IEnumerator DelayActivate(bool active, float delay)
+    {
+        yield return null;
+        if (active)
+        {
+            yield return new WaitForSeconds(delay);
+            isActive = true;
+            EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
+            canvasGroup.alpha = 1;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+            ActiveAnimate(active);
+        }
+        else
+        {
+            ActiveAnimate(active, delay);
+            yield return new WaitForSeconds(delay);
+            isActive = false;
+            canvasGroup.alpha = 0;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+    }
 
     public override void Activate(bool active, float delay = 0f)
     {
@@ -153,9 +229,12 @@ public class UpgradePanel : BasePanel
         levelUpCostTxt.text = cost.ToString();
     }
 
+
     private void UpdateStatsTxt(CharacterStats stats)
     {
-        statsTxt.text = $"Lv <size=150%>{stats.Level}</size>\n\nAtk\t\t\t\t{stats.Attack.Total}\nHP\t\t\t\t{stats.MaxHealthPoint.Total}\nDef\t\t\t\t{stats.Defense.Total}\nCrit Rate\t\t{stats.CriticalHitChance.Total}\nCrit Dmg\t\t{stats.CriticalHitDamage.Total}";
+        levelTxt.text = $"Lv <size=150%>{stats.Level}";
+        // statsTxt.text = String.Format("{0:0.00}");
+        statsTxt.text = $"{stats.Attack.Total}\n{stats.MaxHealthPoint.Total}\n{stats.Defense.Total}\n{(stats.CriticalHitChance.Total * 100).ToString("F")}%\n{stats.CriticalHitDamage.Total * 100}%\n{stats.Haste.Total * 100}%";
     }
 
     private void UpdateFragmentText(int currency)
@@ -165,7 +244,7 @@ public class UpgradePanel : BasePanel
 
     public void OnNextRoundButtonClick()
     {
-        Activate(false);
+        // Activate(false);
         //OnNextRound?.Invoke();
         GameManager.Instance.StartNextRound();
 

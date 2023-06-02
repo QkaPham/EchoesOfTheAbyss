@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.PausePanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(false);
         UIManager.Instance.ActiveDepthOfField(true);
+        Time.timeScale = 0f;
     }
 
     public void Resume()
@@ -43,6 +44,7 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.PausePanel.Activate(false);
         UIManager.Instance.ActiveDepthOfField(false);
         InputManager.Instance.EnablePlayerInput(true);
+        Time.timeScale = 1f;
     }
 
     public void RetryGame()
@@ -73,7 +75,7 @@ public class GameManager : Singleton<GameManager>
 
     public void RoundEnd()
     {
-        UIManager.Instance.UpgradePanel.Activate(true);
+        UIManager.Instance.UpgradePanel.Activate(true, 1.5f);
         UIManager.Instance.GamePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(false);
         OnRoundEnd?.Invoke();
@@ -81,7 +83,7 @@ public class GameManager : Singleton<GameManager>
 
     public void StartNextRound()
     {
-        UIManager.Instance.UpgradePanel.Activate(false);
+        UIManager.Instance.UpgradePanel.Activate(false, 1f);
         UIManager.Instance.GamePanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(true);
         OnStartNextRound?.Invoke();

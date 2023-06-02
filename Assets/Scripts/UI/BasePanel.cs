@@ -29,6 +29,7 @@ public abstract class BasePanel : MonoBehaviour
         {
             isActive = true;
             EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
+            //canvasGroup.DOFade(1, delay);
             canvasGroup.alpha = 1;
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
@@ -36,6 +37,7 @@ public abstract class BasePanel : MonoBehaviour
         else
         {
             isActive = false;
+            //canvasGroup.DOFade(0, delay);
             canvasGroup.alpha = 0;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;

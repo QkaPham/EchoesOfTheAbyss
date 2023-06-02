@@ -1286,8 +1286,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentRound: 0
-  roundNumber: 3
-  roundDuration: 20
+  roundNumber: 5
+  roundDuration: 5
   roundTimer: 0
   enemySpawn: {fileID: 113934207}
   vCam: {fileID: 0}

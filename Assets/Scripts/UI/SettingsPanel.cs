@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using System.IO;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class SettingsPanel : BasePanel
 {
@@ -64,6 +66,27 @@ public class SettingsPanel : BasePanel
     {
         TurnOnSettingsPanel = panel;
         Activate(true);
+    }
+
+    protected override IEnumerator DelayActivate(bool active, float delay)
+    {
+        if (active)
+        {
+            yield return new WaitForSeconds(delay);
+            isActive = true;
+            EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
+            canvasGroup.alpha = 1;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+        else
+        {
+            yield return new WaitForSeconds(delay);
+            isActive = false;
+            canvasGroup.alpha = 0;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
     }
 
     private void SetDisplay(bool toggle)

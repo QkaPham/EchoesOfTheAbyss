@@ -8,18 +8,18 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     protected override void OnEnable()
     {
         base.OnEnable();
-        GameManager.OnStartGame += Release;
-        GameManager.OnRoundEnd += Release;
-        GameManager.OnVictory += Release;
+        GameManager.OnStartGame += Death;
+        GameManager.OnRoundEnd += Death;
+        GameManager.OnVictory += Death;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         animator.SetTrigger("Reset");
-        GameManager.OnStartGame -= Release;
-        GameManager.OnRoundEnd -= Release;
-        GameManager.OnVictory -= Release;
+        GameManager.OnStartGame -= Death;
+        GameManager.OnRoundEnd -= Death;
+        GameManager.OnVictory -= Death;
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;
@@ -31,7 +31,10 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
 
     public override void Destroy()
     {
-        Drop();
+        if (health.isDeath)
+        {
+            Drop();
+        }
         Release();
     }
 

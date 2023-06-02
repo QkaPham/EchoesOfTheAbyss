@@ -22,13 +22,37 @@ public class Modifier
     }
     public override string ToString()
     {
+        string type = "";
+        switch (StatType)
+        {
+            case StatType.Attack:
+                type = "Atk";
+                break;
+            case StatType.Defense:
+                type = "Def";
+                break;
+            case StatType.MaxHealthPoint:
+                type = "HP";
+                break;
+            case StatType.CriticalHitChance:
+                type = "Crit Rate";
+                break;
+            case StatType.CriticalHitDamage:
+                type = "Crit Dmg";
+                break;
+            case StatType.Haste:
+                type = "Haste";
+                break;
+            default:
+                break;
+        }
         if (ModifierType == ModifierType.Flat)
         {
-            return $"{StatType} {Amount}";
+            return $"{type} {Amount}";
         }
         else if (ModifierType == ModifierType.PercentMultiply || ModifierType == ModifierType.PercentAdd)
         {
-            return $"{StatType} {Amount}%";
+            return $"{type} {Amount}%";
         }
         return base.ToString();
     }

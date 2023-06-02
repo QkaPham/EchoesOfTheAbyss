@@ -26,11 +26,6 @@ public class MeleeEnemy : BasePoolableEnemy
     protected override void Awake()
     {
         base.Awake();
-        //Init();
-        //if (player == null)
-        //{
-        //    player = FindObjectOfType<Player>();
-        //}
     }
 
     protected override void Update()

@@ -18,6 +18,8 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField]
     protected Transform damagePopupPoint;
+
+    public bool isDeath => currentHealth <= 0;
     public void Init(BaseEnemy enemy)
     {
         this.enemy = enemy;
@@ -27,9 +29,7 @@ public class EnemyHealth : MonoBehaviour
     public virtual void TakeDamage(float damageAmount, bool isCritHit)
     {
         currentHealth -= damageAmount;
-        //DamagePopup.Show(damagePopupPrefab, damageAmount, enemy.transform.position + Vector3.up);
         DamagePopup damagePopup = Instantiate(damagePopupPrefab, transform).GetComponent<DamagePopup>();
-        //damagePopup.SetUp(damageAmount, enemy.transform.position + Vector3.up, isCritHit);
         damagePopup.SetUp(damageAmount, damagePopupPoint.position - transform.position, isCritHit);
 
         if (currentHealth <= 0)
