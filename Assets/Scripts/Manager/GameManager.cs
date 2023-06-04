@@ -24,7 +24,7 @@ public class GameManager : Singleton<GameManager>
     private void OnGameLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnGameLevelLoaded;
-        UIManager.Instance.MainMenuPanel.Activate(false);
+      //  UIManager.Instance.MainMenuPanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(true);
         UIManager.Instance.Fade(0f, 1f);
         InputManager.instance.EnablePlayerInput(true);

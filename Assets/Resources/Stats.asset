@@ -23,8 +23,8 @@ MonoBehaviour:
   DefenseGrowth: 1
   MaxHealthGrowth: 10
   CritGrowth: 0.01
-  CritDamageGrowth: 0.5
-  HasteGrowth: 0.5
+  CritDamageGrowth: 0.05
+  HasteGrowth: 0.05
   BaseMoveSpeed: 4
   RunSpeed: 7
   RunStaminaConsume: 15
@@ -32,18 +32,11 @@ MonoBehaviour:
   DashTime: 0.2
   DashCooldownTime: 2
   DashStaminaConsume: 20
-  AttackDamageMultifier: 1
-  AttackTime: 0.2
-  AttackMoveSpeed: 2
-  BaseAttackCooldownTime: 1
-  RangeAttackDamageMultifier: 0.5
-  BaseRangeAttackCooldownTime: 1
-  RangeAttackManaConsume: 20
   MaxStamina: 100
-  StaminaRecovery: 15
+  StaminaRecovery: 10
   DelayStaminaRecoverTime: 1
   MaxMana: 100
-  ManaRecovery: 15
+  ManaRecovery: 10
   DelayManaRecoverTime: 1
   Attack:
     StatType: 0

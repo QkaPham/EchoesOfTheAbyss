@@ -45,7 +45,6 @@ public class SettingsPanel : BasePanel
 
         ResolutionDropDown.onValueChanged.AddListener(SetResolution);
         FullScreenToggle.onValueChanged.AddListener(SetDisplay);
-
     }
 
     private void Start()

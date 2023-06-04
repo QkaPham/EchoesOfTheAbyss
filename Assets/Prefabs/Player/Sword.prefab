@@ -187,6 +187,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rootTransform: {fileID: 428459967188302182}
+  BaseAttackCooldown: 1
+  damageMultifier: 1
+  hitbox: {fileID: 8664613936352316282}
 --- !u!210 &1993111684
 SortingGroup:
   m_ObjectHideFlags: 0
@@ -380,4 +383,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageableObjects: []
-  damagePopupPrefab: {fileID: 1808901579846088661, guid: f0fb4416a6493d848add8f935f70fd52, type: 3}

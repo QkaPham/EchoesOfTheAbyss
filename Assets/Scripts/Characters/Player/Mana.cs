@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Mana", menuName = "Scriptable Object/Mana")]
 public class Mana : ScriptableObject
 {
-    public float currentMana;
+    [SerializeField]
+    private float currentMana;
     public float CurrentMana
     {
         get
@@ -21,18 +22,18 @@ public class Mana : ScriptableObject
     [SerializeField]
     private float maxMana;
     public float MaxMana { get => maxMana; }
-
-    [SerializeField]
     private float delayManaRecoverTime;
-    public float LastTimeConsumeMana { get; set; }
+    private float LastTimeConsumeMana { get; set; }
     private bool recoverMana => Time.time >= delayManaRecoverTime + LastTimeConsumeMana;
     private bool fullyRecovered => currentMana == maxMana;
+    private float manaRecovery;
 
-    public float manaRecoverPerSecond;
-    public void Init(float maxMana)
+    public void Init(CharacterStats stats)
     {
-        this.maxMana = maxMana;
+        maxMana = stats.MaxMana;
         currentMana = maxMana;
+        delayManaRecoverTime = stats.DelayManaRecoverTime;
+        manaRecovery = stats.ManaRecovery;
     }
 
     public void Regenerate()
@@ -41,7 +42,7 @@ public class Mana : ScriptableObject
         {
             if (recoverMana)
             {
-                CurrentMana += manaRecoverPerSecond * Time.deltaTime;
+                CurrentMana += manaRecovery * Time.deltaTime;
             }
             if (UIManager.Instance.GamePanel != null)
             {

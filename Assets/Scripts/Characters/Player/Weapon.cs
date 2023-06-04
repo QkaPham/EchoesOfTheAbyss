@@ -5,62 +5,82 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    protected Player player;
-    protected Vector3 playerPositon => player.transform.position;
-
     [SerializeField]
     protected Transform rootTransform;
     protected Animator animator;
-    protected bool isAttacking;
+    protected Player player;
+    protected CharacterStats stats => player.stats;
+    protected Vector3 playerPositon => player.transform.position;
+
+    [SerializeField]
+    protected float BaseAttackCooldown = 1f;
+    [SerializeField]
+    protected float damageMultifier = 1f;
+
+    [SerializeField]
+    protected HitBox hitbox;
+    protected bool CanAttack => Time.time >= lastAttackTime + CooldownTime;
+    protected bool EndAttack = true;
+    protected float CooldownTime => BaseAttackCooldown / stats.Haste.Total;
+    protected float lastAttackTime = 0f;
+
     protected void Awake()
     {
         player = GetComponentInParent<Player>();
         animator = GetComponent<Animator>();
+        hitbox = GetComponentInChildren<HitBox>();
         if (rootTransform == null)
         {
             foreach (Transform child in transform)
             {
-                if (child.name == "Flip")
+                if (child.name == "Root")
                 {
                     rootTransform = child;
                     continue;
                 }
             }
         }
+
+        //Cooldown 10% when start game
+        lastAttackTime = -CooldownTime * 1.1f;
     }
 
     protected void OnEnable()
     {
         CharacterStats.OnStatsChange += SpeedUpAttackAnimation;
-        Attack.OnStartAttack += OnStartAttack;
-        //Health.OnGameOver += () => gameObject.SetActive(false);
     }
 
     protected void OnDisable()
     {
         CharacterStats.OnStatsChange -= SpeedUpAttackAnimation;
-        Attack.OnStartAttack -= OnStartAttack;
-        //Health.OnGameOver -= () => gameObject.SetActive(false);
-    }
-
-    protected void OnStartAttack(CharacterStats stats)
-    {
-        isAttacking = true;
-        RotateToMouse();
-        animator.SetTrigger("Swing");
-    }
-    protected void OnEndAttack()
-    {
-        isAttacking = false;
     }
 
     protected void Update()
     {
-        if (!isAttacking)
+        if (InputManager.Instance.Attack && CanAttack)
         {
-            Flip();
-            ResetRotation();
+            Attack();
         }
+        if (EndAttack)
+        {
+            ResetRotation();
+            Flip();
+        }
+    }
+
+    private void Attack()
+    {
+        EndAttack = false;
+        lastAttackTime = Time.time;
+        RotateToMouse();
+        animator.SetTrigger("Swing");
+        AudioManager.Instance.PlaySE("Slash");
+        hitbox.DealDamage(stats, damageMultifier);
+    }
+
+    protected void OnEndAttack()
+    {
+        EndAttack = true;
     }
 
     protected void RotateToMouse()
@@ -94,5 +114,15 @@ public class Weapon : MonoBehaviour
     protected void SpeedUpAttackAnimation(CharacterStats stats)
     {
         animator.SetFloat("AttackSpeedMultiplier", (1 + stats.Haste.Total));
+    }
+
+    public void Destroy()
+    {
+        animator.SetTrigger("Destroy");
+    }
+
+    public void Init()
+    {
+        animator.SetTrigger("Reset");
     }
 }

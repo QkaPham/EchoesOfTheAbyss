@@ -8,19 +8,6 @@ public class HitBox : MonoBehaviour
     [SerializeField]
     private List<EnemyHealth> DamageableObjects = new List<EnemyHealth>();
 
-    [SerializeField]
-    private GameObject damagePopupPrefab;
-
-    private void OnEnable()
-    {
-        Attack.OnStartAttack += DealDamage;
-    }
-
-    private void OnDisable()
-    {
-        Attack.OnStartAttack -= DealDamage;
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         EnemyHealth DamageableObject = collision.gameObject.GetComponent<EnemyHealth>();
@@ -38,19 +25,19 @@ public class HitBox : MonoBehaviour
         }
     }
 
-    private void DealDamage(CharacterStats stats)
+    public void DealDamage(CharacterStats stats, float multifier = 1f)
     {
         int count = DamageableObjects.Count;
         if (count == 0) return;
         AudioManager.Instance.PlaySE("Hit");
         for (int i = count - 1; i >= 0; i--)
         {
-            float damage = DamageCalculate(out bool isCrit, stats.Attack.Total, stats.CriticalHitChance.Total, stats.CriticalHitDamage.Total);
+            float damage = DamageCalculate(out bool isCrit, stats.Attack.Total, stats.CriticalHitChance.Total, stats.CriticalHitDamage.Total, multifier);
             DamageableObjects[i].TakeDamage(damage, isCrit);
         }
     }
 
-    private float DamageCalculate(out bool isCrit, float attack, float critRate, float critDamage, float damageMultiplier = 1f)
+    private float DamageCalculate(out bool isCrit, float attack, float critRate, float critDamage, float damageMultiplier)
     {
         float rand = UnityEngine.Random.value;
         if (rand < critRate)
@@ -63,13 +50,6 @@ public class HitBox : MonoBehaviour
             isCrit = false;
             return attack * damageMultiplier;
         }
-    }
-
-
-    private IEnumerator Delay()
-    {
-        yield return null;
-        AudioManager.Instance.PlaySE("Hit");
     }
 
     private void Update()
@@ -96,6 +76,4 @@ public class HitBox : MonoBehaviour
             transform.localScale = Vector3.one;
         }
     }
-
-
 }

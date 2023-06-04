@@ -44,7 +44,7 @@ public class LaserEnemy : BasePoolableEnemy
     [SerializeField]
     protected float attackCooldownTime = 0.5f;
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    protected float lastAttackTime = float.MinValue;
+    //protected float lastAttackTime = float.MinValue;
 
 
     [SerializeField]

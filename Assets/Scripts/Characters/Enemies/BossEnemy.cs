@@ -60,10 +60,11 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected float attackCooldownTime = 0.5f;
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    protected float lastAttackTime = float.MinValue;
+    // protected float lastAttackTime = float.MinValue;
 
     [SerializeField]
     protected float rushDamageDistance = .8f;
+    protected float rushTime;
 
     [SerializeField]
     protected float timeBetweenEachRushDamage = 1f;
@@ -292,6 +293,7 @@ public class BossEnemy : BaseEnemy
     protected virtual void HandleRushState()
     {
         rb.velocity = rushDirection * rushSpeed;
+        rushTime += Time.deltaTime;
 
         if (playerDistance < rushDamageDistance && elapsedTimeBetweenEachRushDamage >= timeBetweenEachRushDamage)
         {
@@ -304,8 +306,9 @@ public class BossEnemy : BaseEnemy
             elapsedTimeBetweenEachRushDamage += Time.deltaTime;
         }
 
-        if (Vector3.Distance(transform.position, rushPositon) <= 0.01f)
+        if (rushTime >= rushRange / rushSpeed)
         {
+            rushTime = 0;
             lastAttackTime = Time.time;
             ChangeAttackType();
             NextState = EnemyState.Idle;

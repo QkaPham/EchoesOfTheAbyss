@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +10,8 @@ public enum PlayerState
     Run,
     Dash,
     Attack,
-    Death
+    Death,
+    Hurt
 }
 
 public class Player : MonoBehaviour
@@ -22,9 +24,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     public Transform rootTransform;
-
-    [SerializeField]
-    public GameObject playerBulletPrefabs;
 
     [SerializeField]
     private Transform firePoint;
@@ -41,7 +40,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     protected ParticleSystem DeathParticle;
 
-    private StateMachine stateMachine;
+    private StateMachine playerStateMachine;
+    private StateMachine weaponStateMachine;
 
     [SerializeField]
     private Currency currency;
@@ -67,62 +67,70 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Weapon weapon;
 
+    [SerializeField]
+    private RangeWeapon rangeWeapon;
+
+    public static event Action PlayerDeath;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         weapon = GetComponentInChildren<Weapon>();
 
-        stateMachine = new StateMachine();
-        var idle = new Idle(stateMachine, animator, this);
-        var walk = new Walk(stateMachine, animator, this);
-        var run = new Run(stateMachine, animator, this);
-        var dash = new Dash(stateMachine, animator, this);
-        var attack = new Attack(stateMachine, animator, this);
-        var rangeAttack = new RangeAttack(stateMachine, animator, this);
+        playerStateMachine = new StateMachine();
+        var idle = new Idle(playerStateMachine, animator, this);
+        var walk = new Walk(playerStateMachine, animator, this);
+        var run = new Run(playerStateMachine, animator, this);
+        var dash = new Dash(playerStateMachine, animator, this);
 
-        stateMachine.Initialize(idle);
-        stateMachine.AddAnyTransition(dash, () => InputManager.Instance.Dash && dash.CanDash && stamina.CurrentStamina >= stats.DashStaminaConsume);
-        stateMachine.AddTransition(dash, idle, () => dash.DashEnd);
-        stateMachine.AddAnyTransition(attack, () => InputManager.Instance.Attack && attack.CanAttack && stateMachine.currentState != dash);
-        stateMachine.AddTransition(attack, idle, () => attack.AttackEnd);
-        stateMachine.AddTransition(idle, walk, () => InputManager.Instance.Move);
-        stateMachine.AddTransition(walk, run, () => InputManager.Instance.Run && stamina.CurrentStamina >= 1f);
-        stateMachine.AddTransition(walk, idle, () => !InputManager.Instance.Move);
-        stateMachine.AddTransition(run, idle, () => !InputManager.Instance.Run || !InputManager.Instance.Move);
-        stateMachine.AddTransition(run, walk, () => stamina.CurrentStamina == 0f);
-        stateMachine.AddAnyTransition(rangeAttack, () => InputManager.Instance.RangeAttack && rangeAttack.CanAttack && mana.CurrentMana >= 20);
-        stateMachine.AddTransition(rangeAttack, idle, () => rangeAttack.AttackEnd || mana.currentMana < 20);
+        playerStateMachine.Initialize(idle);
+        playerStateMachine.AddAnyTransition(dash, () => InputManager.Instance.Dash && dash.CanDash && stamina.CurrentStamina >= stats.DashStaminaConsume);
+        playerStateMachine.AddTransition(dash, idle, () => dash.DashEnd);
+        playerStateMachine.AddTransition(idle, walk, () => InputManager.Instance.Move);
+        playerStateMachine.AddTransition(walk, run, () => InputManager.Instance.Run && stamina.CurrentStamina >= 1f);
+        playerStateMachine.AddTransition(walk, idle, () => !InputManager.Instance.Move);
+        playerStateMachine.AddTransition(run, idle, () => !InputManager.Instance.Run || !InputManager.Instance.Move);
+        playerStateMachine.AddTransition(run, walk, () => stamina.CurrentStamina == 0f);
+    }
+
+    private void Start()
+    {
+        Init();
     }
 
     private void OnEnable()
     {
-        GameManager.OnStartGame += ResetPlayer;
+        GameManager.OnStartGame += Init;
     }
 
     private void OnDisable()
     {
-        GameManager.OnStartGame -= ResetPlayer;
+        GameManager.OnStartGame -= Init;
     }
 
-    private void ResetPlayer()
+    private void Init()
     {
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
+        animator.SetTrigger("Reset");
         currency.Init();
         stats.Init();
-        health.Init(stats.MaxHealthPoint.Total, this);
-        mana.Init(stats.MaxStamina);
-        stamina.Init(stats.MaxMana);
+        health.Init(stats, this);
+        mana.Init(stats);
+        stamina.Init(stats);
         inventory.Init();
         equipment.Init();
-        weapon.gameObject.SetActive(true);
+        weapon.Init();
+        rangeWeapon.firePoint = firePoint;
     }
 
     private void Update()
     {
-        stateMachine.OnFSMUpdate();
+        playerStateMachine.OnFSMUpdate();
         Flip();
         stamina.Regenerate();
         mana.Regenerate();
+
+        TestCode();
     }
 
     public void SetPosition(Vector2 position)
@@ -141,27 +149,34 @@ public class Player : MonoBehaviour
 
     private void Flip()
     {
-        if (Time.timeScale == 0.0f || stateMachine.currentState.GetType() == typeof(Dash))
+        if (Time.timeScale == 0.0f || playerStateMachine.currentState.GetType() == typeof(Dash))
             return;
 
         rootTransform.localScale = InputManager.Instance.MouseOnWorld.x < transform.position.x ? new Vector3(-1, 1, 1) : Vector3.one;
     }
 
-    public void FireBullet()
-    {
-        PlayerBullet playerBullet = Instantiate(playerBulletPrefabs, this.transform).GetComponent<PlayerBullet>();
-        playerBullet.Init(firePoint.position, (InputManager.Instance.MouseOnWorld - (Vector2)firePoint.position).normalized, stats.Attack.Total, 10, 4);
-    }
-
     public void Hurt()
     {
+        animator.SetTrigger("Hurt");
+    }
 
+    private void PlayHurtParticle()
+    {
+        hurtParticle.Play();
     }
 
     public void Death()
     {
+        PlayerDeath?.Invoke();
         animator.SetTrigger("Death");
-        weapon.gameObject.SetActive(false);
+        DeathParticle.Play();
+        weapon.Destroy();
+    }
+
+    private void Destroy()
+    {
+        GameManager.Instance.GameOver();
+        //weapon.gameObject.SetActive(false);
     }
 
     public void PlayDashEffect(Vector2 dashDirection)
@@ -169,5 +184,21 @@ public class Player : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, dashDirection);
         dashParticle.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         dashParticle.Play();
+    }
+
+
+    private void TestCode()
+    {
+        //if(Input.GetKeyDown(KeyCode.P)) {
+        //    health.TakeDamage(1);
+        //}
+        //if(Input.GetKeyDown(KeyCode.O))
+        //{
+        //    health.TakeDamage(1000);
+        //}
+        //if(Input.GetKeyDown(KeyCode.I))
+        //{
+        //    Init();
+        //}
     }
 }

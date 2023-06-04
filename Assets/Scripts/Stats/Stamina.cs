@@ -8,6 +8,14 @@ public class Stamina : ScriptableObject
 {
     [SerializeField]
     private float currentStamina;
+
+    [SerializeField]
+    private float maxStamina;
+
+    private float delayStaminaRecoverTime;
+    private float lastTimeConsumeStamina;
+    private float staminaRecovery;
+
     public float CurrentStamina
     {
         get
@@ -19,22 +27,16 @@ public class Stamina : ScriptableObject
             currentStamina = Mathf.Clamp(value, 0, maxStamina);
         }
     }
-
-    [SerializeField]
-    private float maxStamina;
-    public float MaxStanima { get => maxStamina; }
-
-    [SerializeField]
-    private float delayStaminaRecoverTime;
-    public float LastTimeConsumeStamina { get; set; }
-    private bool recoverStamina => Time.time >= delayStaminaRecoverTime + LastTimeConsumeStamina;
+    public float MaxStanima { get => maxStamina; private set => maxStamina = value; }
+    private bool recoverStamina => Time.time >= delayStaminaRecoverTime + lastTimeConsumeStamina;
     private bool fullyRecovered => CurrentStamina == maxStamina;
 
-    public float staminaRecoverPerSecond;
-    public void Init(float maxStamina)
+    public void Init(CharacterStats stats)
     {
-        this.maxStamina = maxStamina;
+        maxStamina = stats.MaxStamina;
         CurrentStamina = maxStamina;
+        delayStaminaRecoverTime = stats.DelayManaRecoverTime;
+        staminaRecovery = stats.StaminaRecovery;
     }
 
     public void Regenerate()
@@ -43,7 +45,7 @@ public class Stamina : ScriptableObject
         {
             if (recoverStamina)
             {
-                CurrentStamina += staminaRecoverPerSecond * Time.deltaTime;
+                CurrentStamina += staminaRecovery * Time.deltaTime;
             }
             if (UIManager.Instance.GamePanel != null)
             {
@@ -59,7 +61,7 @@ public class Stamina : ScriptableObject
             return false;
         }
         CurrentStamina -= stamina;
-        LastTimeConsumeStamina = Time.time;
+        lastTimeConsumeStamina = Time.time;
         return true;
     }
 

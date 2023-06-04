@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor.Search;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class MainMenuPanel : BasePanel
 {
@@ -30,6 +31,16 @@ public class MainMenuPanel : BasePanel
     private Vector3 moveDirection;
     [SerializeField]
     private float moveDuration;
+
+    [SerializeField]
+    protected Image image;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        image.color = Color.black;
+        image.DOFade(0, 3f);
+    }
 
     private void Update()
     {

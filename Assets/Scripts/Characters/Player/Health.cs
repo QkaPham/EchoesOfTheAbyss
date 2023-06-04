@@ -14,7 +14,6 @@ public class Health : ScriptableObject
     private float maxHealth;
     private float deffense;
 
-    public static event Action OnGameOver;
     public static event Action<float, float, float> OnHealthChange; //(Change Value, Remain Health, Max Health)
 
     public float CurrentHealth
@@ -29,9 +28,9 @@ public class Health : ScriptableObject
         }
     }
 
-    public void Init(float maxHealth,Player player)
+    public void Init(CharacterStats stats,Player player)
     {
-        this.maxHealth = maxHealth;
+        maxHealth = stats.MaxHealthPoint.Total;
         currentHealth = maxHealth;
         this.player = player;
     }
@@ -52,12 +51,14 @@ public class Health : ScriptableObject
     {
         currentHealth -= FinalDamage(amount, deffense);
         OnHealthChange?.Invoke(-amount, currentHealth, maxHealth);
-        player.Hurt();
+        
         if (currentHealth <= 0)
         {
-            OnGameOver?.Invoke();
             player.Death();
-            GameManager.Instance.GameOver();
+        }
+        else
+        {
+            player.Hurt();
         }
     }
 

@@ -1,3 +1,4 @@
+//using System;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -5,6 +6,9 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     private GameObject[] propPrefabs;
     public float propRate = 0.05f;
+    [SerializeField]
+    private GameObject borderPrefabs;
+
 
     public GameObject obstaclePrefab;
     public float obstacleRate = 0.05f;
@@ -23,17 +27,22 @@ public class MapGenerator : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.OnStartGame -= GenerateObstacles;        
+        GameManager.OnStartGame -= GenerateObstacles;
     }
     private void GenerateObstacles()
     {
         DestroyAllChild();
         if (isUseSeed) Random.InitState(seed);
 
-        for (int x = -width / 2; x < width / 2; x++)
+        for (int x = -width / 2; x <= width / 2; x += 2)
         {
-            for (int y = -height / 2; y < height / 2; y++)
+            for (int y = -height / 2; y <= height / 2; y += 2)
             {
+                if (x == -width / 2 || x == width / 2 || y == -height / 2 || y == height / 2)
+                {
+                    Instantiate(borderPrefabs, new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
+                    continue;
+                }
                 if (x >= -exclusionArea && x <= exclusionArea && y >= -exclusionArea && y <= exclusionArea)
                 {
                     continue;
@@ -42,12 +51,12 @@ public class MapGenerator : MonoBehaviour
                 if (rand < propRate)
                 {
                     int index = Random.Range(0, propPrefabs.Length - 1);
-                    Instantiate(propPrefabs[index], new Vector3(x, y, 0), Quaternion.identity, transform);
+                    Instantiate(propPrefabs[index], new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
                 }
 
                 if (rand >= propRate && rand < propRate + obstacleRate)
                 {
-                    Instantiate(obstaclePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+                    Instantiate(obstaclePrefab, new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
                 }
             }
         }

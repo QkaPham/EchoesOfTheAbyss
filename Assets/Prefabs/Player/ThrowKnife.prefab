@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5207439744757054862}
+  - component: {fileID: 5207439744757054851}
   - component: {fileID: 5207439744757054849}
   - component: {fileID: 5207439744757054848}
-  - component: {fileID: 5207439744757054851}
   - component: {fileID: 5207439744757054863}
   m_Layer: 9
   m_Name: ThrowKnife
@@ -37,6 +37,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5207439744757054851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5207439744757054850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ca1d3616166714c809c9fab33ec76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  stats: {fileID: 0}
+  baseAttackCooldown: 0.1
+  damageMultifier: 1
+  manaConsume: 1
+  speed: 10
+  range: 10
 --- !u!50 &5207439744757054849
 Rigidbody2D:
   serializedVersion: 4
@@ -99,20 +119,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5207439744757054851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5207439744757054850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7ca1d3616166714c809c9fab33ec76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  animator: {fileID: 0}
 --- !u!95 &5207439744757054863
 Animator:
   serializedVersion: 5

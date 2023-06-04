@@ -22,7 +22,7 @@ public class MeleeEnemy : BasePoolableEnemy
     protected float attackCooldownTime = 1f;
 
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    protected float lastAttackTime = float.MinValue;
+   // protected float lastAttackTime = float.MinValue;
     protected override void Awake()
     {
         base.Awake();

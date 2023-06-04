@@ -40,7 +40,7 @@ public class RushEnemy : BasePoolableEnemy
     [SerializeField]
     protected float attackCooldownTime = 0.5f;
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    protected float lastAttackTime = float.MinValue;
+    //protected float lastAttackTime = float.MinValue;
 
     [SerializeField]
     protected float damageDistance = .8f;
@@ -48,7 +48,7 @@ public class RushEnemy : BasePoolableEnemy
     [SerializeField]
     protected float timeBetweenEachDamage = 1f;
     protected float elapsedTimeBetweenEachDamage;
-
+    protected float attackTime;
     protected override void Update()
     {
         base.Update();
@@ -110,9 +110,11 @@ public class RushEnemy : BasePoolableEnemy
         }
     }
 
+
     protected virtual void HandleAttackState()
     {
         rb.velocity = rushDirection * rushSpeed;
+        attackTime += Time.deltaTime;
 
         if (playerDistance < damageDistance && elapsedTimeBetweenEachDamage >= timeBetweenEachDamage)
         {
@@ -125,9 +127,15 @@ public class RushEnemy : BasePoolableEnemy
             elapsedTimeBetweenEachDamage += Time.deltaTime;
         }
 
-        if (Vector3.Distance(transform.position, rushPositon) <= 0.01f)
+        if (attackTime >= rushRange / rushSpeed)
         {
+            attackTime = 0;
             lastAttackTime = Time.time;
+            NextState = EnemyState.Idle;
+        }
+
+        if (!canAttack)
+        {
             NextState = EnemyState.Idle;
         }
     }
@@ -162,7 +170,7 @@ public class RushEnemy : BasePoolableEnemy
             rushDirection = playerDirection;
         }
 
-        if (elapsedDelayAttackTime >= delayAttackTime)
+        if (elapsedDelayAttackTime >= delayAttackTime && canAttack)
         {
             elapsedTimeBetweenEachDamage = timeBetweenEachDamage;
             elapsedDelayAttackTime = 0;

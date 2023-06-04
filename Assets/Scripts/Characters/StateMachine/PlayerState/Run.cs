@@ -19,13 +19,10 @@ public class Run : State
         base.OnStateUpdate();
         player.SetVelocity(InputManager.Instance.MoveDir * player.stats.RunSpeed);
         player.stamina.ConsumePerSecond(player.stats.RunStaminaConsume);
-        //player.stamina.CurrentStamina -= player.stats.RunStaminaConsume * Time.deltaTime;
     }
 
     public override void OnStateExit()
     {
         base.OnStateExit();
-        player.stamina.LastTimeConsumeStamina = Time.time;
     }
-
 }

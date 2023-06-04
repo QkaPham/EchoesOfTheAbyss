@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using System;
 
 public class FadePanel : MonoBehaviour
 {
@@ -15,8 +12,7 @@ public class FadePanel : MonoBehaviour
     {
         imgFade = GetComponent<Image>();
         imgFade.color = fadeColor;
-        SetAlpha(1);
-        Fade(0, 5f);
+        SetAlpha(0);
     }
 
     public void Fade(float value, float fadeTime)

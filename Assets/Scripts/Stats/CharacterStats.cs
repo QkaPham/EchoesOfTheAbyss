@@ -33,8 +33,8 @@ public class CharacterStats : ScriptableObject
     public int DefenseGrowth = 1;
     public int MaxHealthGrowth = 10;
     public float CritGrowth = 0.01f;
-    public float CritDamageGrowth = 0.5f;
-    public float HasteGrowth = 0.5f;
+    public float CritDamageGrowth = 0.05f;
+    public float HasteGrowth = 0.05f;
 
     [Header("Abilities")]
     [Header("Move")]
@@ -50,26 +50,14 @@ public class CharacterStats : ScriptableObject
     public float DashCooldownTime = 2f;
     public float DashStaminaConsume = 20f;
 
-    [Header("Melee Attack")]
-    public float AttackDamageMultifier = 1f;
-    public float AttackTime = 0.2f;
-    public float AttackMoveSpeed = 2f;
-    public float BaseAttackCooldownTime = 1f;
-    public float AttackCooldownTime => BaseAttackCooldownTime / (1 + Haste.Total / 100);
-
-    [Header("Range Attack")]
-    public float RangeAttackDamageMultifier = 0.5f;
-    public float BaseRangeAttackCooldownTime = 1f;
-    public float RangeAttackManaConsume = 20f;
-
     [Header("Stamina")]
     public float MaxStamina = 100f;
-    public float StaminaRecovery = 15;
+    public float StaminaRecovery = 10f;
     public float DelayStaminaRecoverTime = 1f;
 
     [Header("Mana")]
     public float MaxMana = 100f;
-    public float ManaRecovery = 15;
+    public float ManaRecovery = 10f;
     public float DelayManaRecoverTime = 1f;
 
     private List<Stat> stats = new List<Stat>();

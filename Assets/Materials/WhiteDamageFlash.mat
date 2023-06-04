@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DamageFlashMat
+  m_Name: WhiteDamageFlash
   m_Shader: {fileID: -6465566751694194690, guid: a493326ab08cd5b40bea18b02927a10d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: c5969f30042435c43a70e02a63176b66, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f02f5c0849105341a6f9a9a7d8027c0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:

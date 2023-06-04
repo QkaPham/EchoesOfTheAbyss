@@ -60,6 +60,8 @@ public abstract class BaseEnemy : MonoBehaviour
     protected ObjectPool<Fragment> fragmentPool;
     protected ObjectPool<CollectibleItem> collectibleItemPool;
 
+    protected float lastAttackTime = float.MinValue;
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -70,15 +72,16 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void OnEnable()
     {
+        Player.PlayerDeath += StopAttack;
     }
 
     protected virtual void OnDisable()
     {
-
+        Player.PlayerDeath -= StopAttack;
     }
     protected virtual void Start()
     {
-        
+
     }
 
     protected virtual void Update()
@@ -97,11 +100,10 @@ public abstract class BaseEnemy : MonoBehaviour
         NextState = EnemyState.Idle;
     }
 
-    //public virtual void Reset(Vector3 position = default)
-    //{
-    //    NextState = EnemyState.Idle;
-    //    health.Init(this);
-    //}
+    protected virtual void StopAttack()
+    {
+        lastAttackTime = float.MaxValue;
+    }
 
     protected virtual void Flip()
     {

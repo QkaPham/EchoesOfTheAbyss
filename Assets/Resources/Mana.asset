@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 651e567d42760ee4dbb827503a5e2805, type: 3}
   m_Name: Mana
   m_EditorClassIdentifier: 
-  currentMana: 85.39009
+  currentMana: 100
   maxMana: 100
-  delayManaRecoverTime: 1
-  manaRecoverPerSecond: 9.7

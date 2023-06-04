@@ -26,7 +26,7 @@ public class RangeEnemy : BasePoolableEnemy
     protected float CooldownTime = 1f;
 
     protected bool canAttack => Time.time >= lastAttackTime + CooldownTime;
-    protected float lastAttackTime = float.MinValue;
+    //protected float lastAttackTime = float.MinValue;
     protected Vector3 targetDirection => (playerPositon + new Vector3(0f, 0.5f, 0f) - transform.position).normalized;
 
     protected override void Update()
@@ -76,6 +76,11 @@ public class RangeEnemy : BasePoolableEnemy
         if (playerDistance <= attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
+            return;
+        }
+        if(playerDistance <= attackRange && !canAttack)
+        {
+            NextState = EnemyState.Idle;
         }
     }
 

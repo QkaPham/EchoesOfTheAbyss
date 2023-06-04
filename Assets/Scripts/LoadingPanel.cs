@@ -1,5 +1,3 @@
-using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,28 +10,28 @@ public class LoadingPanel : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI loadingText;
 
-    [SerializeField]
-    private Slider loadingSlider;
+    //[SerializeField]
+    //private Slider loadingSlider;
 
-    [SerializeField]
-    private CanvasGroup canvasGroup;
+    //[SerializeField]
+    //private CanvasGroup canvasGroup;
 
-    public float fadeValue;
-    public float fadeTime;
+    //public float fadeValue;
+    //public float fadeTime;
 
-    private void Awake()
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
+    //private void Awake()
+    //{
+    //    canvasGroup = GetComponent<CanvasGroup>();
+    //}
 
-    private void Start()
-    {
-        canvasGroup.alpha = 0f;
-    }
+    //private void Start()
+    //{
+    //    canvasGroup.alpha = 0f;
+    //}
 
     public void LoadScene(string scene)
     {
-        canvasGroup.alpha = 1f;
+       // canvasGroup.alpha = 1f;
         StartCoroutine(Load(scene));
     }
 
@@ -57,7 +55,7 @@ public class LoadingPanel : MonoBehaviour
                 //loadingText.text = $"Press any key to continue";
                 if (Time.time >= startTime + 2f)
                 {
-                    canvasGroup.alpha = 0f;
+                   // canvasGroup.alpha = 0f;
                     asyncOperation.allowSceneActivation = true;
                 }
             }
