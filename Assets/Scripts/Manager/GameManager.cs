@@ -11,7 +11,7 @@ public class GameManager : Singleton<GameManager>
     public static event Action OnStartGame;
     public static event Action OnRoundEnd;
     public static event Action OnStartNextRound;
-    public static event Action OnRetryGame;
+    //public static event Action OnRetryGame;
     public static event Action OnGameOver;
     public static event Action OnVictory;
 

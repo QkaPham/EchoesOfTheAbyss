@@ -115,8 +115,6 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected float bulletAngle = 60f;
 
-    public static event Action OnDefeated;
-
     protected override void Start()
     {
         base.Start();

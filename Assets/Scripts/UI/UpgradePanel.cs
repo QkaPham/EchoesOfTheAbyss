@@ -37,8 +37,6 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
-    public static event Action OnLevelUp;
-
     private GameObject currentSelectedObject = null;
     private GameObject previousSelectedObject = null;
 
