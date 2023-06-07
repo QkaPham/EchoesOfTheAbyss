@@ -812,6 +812,8 @@ MonoBehaviour:
   enemy: {fileID: 335271184}
   player: {fileID: 2087511180}
   pool: {fileID: 460206536}
+  inputaction: {fileID: 1698060314520918299, guid: d7287ae5b603d87438756eaa9b5b034c, type: 3}
+  input: {fileID: 0}
 --- !u!4 &1718834489
 Transform:
   m_ObjectHideFlags: 0
