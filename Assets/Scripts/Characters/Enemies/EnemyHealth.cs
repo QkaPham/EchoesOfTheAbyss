@@ -34,7 +34,7 @@ public class EnemyHealth : MonoBehaviour
         col.enabled = false;
     }
 
-    public void Init(BaseEnemy enemy)
+    public virtual void Init(BaseEnemy enemy)
     {
         this.enemy = enemy;
         maxHealth = enemy.stats.totalMaxHealth;

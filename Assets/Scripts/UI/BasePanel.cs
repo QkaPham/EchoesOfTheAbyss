@@ -27,7 +27,7 @@ public abstract class BasePanel : MonoBehaviour
     {
         if (active)
         {
-            //canvasGroup.alpha = 1;
+            canvasGroup.alpha = 1;
             Animation(active, delay);
 
             yield return new WaitForSeconds(delay);
@@ -46,7 +46,7 @@ public abstract class BasePanel : MonoBehaviour
             canvasGroup.interactable = false;
             isActive = false;
             yield return new WaitForSeconds(delay);
-            //canvasGroup.alpha = 0;
+            canvasGroup.alpha = 0;
         }
     }
 

@@ -127,6 +127,7 @@ public class Player : MonoBehaviour
         Flip();
         stamina.Regenerate();
         mana.Regenerate();
+        health.Regenerate();
     }
 
     public void SetPosition(Vector2 position)

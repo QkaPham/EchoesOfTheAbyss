@@ -1,6 +1,6 @@
 using System;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Health", menuName = "Scriptable Object/Health")]
@@ -50,6 +50,7 @@ public class Health : ScriptableObject
         Recovery = stats.HPRecovery;
         Death = OnDeath;
         Hurt = OnHurt;
+
     }
 
     private void OnEnable()

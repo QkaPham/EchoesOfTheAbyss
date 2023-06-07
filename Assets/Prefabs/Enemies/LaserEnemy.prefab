@@ -272,7 +272,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Positions:
   - {x: 0.15, y: 0.66, z: 0}
   - {x: 30, y: 0, z: 1}
@@ -367,9 +367,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5151409397329497943}
   - {fileID: 5151409397747472302}
   - {fileID: 5151409396817030983}
-  - {fileID: 5151409397329497943}
   - {fileID: 5854185910690489030}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -397,6 +397,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
   dropChance: 0.5
   stats: {fileID: 11400000, guid: f47d3ed3422edf446b6deca6a669cccf, type: 2}
+  stopAttack: 0
   profile: {fileID: 11400000, guid: 4f5fb871edd270547a49100619403969, type: 2}
   lineRenderer: {fileID: 5151409397329497936}
   ShotPoint: {fileID: 5151409398064979902}

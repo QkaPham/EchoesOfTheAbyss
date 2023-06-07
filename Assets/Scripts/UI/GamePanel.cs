@@ -32,6 +32,7 @@ public class GamePanel : BasePanel
         Health.OnHealthChange += UpdateHPBar;
         Currency.OnCurrencyChange += UpdateFragmentText;
         RoundTimer.BossRoundStart += OnBossRoundStart;
+        BossHealth.OnHealthChange += UpdateBossHPBar;
     }
 
     private void OnDisable()
@@ -39,6 +40,7 @@ public class GamePanel : BasePanel
         Health.OnHealthChange -= UpdateHPBar;
         Currency.OnCurrencyChange -= UpdateFragmentText;
         RoundTimer.BossRoundStart -= OnBossRoundStart;
+        BossHealth.OnHealthChange -= UpdateBossHPBar;
     }
 
     private void UpdateHPBar(Health health)
@@ -90,9 +92,9 @@ public class GamePanel : BasePanel
         bossHPBar.transform.parent.gameObject.SetActive(active);
     }
 
-    private void UpdateBossHPBar(float remainHeath, float maxHeath)
+    private void UpdateBossHPBar(BossHealth health)
     {
-        float percentHealtPoint = Mathf.Clamp01(remainHeath / maxHeath);
+        float percentHealtPoint = Mathf.Clamp01(health.CurrentHealth / health.MaxHealth);
         bossHPBar.fillAmount = percentHealtPoint;
     }
 }

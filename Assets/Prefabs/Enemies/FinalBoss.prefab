@@ -159,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3048498986722309454}
-  - component: {fileID: 719425958609596984}
+  - component: {fileID: 8034954164624601123}
   - component: {fileID: 6342309277626180644}
   m_Layer: 11
   m_Name: EnemyHealth
@@ -183,7 +183,7 @@ Transform:
   m_Father: {fileID: 331291474498248315}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &719425958609596984
+--- !u!114 &8034954164624601123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,10 +192,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2155742338872829098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c1fbec515f0f74ebc2c44f23e40b12, type: 3}
+  m_Script: {fileID: 11500000, guid: a9bed4823e43190449c3300bbce48e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 20
   currentHealth: 0
   damagePopupPrefab: {fileID: 1808901579846088661, guid: f0fb4416a6493d848add8f935f70fd52, type: 3}
   damagePopupPoint: {fileID: 1983911670980460713}
@@ -319,10 +319,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
+  currentState: 0
+  nextState: 0
   FlipTransform: {fileID: 6377379286155959096}
   dropItems: []
   dropChance: 0.5
   stats: {fileID: 11400000, guid: ae06dab058dcda2438dd45a88b822f59, type: 2}
+  stopAttack: 0
   laserLineRenderer: {fileID: 8799442319700907061}
   ShotPoint: {fileID: 85687451789523954}
   rushLineRenderer: {fileID: 3883072904809869901}

@@ -18,4 +18,9 @@ public class TestCode : MonoBehaviour
         enemy.Init(player, null, enemy.transform.position, null);
         enemy.bulletPool = pool.pool;
     }
+
+    private void Update()
+    {
+
+    }
 }
