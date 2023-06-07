@@ -104,10 +104,6 @@ public class UpgradePanel : BasePanel
         }
     }
 
-    private void Start()
-    {
-
-    }
 
     public void OnEnable()
     {
@@ -123,62 +119,28 @@ public class UpgradePanel : BasePanel
         Currency.OnCurrencyChange -= UpdateFragmentText;
     }
 
-    protected void SetUp()
-    {
-        gameProgress.transform.position -= moveDir;
+    public Ease InEase;
+    public Ease Outease;
 
-        statsCanvasGroup.transform.position -= statsMoveDir;
-        statsCanvasGroup.alpha = 0;
-
-        itemsCanvasGroup.transform.position -= itemsMoveDir;
-        itemsCanvasGroup.alpha = .2f;
-    }
-
-    protected void ActiveAnimate(bool active, float delay = 0f)
+    protected override void Animation(bool active, float delay)
     {
         if (active)
         {
-            gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, moveDuration);
-
-            statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, moveDuration);
-            statsCanvasGroup.DOFade(1f, fadeDuration);
-
-            itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, moveDuration);
-            itemsCanvasGroup.DOFade(1f, fadeDuration);
+            Sequence seq = DOTween.Sequence();
+            seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, delay).SetEase(Ease.Linear));
+            seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, delay).SetEase(Ease.Linear));
+            seq.Join(statsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
+            seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, delay).SetEase(Ease.Linear));
+            seq.Join(itemsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
         }
         else
         {
-            gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, moveDuration);
-
-            statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, moveDuration);
-            statsCanvasGroup.DOFade(0f, Mathf.Clamp(delay * 0.5f, 0.01f, delay));
-
-            itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, moveDuration);
-            itemsCanvasGroup.DOFade(0f, Mathf.Clamp(delay * 0.5f, 0.01f, delay));
-        }
-    }
-
-    protected override IEnumerator DelayActivate(bool active, float delay)
-    {
-        yield return null;
-        if (active)
-        {
-            yield return new WaitForSeconds(delay);
-            isActive = true;
-            EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
-            canvasGroup.alpha = 1;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-            ActiveAnimate(active);
-        }
-        else
-        {
-            ActiveAnimate(active, delay);
-            yield return new WaitForSeconds(delay);
-            isActive = false;
-            canvasGroup.alpha = 0;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+            Sequence seq = DOTween.Sequence();
+            seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, delay).SetEase(Ease.Linear));
+            seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, delay).SetEase(Ease.Linear));
+            seq.Join(statsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
+            seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, delay).SetEase(Ease.Linear));
+            seq.Join(itemsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
         }
     }
 

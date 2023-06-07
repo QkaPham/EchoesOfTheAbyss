@@ -1,29 +1,25 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class EnemyBullet : MonoBehaviour, PoolableObject<EnemyBullet>
 {
-    protected Vector3 direction;
-    protected float speed = 10;
+    protected Rigidbody2D rb;
     protected float damage = 5;
-    protected float despawnTime = 4;
-    protected float despawnTimeElapsed = 0;
 
     protected ObjectPool<EnemyBullet> pool { get; set; }
 
-    void Update()
+    private void Awake()
     {
-        Fly();
-        Despawn();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(Vector3 position, Vector3 direction, float damage, float speed = 10f, float despawnTime = 4f)
+    public void Init(Vector3 position, Vector3 direction, float damage, float speed = 10f, float range = 4f)
     {
         transform.position = position;
-        this.direction = direction;
         this.damage = damage;
-        this.speed = speed;
-        this.despawnTime = despawnTime;
+        rb.velocity = direction * speed;
+        Realease(range / speed);
     }
 
     public void SetPool(ObjectPool<EnemyBullet> pool)
@@ -31,32 +27,26 @@ public class EnemyBullet : MonoBehaviour, PoolableObject<EnemyBullet>
         this.pool = pool;
     }
 
-    public void Release()
+    public void Realease(float delay = 0f)
     {
-        pool.Release(this);
+        StartCoroutine(DelayDestroy(delay));
     }
-
-    public void Fly()
+    private IEnumerator DelayDestroy(float delay = 0f)
     {
-        transform.position += direction * Time.deltaTime * speed;
-    }
-
-    public void Despawn()
-    {
-        despawnTimeElapsed += Time.deltaTime;
-        if (despawnTimeElapsed >= despawnTime)
+        yield return new WaitForSeconds(delay);
+        if (gameObject.activeSelf)
         {
-            despawnTimeElapsed = 0;
-            Release();
+            pool.Release(this);
         }
     }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         Player player = collision.gameObject.GetComponent<Player>();
         if (player != null)
         {
             player.health.TakeDamage(damage);
-            Release();
+            Realease();
         }
     }
 }

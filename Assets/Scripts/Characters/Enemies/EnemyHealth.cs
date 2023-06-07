@@ -1,11 +1,9 @@
 using UnityEngine;
-using UnityEngine.Pool;
-using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.UIElements;
 
 public class EnemyHealth : MonoBehaviour
 {
+    private Collider2D col;
+
     [SerializeField]
     protected float maxHealth = 20;
 
@@ -20,9 +18,26 @@ public class EnemyHealth : MonoBehaviour
     protected Transform damagePopupPoint;
 
     public bool isDeath => currentHealth <= 0;
+
+    private void Awake()
+    {
+        col = GetComponent<Collider2D>();
+    }
+
+    private void OnEnable()
+    {
+        col.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        col.enabled = false;
+    }
+
     public void Init(BaseEnemy enemy)
     {
         this.enemy = enemy;
+        maxHealth = enemy.stats.totalMaxHealth;
         currentHealth = maxHealth;
     }
 
@@ -35,7 +50,7 @@ public class EnemyHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             enemy.Death();
-
+            col.enabled = false;
         }
         else
         {

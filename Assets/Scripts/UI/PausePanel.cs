@@ -20,7 +20,7 @@ public class PausePanel : BasePanel
                 lastCancel = Time.unscaledTime;
                 if (isActive)
                 {
-                    
+
                     GameManager.Instance.Resume();
                 }
                 else
@@ -70,6 +70,7 @@ public class PausePanel : BasePanel
 
     public void OnMainMenuButtonClick()
     {
+        Activate(false, 2f);
         GameManager.Instance.ReturnToMainMenu();
     }
 

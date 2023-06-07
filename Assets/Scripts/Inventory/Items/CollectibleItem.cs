@@ -10,7 +10,7 @@ public class CollectibleItem : MonoBehaviour, PoolableObject<CollectibleItem>
     {
         this.pool= pool;
     }
-    public void Release()
+    public void Realease(float delay = 0f)
     {
         pool.Release(this);
     }

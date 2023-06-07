@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 6001592692448738685}
   - component: {fileID: 6001592692448738684}
   - component: {fileID: 6001592692448738687}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RangeEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ Transform:
   - {fileID: 6001592694410964774}
   - {fileID: 1608997819}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6001592692448738682
 MonoBehaviour:
@@ -167,20 +167,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
-  player: {fileID: 0}
-  health: {fileID: 0}
   currentState: 0
   nextState: 0
   FlipTransform: {fileID: 6001592693972659219}
-  fragment: 5000
-  items:
+  dropItems:
   - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
+  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
+  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
   dropChance: 0.5
+  stats: {fileID: 11400000, guid: caaa25966ec473342a61882d6b5ad137, type: 2}
   bulletStartPoint: {fileID: 6001592692460989428}
-  moveSpeed: 3
-  attackRange: 4
-  attackDamage: 1
-  CooldownTime: 1
+  profile: {fileID: 11400000, guid: ab4c748c3fd51d6409ada9fdc72e15f1, type: 2}
 --- !u!50 &6001592692448738685
 Rigidbody2D:
   serializedVersion: 4

@@ -27,6 +27,7 @@ public enum ItemID
 {
     NoneItem = -1,
     Feather,
-    AceOfHeart
+    Chalice,
+    Necklace
 }
 

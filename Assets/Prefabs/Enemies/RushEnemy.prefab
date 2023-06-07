@@ -205,7 +205,7 @@ Transform:
   - {fileID: 1897277013514471975}
   - {fileID: 5298551039008234591}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7123257137451411173
 MonoBehaviour:
@@ -221,26 +221,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
-  player: {fileID: 0}
-  health: {fileID: 0}
   currentState: 0
   nextState: 0
   FlipTransform: {fileID: 7123257138107155700}
-  fragment: 5000
-  items:
+  dropItems:
   - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
+  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
+  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
   dropChance: 0.5
+  stats: {fileID: 11400000, guid: f7e7646cb7841204dabf9966bcafaffb, type: 2}
   lineRenderer: {fileID: 7123257137506396404}
-  moveSpeed: 2
-  aimingRange: 5
-  aimingTime: 2
-  delayAttackTime: 0.5
-  rushSpeed: 10
-  rushRange: 8
-  attackDamage: 1
-  attackCooldownTime: 3
-  damageDistance: 0.8
-  timeBetweenEachDamage: 1
+  profile: {fileID: 11400000, guid: 66920fbc3aabd7b4a9ed253705788204, type: 2}
 --- !u!50 &7123257137451411174
 Rigidbody2D:
   serializedVersion: 4

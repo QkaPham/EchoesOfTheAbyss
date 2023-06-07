@@ -12,7 +12,7 @@ public class GameOverPanel : BasePanel
 
     public void OnMainMenuButtonClick()
     {
-        Activate(false);
+        Activate(false, 2f);
         GameManager.Instance.ReturnToMainMenu();
     }
 }

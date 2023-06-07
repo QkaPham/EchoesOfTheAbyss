@@ -24,7 +24,7 @@ public class GameManager : Singleton<GameManager>
     private void OnGameLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnGameLevelLoaded;
-      //  UIManager.Instance.MainMenuPanel.Activate(false);
+        //  UIManager.Instance.MainMenuPanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(true);
         UIManager.Instance.Fade(0f, 1f);
         InputManager.instance.EnablePlayerInput(true);
@@ -65,17 +65,15 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.sceneLoaded -= OnMainmenuLoaded;
         UIManager.Instance.MainMenuPanel.Activate(true);
-        UIManager.Instance.PausePanel.Activate(false);
         UIManager.Instance.GamePanel.Activate(false);
         UIManager.Instance.ActiveDepthOfField(false);
         UIManager.Instance.Fade(0f, 2f);
         InputManager.Instance.EnablePlayerInput(false);
     }
 
-
     public void RoundEnd()
     {
-        UIManager.Instance.UpgradePanel.Activate(true, 1.5f);
+        UIManager.Instance.UpgradePanel.Activate(true, .7f);
         UIManager.Instance.GamePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(false);
         OnRoundEnd?.Invoke();
@@ -91,8 +89,8 @@ public class GameManager : Singleton<GameManager>
 
     public void GameOver()
     {
-        UIManager.Instance.GamePanel.Activate(false);
-        UIManager.Instance.GameoverPanel.Activate(true);
+        UIManager.Instance.GamePanel.Activate(false, 2);
+        UIManager.Instance.GameoverPanel.Activate(true, 2);
         InputManager.Instance.EnablePlayerInput(false);
         OnGameOver?.Invoke();
     }

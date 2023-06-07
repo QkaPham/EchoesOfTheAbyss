@@ -368,20 +368,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
-  player: {fileID: 0}
-  health: {fileID: 0}
   currentState: 0
   nextState: 0
   FlipTransform: {fileID: 6812212291574360863}
-  fragment: 5000
-  items:
+  dropItems:
   - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
+  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
+  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
   dropChance: 0.5
-  moveSpeed: 3
-  attackRange: 1
-  damageRange: 1.5
-  attackDamage: 1
-  attackCooldownTime: 1
+  stats: {fileID: 11400000, guid: a725bbe096d413444a55846fb56c03c1, type: 2}
+  profile: {fileID: 11400000, guid: 1cdf2219b7cfd614ea32614ec71dc603, type: 2}
 --- !u!50 &6812212292482767656
 Rigidbody2D:
   serializedVersion: 4

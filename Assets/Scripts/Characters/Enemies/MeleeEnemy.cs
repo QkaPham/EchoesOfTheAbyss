@@ -4,25 +4,10 @@ using UnityEngine;
 
 public class MeleeEnemy : BasePoolableEnemy
 {
-    [Header("Movement")]
     [SerializeField]
-    protected float moveSpeed = 3f;
+    private MeleeEnemyProfile profile;
 
-    [Header("Attack")]
-    [SerializeField]
-    protected float attackRange = 1f;
-
-    [SerializeField]
-    protected float damageRange = 1.5f;
-
-    [SerializeField]
-    protected float attackDamage = 1;
-
-    [SerializeField]
-    protected float attackCooldownTime = 1f;
-
-    protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-   // protected float lastAttackTime = float.MinValue;
+    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
     protected override void Awake()
     {
         base.Awake();
@@ -57,12 +42,12 @@ public class MeleeEnemy : BasePoolableEnemy
     {
         rb.velocity = Vector3.zero;
 
-        if (playerDistance > attackRange)
+        if (playerDistance > profile.attackRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= attackRange && canAttack)
+        if (playerDistance <= profile.attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
         }
@@ -70,9 +55,9 @@ public class MeleeEnemy : BasePoolableEnemy
 
     protected virtual void HandleMoveState()
     {
-        rb.velocity = playerDirection * moveSpeed;
+        rb.velocity = playerDirection * profile.moveSpeed;
 
-        if (playerDistance <= attackRange && canAttack)
+        if (playerDistance <= profile.attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
         }
@@ -83,12 +68,12 @@ public class MeleeEnemy : BasePoolableEnemy
         rb.velocity = Vector3.zero;
         lastAttackTime = Time.time;
 
-        if (playerDistance > attackRange)
+        if (playerDistance > profile.attackRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= attackRange)
+        if (playerDistance <= profile.attackRange)
         {
             NextState = EnemyState.Idle;
         }
@@ -106,14 +91,9 @@ public class MeleeEnemy : BasePoolableEnemy
 
     protected void DealDamage()
     {
-        if (playerDistance <= damageRange)
+        if (playerDistance <= profile.damageRange)
         {
-            player.health.TakeDamage(attackDamage);
+            player.health.TakeDamage(stats.totalAttack);
         }
-    }
-
-    public override void Release()
-    {
-        base.Release();
     }
 }

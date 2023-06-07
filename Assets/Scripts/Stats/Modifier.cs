@@ -52,7 +52,7 @@ public class Modifier
         }
         else if (ModifierType == ModifierType.PercentMultiply || ModifierType == ModifierType.PercentAdd)
         {
-            return $"{type} {Amount}%";
+            return $"{type} {Amount * 100}%";
         }
         return base.ToString();
     }

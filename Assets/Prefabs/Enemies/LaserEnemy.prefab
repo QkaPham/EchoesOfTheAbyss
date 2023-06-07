@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 5151409397631111262}
   - component: {fileID: 5151409397631111263}
   - component: {fileID: 5151409397631111256}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LaserEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +372,7 @@ Transform:
   - {fileID: 5151409397329497943}
   - {fileID: 5854185910690489030}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5151409397631111257
 MonoBehaviour:
@@ -388,29 +388,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDescription: 
-  player: {fileID: 0}
-  health: {fileID: 0}
   currentState: 0
   nextState: 0
   FlipTransform: {fileID: 5151409397747472302}
-  fragment: 5000
-  items:
+  dropItems:
   - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
+  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
+  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
   dropChance: 0.5
+  stats: {fileID: 11400000, guid: f47d3ed3422edf446b6deca6a669cccf, type: 2}
+  profile: {fileID: 11400000, guid: 4f5fb871edd270547a49100619403969, type: 2}
   lineRenderer: {fileID: 5151409397329497936}
   ShotPoint: {fileID: 5151409398064979902}
-  moveSpeed: 2
-  fleeDistance: 2
-  aimingRange: 5
-  aimingTime: 2
-  delayAttackTime: 2
-  PlayerLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  laserRange: 15
-  attackDamage: 1
-  attackCooldownTime: 3
-  attackTimeDelayByHurt: 2
 --- !u!50 &5151409397631111262
 Rigidbody2D:
   serializedVersion: 4

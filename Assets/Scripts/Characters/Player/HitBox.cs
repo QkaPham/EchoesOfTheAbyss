@@ -8,6 +8,16 @@ public class HitBox : MonoBehaviour
     [SerializeField]
     private List<EnemyHealth> DamageableObjects = new List<EnemyHealth>();
 
+    private void OnEnable()
+    {
+        GameManager.OnRoundEnd += OnRoundEnd;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnRoundEnd -= OnRoundEnd;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         EnemyHealth DamageableObject = collision.gameObject.GetComponent<EnemyHealth>();
@@ -75,5 +85,10 @@ public class HitBox : MonoBehaviour
         {
             transform.localScale = Vector3.one;
         }
+    }
+
+    private void OnRoundEnd()
+    {
+        DamageableObjects.Clear();
     }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LaserEnemy : BasePoolableEnemy
 {
+    [SerializeField]
+    protected LaserEnemyProfile profile;
+
     [Header("Additonal References")]
     [SerializeField]
     protected LineRenderer lineRenderer;
@@ -11,53 +14,11 @@ public class LaserEnemy : BasePoolableEnemy
     [SerializeField]
     protected Transform ShotPoint;
 
-    [Header("Movement")]
-    [SerializeField]
-    protected float moveSpeed = 2f;
-
-    [SerializeField]
-    protected float fleeDistance = 2f;
-
-    [Header("Aiming")]
-    [SerializeField]
-    protected float aimingRange = 5f;
-
-    [SerializeField]
-    protected float aimingTime = 2;
     protected float elapsedAimingTime = 0;
-
-    [SerializeField]
-    protected float delayAttackTime = 2;
     protected float elapsedDelayAttackTime = 0;
     protected Vector3 shotDirection;
+    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
 
-    [Header("Attack")]
-    [SerializeField]
-    protected LayerMask PlayerLayerMask;
-
-    [SerializeField]
-    protected float laserRange = 15f;
-
-    [SerializeField]
-    protected float attackDamage = 1;
-
-    [SerializeField]
-    protected float attackCooldownTime = 0.5f;
-    protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    //protected float lastAttackTime = float.MinValue;
-
-
-    [SerializeField]
-    protected float attackTimeDelayByHurt = 2f;
-    protected override void Awake()
-    {
-        base.Awake();
-        //if (player == null)
-        //{
-        //    player = FindObjectOfType<Player>();
-        //}
-        //health.Init(this);
-    }
     protected override void Update()
     {
         base.Update();
@@ -91,37 +52,39 @@ public class LaserEnemy : BasePoolableEnemy
     {
         rb.velocity = Vector3.zero;
 
-        if (playerDistance < fleeDistance || playerDistance > aimingRange)
+        if (playerDistance < profile.fleeDistance || playerDistance > profile.aimingRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= aimingRange && canAttack)
+        if (playerDistance <= profile.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
+            PreventPushing(true);
         }
     }
 
     protected virtual void HandleMoveState()
     {
-        if (playerDistance > aimingRange)
+        if (playerDistance > profile.aimingRange)
         {
-            rb.velocity = playerDirection * moveSpeed;
+            rb.velocity = playerDirection * profile.moveSpeed;
         }
-        else if (playerDistance < fleeDistance)
+        else if (playerDistance < profile.fleeDistance)
         {
-            rb.velocity = -playerDirection * moveSpeed;
+            rb.velocity = -playerDirection * profile.moveSpeed;
         }
 
 
-        if (playerDistance >= fleeDistance && playerDistance <= aimingRange)
+        if (playerDistance >= profile.fleeDistance && playerDistance <= profile.aimingRange)
         {
             NextState = EnemyState.Idle;
             return;
         }
-        if (playerDistance <= aimingRange && canAttack)
+        if (playerDistance <= profile.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
+            PreventPushing(true);
         }
     }
 
@@ -143,11 +106,11 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected virtual void HandleAimingState()
     {
-        if (elapsedAimingTime < aimingTime)
+        if (elapsedAimingTime < profile.aimingTime)
         {
             rb.velocity = Vector3.zero;
             lineRenderer.SetPosition(0, ShotPoint.position);
-            lineRenderer.SetPosition(1, (player.TargetPoint.position - ShotPoint.position).normalized * laserRange + ShotPoint.position);
+            lineRenderer.SetPosition(1, (player.TargetPoint.position - ShotPoint.position).normalized * profile.laserRange + ShotPoint.position);
             elapsedAimingTime += Time.deltaTime;
         }
         else
@@ -155,12 +118,12 @@ public class LaserEnemy : BasePoolableEnemy
             elapsedDelayAttackTime += Time.deltaTime;
         }
 
-        if (elapsedAimingTime >= aimingTime && elapsedDelayAttackTime == 0)
+        if (elapsedAimingTime >= profile.aimingTime && elapsedDelayAttackTime == 0)
         {
             shotDirection = playerDirection;
         }
 
-        if (elapsedDelayAttackTime >= delayAttackTime)
+        if (elapsedDelayAttackTime >= profile.delayAttackTime)
         {
             elapsedDelayAttackTime = 0;
             elapsedAimingTime = 0;
@@ -170,7 +133,8 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected virtual void LaserShot()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, shotDirection, laserRange, PlayerLayerMask);
+        PreventPushing(false);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, shotDirection, profile.laserRange, profile.PlayerLayerMask);
         if (!hit)
         {
             return;
@@ -178,7 +142,7 @@ public class LaserEnemy : BasePoolableEnemy
 
         if (hit.transform.TryGetComponent<Player>(out Player player))
         {
-            player.health.TakeDamage(attackDamage);
+            player.health.TakeDamage(stats.totalAttack);
         }
     }
 
@@ -192,14 +156,14 @@ public class LaserEnemy : BasePoolableEnemy
         {
             elapsedDelayAttackTime = 0f;
             elapsedAimingTime = 0f;
-            DelayNextAttack(attackTimeDelayByHurt);
+            DelayNextAttack(profile.attackTimeDelayByHurt);
         }
         base.Hurt();
     }
 
     private void DelayNextAttack(float timedelay)
     {
-        lastAttackTime = Time.time - attackCooldownTime + timedelay;
+        lastAttackTime = Time.time - profile.attackCooldownTime + timedelay;
     }
 
     public override void Death()
@@ -209,7 +173,7 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected override void Flip()
     {
-        if (CurrentState == EnemyState.Move && playerDistance < fleeDistance)
+        if (CurrentState == EnemyState.Move && playerDistance < profile.fleeDistance)
         {
             ReverseFlip();
             return;

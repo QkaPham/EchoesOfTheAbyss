@@ -1,5 +1,7 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class GamePanel : BasePanel
@@ -14,6 +16,9 @@ public class GamePanel : BasePanel
     private Image staminaBar;
 
     [SerializeField]
+    private Image bossHPBar;
+
+    [SerializeField]
     private TextMeshProUGUI fragmentText;
 
     [SerializeField]
@@ -25,20 +30,20 @@ public class GamePanel : BasePanel
     private void OnEnable()
     {
         Health.OnHealthChange += UpdateHPBar;
-        RoundTimer.OnTimerUpdate += UpdateRoundtimerText;
         Currency.OnCurrencyChange += UpdateFragmentText;
+        RoundTimer.BossRoundStart += OnBossRoundStart;
     }
 
     private void OnDisable()
     {
         Health.OnHealthChange -= UpdateHPBar;
-        RoundTimer.OnTimerUpdate -= UpdateRoundtimerText;
         Currency.OnCurrencyChange -= UpdateFragmentText;
+        RoundTimer.BossRoundStart -= OnBossRoundStart;
     }
 
-    private void UpdateHPBar(float damage, float remainHeath, float maxHeath)
+    private void UpdateHPBar(Health health)
     {
-        float percentHealtPoint = Mathf.Clamp01(remainHeath / maxHeath);
+        float percentHealtPoint = Mathf.Clamp01(health.CurrentHealth / health.MaxHealth);
         hpBar.fillAmount = percentHealtPoint;
     }
 
@@ -54,10 +59,15 @@ public class GamePanel : BasePanel
         mpBar.fillAmount = percentMana;
     }
 
-    private void UpdateRoundtimerText(float time)
+    public void UpdateRoundtimerText(float time)
     {
         time = Mathf.Clamp(time, 0f, float.MaxValue);
-        roundtimerText.text = Mathf.Ceil(time).ToString();
+        UpdateRoundtimerText(Mathf.Ceil(time).ToString());
+    }
+
+    public void UpdateRoundtimerText(string time)
+    {
+        roundtimerText.text = time;
     }
 
     public void UpdateRoundText(int round)
@@ -68,5 +78,21 @@ public class GamePanel : BasePanel
     private void UpdateFragmentText(int currency)
     {
         fragmentText.text = currency.ToString();
+    }
+
+    private void OnBossRoundStart()
+    {
+        ShowBossHPBar(true);
+    }
+
+    public void ShowBossHPBar(bool active)
+    {
+        bossHPBar.transform.parent.gameObject.SetActive(active);
+    }
+
+    private void UpdateBossHPBar(float remainHeath, float maxHeath)
+    {
+        float percentHealtPoint = Mathf.Clamp01(remainHeath / maxHeath);
+        bossHPBar.fillAmount = percentHealtPoint;
     }
 }

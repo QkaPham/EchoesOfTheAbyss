@@ -12,11 +12,13 @@ public enum EnemyState
     Death,
     Aiming = 5,
 
-    FireBullet,
+    //Boss state
+    FireBullet = 6,
     RushAim,
     Rush,
     LaserAim,
-    ShotLaser
+    ShotLaser,
+    Intro
 }
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CapsuleCollider2D), typeof(Animator))]
@@ -25,7 +27,6 @@ public abstract class BaseEnemy : MonoBehaviour
     public string enemyName;
     [TextArea]
     public string enemyDescription;
-    [SerializeField]
     protected Player player;
     protected Vector3 playerPositon => player.transform.position;
     protected float playerDistance => Vector3.Distance(playerPositon, transform.position);
@@ -33,13 +34,10 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected Rigidbody2D rb;
     protected Animator animator;
-    [SerializeField]
     protected EnemyHealth health;
-
     [SerializeField]
     protected EnemyState currentState;
     public EnemyState CurrentState { get => currentState; set => currentState = value; }
-
     [SerializeField]
     protected EnemyState nextState;
     public EnemyState NextState { get => nextState; set => nextState = value; }
@@ -47,12 +45,8 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField]
     protected Transform FlipTransform;
 
-    [Header("Enemy Drops")]
     [SerializeField]
-    protected int fragment = 5000;
-
-    [SerializeField]
-    protected List<Item> items;
+    protected List<Item> dropItems;
 
     [SerializeField]
     protected float dropChance = 0.5f;
@@ -62,26 +56,32 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected float lastAttackTime = float.MinValue;
 
+    public EnemyStats stats;
+
+    [SerializeField]
+    private bool stopAttack;
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         health = GetComponentInChildren<EnemyHealth>();
-        NextState = EnemyState.Idle;
     }
 
     protected virtual void OnEnable()
     {
-        Player.PlayerDeath += StopAttack;
+        //GameManager.OnStartGame += Destroy;
+        GameManager.OnGameOver += StopAttack;
     }
 
     protected virtual void OnDisable()
     {
-        Player.PlayerDeath -= StopAttack;
+        //GameManager.OnStartGame -= Destroy;
+        GameManager.OnGameOver -= StopAttack;
     }
     protected virtual void Start()
     {
-
+        stats.Init();
     }
 
     protected virtual void Update()
@@ -93,16 +93,17 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void Init(Player player = null, ObjectPool<Fragment> fragmentPool = null, Vector3 position = default, ObjectPool<CollectibleItem> collectibleItemPool = null)
     {
         this.player = player;
-        health.Init(this);
         transform.position = position;
         this.fragmentPool = fragmentPool;
         this.collectibleItemPool = collectibleItemPool;
+        health.Init(this);
         NextState = EnemyState.Idle;
+        stopAttack = false;
     }
 
     protected virtual void StopAttack()
     {
-        lastAttackTime = float.MaxValue;
+        stopAttack = true;
     }
 
     protected virtual void Flip()
@@ -130,6 +131,11 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void StateUpdate()
     {
+        if (stopAttack)
+        {
+            NextState = EnemyState.Idle;
+            CurrentState = EnemyState.Idle;
+        }
         if (NextState == CurrentState) return;
         else
         {
@@ -160,18 +166,38 @@ public abstract class BaseEnemy : MonoBehaviour
         NextState = EnemyState.Hurt;
     }
 
-    public void Drop()
+    public virtual void EndHurt()
+    {
+        if (!health.isDeath)
+        {
+            nextState = EnemyState.Idle;
+        }
+    }
+
+    protected virtual void PreventPushing(bool active)
+    {
+        if (active)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+        else
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+    }
+
+    protected void Drop()
     {
         var random = Random.value;
-        if (random < dropChance && items.Count >= 1)
+        if (random < dropChance && dropItems.Count >= 1)
         {
             var item = collectibleItemPool.Get();
             item.transform.position = this.transform.position;
-            item.item = items[Random.Range(0, items.Count - 1)];
+            item.item = dropItems[Random.Range(0, dropItems.Count)];
         }
 
         var fragment = fragmentPool.Get();
         fragment.transform.position = this.transform.position;
-        fragment.Amount = this.fragment;
+        fragment.Amount = stats.totalfragment;
     }
 }

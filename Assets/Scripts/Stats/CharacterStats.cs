@@ -60,6 +60,10 @@ public class CharacterStats : ScriptableObject
     public float ManaRecovery = 10f;
     public float DelayManaRecoverTime = 1f;
 
+    [Header("HP")]
+    public float HPRecovery = 5f;
+
+
     private List<Stat> stats = new List<Stat>();
     public Stat Attack;
     public Stat Defense;
@@ -90,6 +94,7 @@ public class CharacterStats : ScriptableObject
         stats.AddRange(new Stat[] { Attack, Defense, MaxHealthPoint, CriticalHitChance, CriticalHitDamage, Haste });
         OnLevelChange?.Invoke(Level, LevelUpCost);
         OnStatsChange?.Invoke(this);
+        ModifierSources.Clear();
     }
 
     private void OnEnable()
@@ -139,7 +144,11 @@ public class CharacterStats : ScriptableObject
                 .Where(m => m.StatType == stat.StatType && m.ModifierType == ModifierType.PercentMultiply)
                 .Sum(m => m.Amount));
 
-            stat.Modifier = stat.Base * percentModifiers / 100 + flatModifiers;
+            float percentaddModifiers = ModifierSources.Sum(s => s.Modifiers
+                .Where(m => m.StatType == stat.StatType && m.ModifierType == ModifierType.PercentAdd)
+                .Sum(m => m.Amount));
+
+            stat.Modifier = stat.Base * percentModifiers + flatModifiers + percentaddModifiers;
         }
     }
 

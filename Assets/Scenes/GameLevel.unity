@@ -192,22 +192,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1969191432}
   BossPrefabs: {fileID: 3949265461923474693, guid: c848976647af3a24eaa4d86639c9c5df, type: 3}
+  bossIntroTime: 1.5
   bulletPool: {fileID: 460206536}
   enemyTypes:
   - enemyPool: {fileID: 1364777809}
-    spawnRate: 0.1
-  - enemyPool: {fileID: 1513383561}
-    spawnRate: 0.1
+    spawnRate: 5
   - enemyPool: {fileID: 119055166}
-    spawnRate: 0.1
+    spawnRate: 2
+  - enemyPool: {fileID: 1513383561}
+    spawnRate: 1
   - enemyPool: {fileID: 1471738002}
-    spawnRate: 0.1
+    spawnRate: 1
   fragmentPool: {fileID: 1652442647}
   itemPool: {fileID: 476505109}
   spawnDistance: 1
   Offset: 1
-  mainCamera: {fileID: 1319761096}
-  enemySpawnTime: 3
+  enemySpawnTime: 1
   vCam: {fileID: 1142955491}
 --- !u!4 &113934209
 Transform:
@@ -1540,7 +1540,7 @@ GameObject:
   - component: {fileID: 1642846461}
   - component: {fileID: 1642846462}
   m_Layer: 0
-  m_Name: RoundTimer
+  m_Name: Round
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1553,7 +1553,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642846459}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1578,6 +1578,11 @@ MonoBehaviour:
   roundDuration: 60
   roundTimer: 0
   enemySpawn: {fileID: 113934207}
+  enemiesStats:
+  - {fileID: 11400000, guid: a725bbe096d413444a55846fb56c03c1, type: 2}
+  - {fileID: 11400000, guid: caaa25966ec473342a61882d6b5ad137, type: 2}
+  - {fileID: 11400000, guid: f47d3ed3422edf446b6deca6a669cccf, type: 2}
+  - {fileID: 11400000, guid: f7e7646cb7841204dabf9966bcafaffb, type: 2}
 --- !u!1 &1652442646
 GameObject:
   m_ObjectHideFlags: 0

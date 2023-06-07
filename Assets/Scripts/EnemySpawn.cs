@@ -12,6 +12,8 @@ public class EnemySpawn : MonoBehaviour
 
     [SerializeField]
     private GameObject BossPrefabs;
+    [SerializeField]
+    private float bossIntroTime;
 
     [SerializeField]
     private EnemyBulletPool bulletPool;
@@ -31,11 +33,9 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField]
     private float Offset = 1.0f;
 
-    [SerializeField]
-    private Camera mainCamera;
-
+    [SerializeField] 
+    private float enemySpawnTime = 1;
     private float lastSpawnTime = float.MinValue;
-    [SerializeField] private float enemySpawnTime = 1;
 
     private bool isSpawning;
 
@@ -130,11 +130,10 @@ public class EnemySpawn : MonoBehaviour
         return bossEnemy;
     }
 
-
     private IEnumerator SetCameraFollow(BossEnemy bossEnemy)
     {
         vCam.Follow = bossEnemy.transform;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(bossIntroTime);
         vCam.Follow = player.transform;
     }
 

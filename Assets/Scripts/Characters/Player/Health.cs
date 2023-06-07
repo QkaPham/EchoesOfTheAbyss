@@ -6,15 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Health", menuName = "Scriptable Object/Health")]
 public class Health : ScriptableObject
 {
-    private Player player;
-    [SerializeField]
-    private float currentHealth;
-
-    [SerializeField]
-    private float maxHealth;
+    [SerializeField] private float currentHealth;
+    [SerializeField] private float maxHealth;
+    private float Recovery;
     private float deffense;
-
-    public static event Action<float, float, float> OnHealthChange; //(Change Value, Remain Health, Max Health)
 
     public float CurrentHealth
     {
@@ -24,15 +19,37 @@ public class Health : ScriptableObject
         }
         private set
         {
-            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+            currentHealth = Mathf.Clamp(value, 0, MaxHealth);
+            OnHealthChange?.Invoke(this);
+        }
+    }
+    public float MaxHealth
+    {
+        get
+        {
+            return maxHealth;
+        }
+        private set
+        {
+            if (value > CurrentHealth)
+            {
+                CurrentHealth = value;
+            }
+            maxHealth = value;
+            OnHealthChange?.Invoke(this);
         }
     }
 
-    public void Init(CharacterStats stats,Player player)
+    public static event Action<Health> OnHealthChange;
+    private event Action Death, Hurt;
+
+    public void Init(CharacterStats stats, Action OnDeath, Action OnHurt)
     {
-        maxHealth = stats.MaxHealthPoint.Total;
-        currentHealth = maxHealth;
-        this.player = player;
+        MaxHealth = stats.MaxHealthPoint.Total;
+        CurrentHealth = MaxHealth;
+        Recovery = stats.HPRecovery;
+        Death = OnDeath;
+        Hurt = OnHurt;
     }
 
     private void OnEnable()
@@ -40,32 +57,45 @@ public class Health : ScriptableObject
         CharacterStats.OnStatsChange += OnStatsChange;
     }
 
+    private void OnDisable()
+    {
+        CharacterStats.OnStatsChange -= OnStatsChange;
+    }
+
     private void OnStatsChange(CharacterStats stats)
     {
-        maxHealth = stats.MaxHealthPoint.Total;
+        MaxHealth = stats.MaxHealthPoint.Total;
         deffense = stats.Defense.Total;
-        OnHealthChange?.Invoke(0, currentHealth, maxHealth);
+    }
+
+    private bool fullyRecovered => currentHealth == maxHealth;
+
+    public void Regenerate()
+    {
+        if (!fullyRecovered)
+        {
+            CurrentHealth += Recovery * Time.deltaTime;
+        }
     }
 
     public void TakeDamage(float amount)
     {
-        currentHealth -= FinalDamage(amount, deffense);
-        OnHealthChange?.Invoke(-amount, currentHealth, maxHealth);
-        
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0) return;
+        CurrentHealth -= FinalDamage(amount, deffense);
+
+        if (CurrentHealth <= 0)
         {
-            player.Death();
+            Death?.Invoke();
         }
         else
         {
-            player.Hurt();
+            Hurt?.Invoke();
         }
     }
 
     public void TakeHeal(float amount)
     {
-        currentHealth += amount;
-        OnHealthChange?.Invoke(amount, currentHealth, maxHealth);
+        CurrentHealth += amount;
     }
 
     private float FinalDamage(float damageReceive, float deffense)

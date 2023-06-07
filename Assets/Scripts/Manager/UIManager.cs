@@ -68,14 +68,13 @@ public class UIManager : Singleton<UIManager>
         LoadingPanel = GetComponentInChildren<LoadingPanel>();
         FadePanel = GetComponentInChildren<FadePanel>();
 
-        MainMenuPanel.Activate(true);
+        MainMenuPanel.Activate(true, 1f);
         GamePanel.Activate(false);
         PausePanel.Activate(false);
         SettingsPanel.Activate(false);
         UpgradePanel.Activate(false);
         GameoverPanel.Activate(false);
         VictoryPanel.Activate(false);
-        //LoadingPanel.gameObject.SetActive(false);
 
         volume = GetComponentInChildren<Volume>();
         if (volume.profile.TryGet<DepthOfField>(out DepthOfField dof))

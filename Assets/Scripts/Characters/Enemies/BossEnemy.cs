@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UIElements;
 
 public enum AttackType
@@ -60,7 +62,6 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected float attackCooldownTime = 0.5f;
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
-    // protected float lastAttackTime = float.MinValue;
 
     [SerializeField]
     protected float rushDamageDistance = .8f;
@@ -99,7 +100,7 @@ public class BossEnemy : BaseEnemy
     protected EnemyBulletPool bulletPool;
 
     [SerializeField]
-    protected float bulletAttackRange = 12f;
+    protected float bulletRange = 12f;
 
     [SerializeField]
     protected float bulletAttackDamage = 10f;
@@ -115,11 +116,18 @@ public class BossEnemy : BaseEnemy
     [SerializeField]
     protected float bulletAngle = 60f;
 
-    protected override void Start()
+    [SerializeField]
+    protected float bulletSpeed = 10f;
+
+    protected float spawnTime;
+    protected float introDuration = 2;
+    protected override void Awake()
     {
-        base.Start();
-        health.Init(this);
+        base.Awake();
+        spawnTime = Time.time;
+        PreventPushing(true);
     }
+
     protected override void Update()
     {
         base.Update();
@@ -159,6 +167,8 @@ public class BossEnemy : BaseEnemy
         this.player = player;
         transform.position = position;
         this.bulletPool = bulletPool;
+        stats.Init();
+        health.Init(this);
     }
 
     public void ChangeAttackType()
@@ -169,43 +179,45 @@ public class BossEnemy : BaseEnemy
     protected virtual void HandleIdleState()
     {
         rb.velocity = Vector3.zero;
-
-        if (currentAttackType == AttackType.Rush)
+        if (Time.time > spawnTime + introDuration)
         {
-            if (playerDistance > RushAimingRange)
+            if (currentAttackType == AttackType.Rush)
             {
-                NextState = EnemyState.Move;
-                return;
+                if (playerDistance > RushAimingRange)
+                {
+                    NextState = EnemyState.Move;
+                    return;
+                }
+                if (playerDistance <= RushAimingRange && canAttack)
+                {
+                    NextState = EnemyState.RushAim;
+                }
             }
-            if (playerDistance <= RushAimingRange && canAttack)
-            {
-                NextState = EnemyState.RushAim;
-            }
-        }
 
-        if (currentAttackType == AttackType.Laser)
-        {
-            if (playerDistance > laserAimingRange)
+            if (currentAttackType == AttackType.Laser)
             {
-                NextState = EnemyState.Move;
-                return;
+                if (playerDistance > laserAimingRange)
+                {
+                    NextState = EnemyState.Move;
+                    return;
+                }
+                if (playerDistance <= laserAimingRange && canAttack)
+                {
+                    NextState = EnemyState.LaserAim;
+                }
             }
-            if (playerDistance <= laserAimingRange && canAttack)
-            {
-                NextState = EnemyState.LaserAim;
-            }
-        }
 
-        if (currentAttackType == AttackType.Bullet)
-        {
-            if (playerDistance > bulletAttackRange)
+            if (currentAttackType == AttackType.Bullet)
             {
-                NextState = EnemyState.Move;
-                return;
-            }
-            if (playerDistance <= bulletAttackRange && canAttack)
-            {
-                NextState = EnemyState.FireBullet;
+                if (playerDistance > bulletRange)
+                {
+                    NextState = EnemyState.Move;
+                    return;
+                }
+                if (playerDistance <= bulletRange && canAttack)
+                {
+                    NextState = EnemyState.FireBullet;
+                }
             }
         }
     }
@@ -242,12 +254,12 @@ public class BossEnemy : BaseEnemy
 
         if (currentAttackType == AttackType.Bullet)
         {
-            if (playerDistance <= bulletAttackRange && !canAttack)
+            if (playerDistance <= bulletRange && !canAttack)
             {
                 NextState = EnemyState.Idle;
                 return;
             }
-            if (playerDistance <= bulletAttackRange && canAttack)
+            if (playerDistance <= bulletRange && canAttack)
             {
                 NextState = EnemyState.FireBullet;
             }
@@ -408,7 +420,7 @@ public class BossEnemy : BaseEnemy
         EnemyBullet bullet = bulletPool.Get();
         Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
         Vector2 rotatedDirection = rotation * originalDirection;
-        bullet.Init(bulletFirePoint.position, rotatedDirection, damage);
+        bullet.Init(bulletFirePoint.position, rotatedDirection, damage, bulletSpeed, bulletRange);
     }
 
     public void ShotLaser()
@@ -434,7 +446,6 @@ public class BossEnemy : BaseEnemy
     {
         base.Death();
         GameManager.Instance.Victory();
-        //OnDefeated?.Invoke();
     }
 
     public override void Destroy()

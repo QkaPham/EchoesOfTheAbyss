@@ -8,7 +8,7 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     protected override void OnEnable()
     {
         base.OnEnable();
-        GameManager.OnStartGame += Death;
+        GameManager.OnStartGame += Destroy;
         GameManager.OnRoundEnd += Death;
         GameManager.OnVictory += Death;
     }
@@ -17,7 +17,7 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     {
         base.OnDisable();
         animator.SetTrigger("Reset");
-        GameManager.OnStartGame -= Death;
+        GameManager.OnStartGame -= Destroy;
         GameManager.OnRoundEnd -= Death;
         GameManager.OnVictory -= Death;
     }
@@ -35,21 +35,20 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         {
             Drop();
         }
-        Release();
+        Realease();
     }
 
-    public virtual void Release()
+    public virtual void Realease(float delay = 0f)
     {
+        StartCoroutine(DelayRealease(delay));
+    }
+
+    protected IEnumerator DelayRealease(float delay = 0f)
+    {
+        yield return new WaitForSeconds(delay);
         if (gameObject.activeSelf)
         {
-            if (pool != null)
-            {
-                pool.Release(this);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            pool.Release(this);
         }
     }
 }

@@ -70,8 +70,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private RangeWeapon rangeWeapon;
 
-    public static event Action PlayerDeath;
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -114,7 +112,7 @@ public class Player : MonoBehaviour
         animator.SetTrigger("Reset");
         currency.Init();
         stats.Init();
-        health.Init(stats, this);
+        health.Init(stats, Death, Hurt);
         mana.Init(stats);
         stamina.Init(stats);
         inventory.Init();
@@ -129,8 +127,6 @@ public class Player : MonoBehaviour
         Flip();
         stamina.Regenerate();
         mana.Regenerate();
-
-        TestCode();
     }
 
     public void SetPosition(Vector2 position)
@@ -167,7 +163,7 @@ public class Player : MonoBehaviour
 
     public void Death()
     {
-        PlayerDeath?.Invoke();
+        GameManager.Instance.GameOver();
         animator.SetTrigger("Death");
         DeathParticle.Play();
         weapon.Destroy();
@@ -175,8 +171,7 @@ public class Player : MonoBehaviour
 
     private void Destroy()
     {
-        GameManager.Instance.GameOver();
-        //weapon.gameObject.SetActive(false);
+
     }
 
     public void PlayDashEffect(Vector2 dashDirection)
@@ -184,21 +179,5 @@ public class Player : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, dashDirection);
         dashParticle.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         dashParticle.Play();
-    }
-
-
-    private void TestCode()
-    {
-        //if(Input.GetKeyDown(KeyCode.P)) {
-        //    health.TakeDamage(1);
-        //}
-        //if(Input.GetKeyDown(KeyCode.O))
-        //{
-        //    health.TakeDamage(1000);
-        //}
-        //if(Input.GetKeyDown(KeyCode.I))
-        //{
-        //    Init();
-        //}
     }
 }

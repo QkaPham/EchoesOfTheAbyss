@@ -8,16 +8,12 @@ public class PlayerBullet : MonoBehaviour
     [SerializeField]
     protected Rigidbody2D rb;
 
-    [SerializeField]
-    protected Animator animator;
-
     public CharacterStats stats;
     public float damageMultifier;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
     public void Init(Vector3 position, Vector3 direction, float range, float speed)

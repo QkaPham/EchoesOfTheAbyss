@@ -1,6 +1,7 @@
 using Cinemachine;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,52 +19,62 @@ public class RoundTimer : MonoBehaviour
     [SerializeField]
     private float roundTimer;
 
-    private bool isRoundEnded = false;
-
-    public static event Action<float> OnTimerUpdate;
+    private bool stopTimer = false;
 
     [SerializeField]
     private EnemySpawn enemySpawn;
+
+    public static event Action BossRoundStart;
 
     private void Start()
     {
         roundTimer = roundDuration;
     }
+
     private void OnEnable()
     {
         GameManager.OnStartGame += OnStartGame;
         GameManager.OnStartNextRound += StartNextRound;
+        GameManager.OnGameOver += OnGameOver;
     }
 
     private void OnDisable()
     {
         GameManager.OnStartGame -= OnStartGame;
         GameManager.OnStartNextRound -= StartNextRound;
+        GameManager.OnGameOver -= OnGameOver;
     }
 
     void Update()
     {
         RoundUpdate();
     }
+
+    private void OnGameOver()
+    {
+        stopTimer = true;
+    }
+
     private void OnStartGame()
     {
         currentRound = 1;
         UIManager.Instance.GamePanel.UpdateRoundText(currentRound);
         Time.timeScale = 1f;
         roundTimer = roundDuration;
-        isRoundEnded = false;
+        stopTimer = false;
     }
     private void RoundUpdate()
     {
-        if (currentRound != roundNumber)
+        if (currentRound != roundNumber && !stopTimer)
         {
             roundTimer -= Time.deltaTime;
+            UIManager.Instance.GamePanel.UpdateRoundtimerText(roundTimer);
         }
-        OnTimerUpdate?.Invoke(roundTimer);
 
-        if (roundTimer <= 0f && !isRoundEnded)
+        if (roundTimer <= 0f && !stopTimer)
         {
-            isRoundEnded = true;
+            stopTimer = true;
+            EnemyPowerUp();
             GameManager.Instance.RoundEnd();
         }
     }
@@ -76,9 +87,23 @@ public class RoundTimer : MonoBehaviour
         if (currentRound == roundNumber)
         {
             BossEnemy boss = enemySpawn.SpawnBoss();
+            UIManager.Instance.GamePanel.UpdateRoundtimerText("");
+            BossRoundStart?.Invoke();
         }
         Time.timeScale = 1f;
         roundTimer = roundDuration;
-        isRoundEnded = false;
+        stopTimer = false;
     }
+
+    [SerializeField]
+    private List<EnemyStats> enemiesStats;
+
+    private void EnemyPowerUp()
+    {
+        foreach (var enemyStats in enemiesStats)
+        {
+            enemyStats.StatsGrowth();
+        }
+    }
+
 }
