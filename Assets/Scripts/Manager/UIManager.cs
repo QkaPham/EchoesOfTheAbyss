@@ -106,8 +106,8 @@ public class UIManager : Singleton<UIManager>
         LoadingPanel.LoadScene(scene);
     }
 
-    public void Fade(float value, float fadeTime)
+    public void Fade(float value, float fadeTime, Action onComplete = null)
     {
-        FadePanel.Fade(value, fadeTime);
+        FadePanel.Fade(value, fadeTime, onComplete);
     }
 }

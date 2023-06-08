@@ -70,7 +70,8 @@ public class PausePanel : BasePanel
 
     public void OnMainMenuButtonClick()
     {
-        Activate(false, 2f);
+        Activate(false);
+       //canvasGroup.interactable = false;
         GameManager.Instance.ReturnToMainMenu();
     }
 
