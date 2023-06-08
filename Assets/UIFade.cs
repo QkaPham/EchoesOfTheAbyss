@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIFade : UIAnimate
 {
+
     protected override void PreActivate()
     {
         base.PreActivate();
@@ -29,4 +30,5 @@ public class UIFade : UIAnimate
     {
         base.Deactivate(duration);
     }
+
 }
