@@ -124,24 +124,24 @@ public class UpgradePanel : BasePanel
 
     protected override void Animation(bool active, float delay)
     {
-        if (active)
-        {
-            Sequence seq = DOTween.Sequence();
-            seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, delay).SetEase(Ease.Linear));
-            seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, delay).SetEase(Ease.Linear));
-            seq.Join(statsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
-            seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, delay).SetEase(Ease.Linear));
-            seq.Join(itemsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
-        }
-        else
-        {
-            Sequence seq = DOTween.Sequence();
-            seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, delay).SetEase(Ease.Linear));
-            seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, delay).SetEase(Ease.Linear));
-            seq.Join(statsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
-            seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, delay).SetEase(Ease.Linear));
-            seq.Join(itemsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
-        }
+        //if (active)
+        //{
+        //    Sequence seq = DOTween.Sequence();
+        //    seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(statsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
+        //    seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(itemsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
+        //}
+        //else
+        //{
+        //    Sequence seq = DOTween.Sequence();
+        //    seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(statsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
+        //    seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, delay).SetEase(Ease.Linear));
+        //    seq.Join(itemsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
+        //}
     }
 
     public override void Activate(bool active, float delay = 0f)
@@ -210,6 +210,7 @@ public class UpgradePanel : BasePanel
 
     public void OnNextRoundButtonClick()
     {
+        UIManager.Instance.ShowLast();
         GameManager.Instance.StartNextRound();
 
     }

@@ -56,8 +56,11 @@ public class SettingsPanel : BasePanel
     {
         if (InputManager.Instance.Cancel)
         {
-            if (!isActive) return;
-            OnSaveButtonClick();
+            if (UIManager.Instance.currentView.viewName == View.Settings)
+            {
+                OnSaveButtonClick();
+            }
+            //if (!isActive) return;
         }
     }
 

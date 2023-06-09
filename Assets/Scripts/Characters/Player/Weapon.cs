@@ -19,6 +19,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField]
     protected HitBox hitbox;
+
     protected bool CanAttack => Time.time >= lastAttackTime + CooldownTime;
     protected bool EndAttack = true;
     protected float CooldownTime => BaseAttackCooldown / stats.Haste.Total;
@@ -54,6 +55,7 @@ public class Weapon : MonoBehaviour
     {
         CharacterStats.OnStatsChange -= SpeedUpAttackAnimation;
     }
+
 
     protected void Update()
     {

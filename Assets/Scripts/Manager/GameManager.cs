@@ -30,16 +30,16 @@ public class GameManager : Singleton<GameManager>
 
     public void Pause()
     {
-        UIManager.Instance.PausePanel.Activate(true);
+        //UIManager.Instance.PausePanel.Activate(true);
+        //UIManager.Instance.ActiveDepthOfField(true);
         InputManager.Instance.EnablePlayerInput(false);
-        UIManager.Instance.ActiveDepthOfField(true);
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        UIManager.Instance.PausePanel.Activate(false);
-        UIManager.Instance.ActiveDepthOfField(false);
+        //UIManager.Instance.PausePanel.Activate(false);
+        //UIManager.Instance.ActiveDepthOfField(false);
         InputManager.Instance.EnablePlayerInput(true);
         Time.timeScale = 1f;
     }
@@ -70,16 +70,16 @@ public class GameManager : Singleton<GameManager>
 
     public void RoundEnd()
     {
-        UIManager.Instance.UpgradePanel.Activate(true, .7f);
-        UIManager.Instance.GamePanel.Activate(false);
+        UIManager.Instance.Show(View.Upgrade);
+        //UIManager.Instance.GamePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(false);
         OnRoundEnd?.Invoke();
     }
 
     public void StartNextRound()
     {
-        UIManager.Instance.UpgradePanel.Activate(false, 1f);
-        UIManager.Instance.GamePanel.Activate(true);
+        //UIManager.Instance.UpgradePanel.Activate(false, 1f);
+        //UIManager.Instance.GamePanel.Activate(true);
         InputManager.Instance.EnablePlayerInput(true);
         OnStartNextRound?.Invoke();
     }

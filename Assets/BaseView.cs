@@ -15,6 +15,9 @@ public enum View
     Load,
     Game,
     Pause,
+    Upgrade,
+    Victory,
+    GameOver
 }
 
 public abstract class BaseView : MonoBehaviour
@@ -55,12 +58,12 @@ public abstract class BaseView : MonoBehaviour
     {
         InputManager.Instance.EnableUIInput(false);
 
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSecondsRealtime(delay);
         foreach (var item in UIAnimates)
         {
             item.Activate(duration);
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSecondsRealtime(duration);
 
         isActive = true;
         InputManager.Instance.EnableUIInput(true);
@@ -75,12 +78,12 @@ public abstract class BaseView : MonoBehaviour
         InputManager.Instance.EnableUIInput(false);
         EventSystem.current.SetSelectedGameObject(null);
 
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSecondsRealtime(delay);
         foreach (var item in UIAnimates)
         {
             item.Deactivate(duration);
         }
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSecondsRealtime(duration);
 
         InputManager.Instance.EnableUIInput(true);
 

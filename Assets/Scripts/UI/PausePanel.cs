@@ -12,23 +12,27 @@ public class PausePanel : BasePanel
     {
         if (InputManager.Instance.Cancel)
         {
-            Debug.Log("Cancel");
-            if (!UIManager.Instance.GamePanel.isActive) return;
-            if (UIManager.Instance.UpgradePanel.isActive) return;
-            if (UIManager.Instance.SettingsPanel.isActive) return;
-            if (Time.unscaledTime > lastCancel + 1.2f)
+            // Debug.Log("Cancel");
+            if (UIManager.Instance.currentView.viewName == View.Pause)
             {
-                lastCancel = Time.unscaledTime;
-                if (isActive)
-                {
-
-                    GameManager.Instance.Resume();
-                }
-                else
-                {
-                    GameManager.Instance.Pause();
-                }
+                OnResumeButtonClick();
             }
+            //if (!UIManager.Instance.GamePanel.isActive) return;
+            //if (UIManager.Instance.UpgradePanel.isActive) return;
+            //if (UIManager.Instance.SettingsPanel.isActive) return;
+            //if (Time.unscaledTime > lastCancel + 1.2f)
+            //{
+            //    lastCancel = Time.unscaledTime;
+            //    if (isActive)
+            //    {
+
+            //        GameManager.Instance.Resume();
+            //    }
+            //    else
+            //    {
+            //        GameManager.Instance.Pause();
+            //    }
+            //}
         }
     }
     protected override IEnumerator DelayActivate(bool active, float delay)
@@ -59,20 +63,24 @@ public class PausePanel : BasePanel
 
     public void OnResumeButtonClick()
     {
-        GameManager.Instance.Resume();
+        UIManager.Instance.ShowLast(() =>
+        {
+            GameManager.Instance.Resume();
+        });
     }
 
     public void OnSettingsButtonClick()
     {
-        Activate(false);
-        UIManager.Instance.SettingsPanel.ActivateByPanel(this);
+        UIManager.Instance.Show(View.Settings);
+        //Activate(false);
+        //UIManager.Instance.SettingsPanel.ActivateByPanel(this);
         UIManager.Instance.ActiveDepthOfField(true);
     }
 
     public void OnMainMenuButtonClick()
     {
         Activate(false);
-       //canvasGroup.interactable = false;
+        //canvasGroup.interactable = false;
         GameManager.Instance.ReturnToMainMenu();
     }
 

@@ -137,12 +137,14 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
     protected virtual void SlideOut(float duration, float delay = 0f, Action onComplete = null)
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(rectTransform.DOMove(deactivePosition, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 
@@ -150,6 +152,7 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(rectTransform.DOScale(1f, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 
@@ -157,6 +160,7 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(rectTransform.DOScale(0f, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 
@@ -164,6 +168,7 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(canvasGroup.DOFade(1, duration).SetEase(Ease.OutExpo).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 
@@ -171,6 +176,7 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(canvasGroup.DOFade(0, duration).SetEase(Ease.InExpo).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 
@@ -179,6 +185,7 @@ public class UIAnimate : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Append(canvasGroup.DOFade(1f, duration).SetEase(Ease.OutExpo).SetDelay(delay));
         sequence.Join(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
     protected virtual void FadeSlideOut(float duration, float delay = 0f, Action onComplete = null)
@@ -186,6 +193,7 @@ public class UIAnimate : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Append(canvasGroup.DOFade(0, duration).SetEase(Ease.InExpo).SetDelay(delay));
         sequence.Join(rectTransform.DOMove(deactivePosition, duration).SetDelay(delay));
+        sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
 

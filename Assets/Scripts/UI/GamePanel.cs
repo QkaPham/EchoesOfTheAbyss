@@ -43,6 +43,23 @@ public class GamePanel : BasePanel
         BossHealth.OnHealthChange -= UpdateBossHPBar;
     }
 
+    private void Update()
+    {
+        if (InputManager.Instance.Cancel)
+        {
+            if (UIManager.Instance.currentView.viewName == View.Game)
+            {
+                OnPauseButtonClick();
+            }
+        }
+    }
+
+    private void OnPauseButtonClick()
+    {
+        GameManager.Instance.Pause();
+        UIManager.Instance.Show(View.Pause);
+    }
+
     private void UpdateHPBar(Health health)
     {
         float percentHealtPoint = Mathf.Clamp01(health.CurrentHealth / health.MaxHealth);

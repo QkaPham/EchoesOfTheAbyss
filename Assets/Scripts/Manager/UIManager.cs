@@ -5,6 +5,7 @@ using UnityEngine.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -47,8 +48,8 @@ public class UIManager : Singleton<UIManager>
     private DepthOfField depthOfField;
 
 
-    public MainMenuView mainMenuView;
-    public SettingsView settingsView;
+    //public MainMenuView mainMenuView;
+    //public SettingsView settingsView;
 
     public BaseView startingView;
     public BaseView currentView;
@@ -79,8 +80,8 @@ public class UIManager : Singleton<UIManager>
         LoadingPanel = GetComponentInChildren<LoadingPanel>();
         FadePanel = GetComponentInChildren<FadePanel>();
 
-        mainMenuView = GetComponentInChildren<MainMenuView>();
-        settingsView = GetComponentInChildren<SettingsView>();
+        //mainMenuView = GetComponentInChildren<MainMenuView>();
+        //settingsView = GetComponentInChildren<SettingsView>();
 
         List<BaseView> baseViews = GetComponentsInChildren<BaseView>().ToList();
         foreach (BaseView view in baseViews)
@@ -139,6 +140,13 @@ public class UIManager : Singleton<UIManager>
 
     public void Show(View viewName, Action onComplete = null, bool remember = true)
     {
+        StartCoroutine(DelayShow(viewName, onComplete, remember));
+    }
+
+    public IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
+    {
+        yield return null;
+        Debug.Log("Show View " + viewName);
         viewsMap.TryGetValue(viewName, out BaseView view);
         if (view != null)
         {
