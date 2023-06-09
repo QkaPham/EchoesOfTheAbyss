@@ -130,16 +130,21 @@ public class SettingsPanel : BasePanel
     public void OnSaveButtonClick()
     {
         SaveToJson();
-        Activate(false);
-        if (TurnOnSettingsPanel.GetType() == typeof(MainMenuPanel))
-        {
-            UIManager.Instance.MainMenuPanel.Activate(true);
-            UIManager.Instance.ActiveDepthOfField(false);
-        }
-        else if (TurnOnSettingsPanel.GetType() == typeof(PausePanel))
-        {
-            UIManager.Instance.PausePanel.Activate(true);
-        }
+        UIManager.Instance.ShowLast();
+        // Activate(false);
+        //UIManager.Instance.settingsView.DeActivate(1f, 0f, () =>
+        //{
+        //    UIManager.Instance.mainMenuView.Activate(1f);
+        //});
+        //if (TurnOnSettingsPanel.GetType() == typeof(MainMenuPanel))
+        //{
+        //    UIManager.Instance.MainMenuPanel.Activate(true);
+        //    UIManager.Instance.ActiveDepthOfField(false);
+        //}
+        //else if (TurnOnSettingsPanel.GetType() == typeof(PausePanel))
+        //{
+        //    UIManager.Instance.PausePanel.Activate(true);
+        //}
     }
 
     private void SaveToJson()

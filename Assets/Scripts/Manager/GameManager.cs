@@ -18,15 +18,12 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         SceneManager.sceneLoaded += OnGameLevelLoaded;
-        UIManager.Instance.LoadScene("GameLevel");
+        //UIManager.Instance.LoadScene("GameLevel");
     }
 
     private void OnGameLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnGameLevelLoaded;
-        //  UIManager.Instance.MainMenuPanel.Activate(false);
-        UIManager.Instance.GamePanel.Activate(true);
-        UIManager.Instance.Fade(0f, 1f);
         InputManager.instance.EnablePlayerInput(true);
         OnStartGame?.Invoke();
     }
@@ -58,7 +55,7 @@ public class GameManager : Singleton<GameManager>
     public void ReturnToMainMenu()
     {
         SceneManager.sceneLoaded += OnMainmenuLoaded;
-        UIManager.Instance.LoadScene("MainMenu");
+        //UIManager.Instance.LoadScene("MainMenu");
     }
 
     private void OnMainmenuLoaded(Scene scene, LoadSceneMode mode)

@@ -12,6 +12,7 @@ public class PausePanel : BasePanel
     {
         if (InputManager.Instance.Cancel)
         {
+            Debug.Log("Cancel");
             if (!UIManager.Instance.GamePanel.isActive) return;
             if (UIManager.Instance.UpgradePanel.isActive) return;
             if (UIManager.Instance.SettingsPanel.isActive) return;

@@ -3,97 +3,208 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum AnimationType
 {
     Slide,
-    Fade,
     Zoom,
-
+    Fade,
+    FadeSlide
 }
 
+public enum AnimationDirection
+{
+    None,
+    Up,
+    Down,
+    Left,
+    Right
+}
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UIAnimate : MonoBehaviour
 {
-    public CanvasGroup canvasGroup;
-    public RectTransform rectTransform;
+    protected CanvasGroup canvasGroup;
+    protected RectTransform rectTransform;
 
     public AnimationType type;
+    public AnimationDirection direction;
 
-    public Tween tween;
-    public Vector3 originalPosition;
-    public Vector3 offPosition;
+    [Range(0f, 1f)]
+    public float slideDistance = 1;
+
+    protected Vector3 originalPosition;
+    protected Vector3 deactivePosition;
+    protected bool isActive;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         originalPosition = rectTransform.position;
-        offPosition = rectTransform.position + 1000 * Vector3.down;
+        deactivePosition = CalculateDeactivePosition(direction);
         canvasGroup = GetComponent<CanvasGroup>();
         Deactivate(0f);
     }
 
-    protected virtual void Update()
+    public virtual void Activate(float duration)
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Activate(1f);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Deactivate(1f);
-        }
+        Activate(duration, 0f);
     }
 
-    public bool receiveInput = true;
-    public float Duration { get; set; }
-
-    protected virtual void Activate(float duration)
+    public virtual void Deactivate(float duration)
     {
-        if (!receiveInput) return;
-        receiveInput = false;
+        Deactivate(duration, 0f);
+    }
 
+    public virtual void Activate(float duration, float delay = 0f)
+    {
         PreActivate();
-        TurnOnAnimation(duration, PostActivate);
+        switch (type)
+        {
+            case AnimationType.Slide:
+                SlideIn(duration, delay, PostActivate);
+                break;
+            case AnimationType.Zoom:
+                ZoomIn(duration, delay, PostActivate);
+                break;
+            case AnimationType.Fade:
+                FadeIn(duration, delay, PostActivate);
+                break;
+            case AnimationType.FadeSlide:
+                FadeSlideIn(duration, delay, PostActivate);
+                break;
+            default:
+                break;
+        }
     }
 
-    protected virtual void Deactivate(float duration)
+    public virtual void Deactivate(float duration, float delay = 0f)
     {
-        if (!receiveInput) return;
-        receiveInput = false;
-
         PreDeactivate();
-
-        tween = rectTransform.DOMove(offPosition, duration).OnComplete(PostDeactivate);
+        switch (type)
+        {
+            case AnimationType.Slide:
+                SlideOut(duration, delay, PostDeactivate);
+                break;
+            case AnimationType.Zoom:
+                ZoomOut(duration, delay, PostDeactivate);
+                break;
+            case AnimationType.Fade:
+                FadeOut(duration, delay, PostDeactivate);
+                break;
+            case AnimationType.FadeSlide:
+                FadeSlideOut(duration, delay, PostDeactivate);
+                break;
+            default:
+                break;
+        }
     }
 
     protected virtual void PreActivate()
     {
-        tween.Kill();
-        canvasGroup.alpha = 1f;
+        if (type != AnimationType.Fade && type != AnimationType.FadeSlide)
+        {
+            canvasGroup.alpha = 1f;
+        }
     }
 
     protected virtual void PreDeactivate()
     {
-        tween.Kill();
         canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+        isActive = false;
     }
 
     protected virtual void PostActivate()
     {
-        receiveInput = true;
         canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        isActive = true;
     }
 
     protected virtual void PostDeactivate()
     {
-        receiveInput = true;
-        canvasGroup.alpha = 0f;
+        if (type != AnimationType.Fade && type != AnimationType.FadeSlide)
+        {
+            canvasGroup.alpha = 0f;
+        }
     }
 
-    protected virtual void TurnOnAnimation(float duration, TweenCallback onComplete)
+    protected virtual void SlideIn(float duration, float delay = 0f, Action onComplete = null)
     {
-        tween = rectTransform.DOMove(originalPosition, duration).OnComplete(onComplete);
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+    protected virtual void SlideOut(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(rectTransform.DOMove(deactivePosition, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual void ZoomIn(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(rectTransform.DOScale(1f, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual void ZoomOut(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(rectTransform.DOScale(0f, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual void FadeIn(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(canvasGroup.DOFade(1, duration).SetEase(Ease.OutExpo).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual void FadeOut(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(canvasGroup.DOFade(0, duration).SetEase(Ease.InExpo).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual void FadeSlideIn(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(canvasGroup.DOFade(1f, duration).SetEase(Ease.OutExpo).SetDelay(delay));
+        sequence.Join(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+    protected virtual void FadeSlideOut(float duration, float delay = 0f, Action onComplete = null)
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(canvasGroup.DOFade(0, duration).SetEase(Ease.InExpo).SetDelay(delay));
+        sequence.Join(rectTransform.DOMove(deactivePosition, duration).SetDelay(delay));
+        sequence.OnComplete(() => onComplete());
+    }
+
+    protected virtual Vector3 CalculateDeactivePosition(AnimationDirection direction)
+    {
+        switch (direction)
+        {
+            case AnimationDirection.None:
+                return originalPosition;
+            case AnimationDirection.Up:
+                return originalPosition + Screen.height * Vector3.down * slideDistance;
+            case AnimationDirection.Down:
+                return originalPosition + Screen.height * Vector3.up * slideDistance;
+            case AnimationDirection.Left:
+                return originalPosition + Screen.width * Vector3.right * slideDistance;
+            case AnimationDirection.Right:
+                return originalPosition + Screen.width * Vector3.left * slideDistance;
+            default:
+                return originalPosition;
+        }
     }
 }

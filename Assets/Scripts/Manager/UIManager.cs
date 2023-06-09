@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -44,6 +46,15 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private DepthOfField depthOfField;
 
+
+    public MainMenuView mainMenuView;
+    public SettingsView settingsView;
+
+    public BaseView startingView;
+    public BaseView currentView;
+    public Stack<BaseView> history = new Stack<BaseView>();
+    private Dictionary<View, BaseView> viewsMap = new Dictionary<View, BaseView>();
+
     protected override void Awake()
     {
         base.Awake();
@@ -67,6 +78,20 @@ public class UIManager : Singleton<UIManager>
         VictoryPanel = GetComponentInChildren<VictoryPanel>();
         LoadingPanel = GetComponentInChildren<LoadingPanel>();
         FadePanel = GetComponentInChildren<FadePanel>();
+
+        mainMenuView = GetComponentInChildren<MainMenuView>();
+        settingsView = GetComponentInChildren<SettingsView>();
+
+        List<BaseView> baseViews = GetComponentsInChildren<BaseView>().ToList();
+        foreach (BaseView view in baseViews)
+        {
+            if (view.viewName != View.None)
+            {
+                viewsMap.Add(view.viewName, view);
+            }
+        }
+        currentView = startingView;
+        history.Push(startingView);
 
         MainMenuPanel.Activate(true, 1f);
         GamePanel.Activate(false);
@@ -101,13 +126,43 @@ public class UIManager : Singleton<UIManager>
         depthOfField.active = active;
     }
 
-    public void LoadScene(string scene)
+    public void LoadScene(string scene, View viewName)
     {
-        LoadingPanel.LoadScene(scene);
+        //Show(View.Load, null, false);
+        LoadingPanel.LoadScene(scene, viewName);
     }
 
-    public void Fade(float value, float fadeTime, Action onComplete = null)
+    public void Fade(float value, float fadeTime)
     {
-        FadePanel.Fade(value, fadeTime, onComplete);
+        FadePanel.Fade(value, fadeTime);
     }
+
+    public void Show(View viewName, Action onComplete = null, bool remember = true)
+    {
+        viewsMap.TryGetValue(viewName, out BaseView view);
+        if (view != null)
+        {
+            currentView.DeActivate(() =>
+            {
+                view.Activate(onComplete);
+            });
+            if (remember)
+            {
+                history.Push(currentView);
+            }
+            currentView = view;
+        }
+        else
+        {
+            Debug.LogError($"Not contain {viewName} view in views map");
+        }
+    }
+
+    public void ShowLast(Action onComplete = null)
+    {
+        var view = history.Pop();
+        Show(view.viewName, onComplete, false);
+    }
+
+
 }

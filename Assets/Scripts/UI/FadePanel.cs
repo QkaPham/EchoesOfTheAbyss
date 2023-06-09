@@ -2,12 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System;
+using static UnityEngine.Rendering.DebugUI;
 
 public class FadePanel : MonoBehaviour
 {
     private Image imgFade;
     [SerializeField]
     private Color fadeColor;
+
+    private Tween tween;
 
     private void Awake()
     {
@@ -16,10 +19,22 @@ public class FadePanel : MonoBehaviour
         SetAlpha(0);
     }
 
-    public void Fade(float value, float fadeTime, Action OnComplete)
+    public void Fade(float value, float duration)
     {
-        if (Time.timeScale != 1) Time.timeScale = 1;
-        imgFade.DOFade(value, fadeTime).OnComplete(() => OnComplete());
+        tween.Kill();
+        tween = imgFade.DOFade(value, duration);
+    }
+
+    public void FadeIn(float duration)
+    {
+        Fade(0f, duration);
+        tween.SetEase(Ease.InExpo);
+    }
+
+    public void FadeOut(float duration)
+    {
+        Fade(0f, duration);
+        tween.SetEase(Ease.OutExpo);
     }
 
     private void SetAlpha(float alp)
