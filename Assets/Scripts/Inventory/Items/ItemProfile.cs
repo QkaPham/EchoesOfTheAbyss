@@ -13,10 +13,13 @@ public class ItemProfile : ScriptableObject
     public int maxRarity;
     public int[] recyclePrice;
     public int[] price;
+    public Color[] backGroundColor;
     public List<ModiferConfig> modifierConfig;
+
     [Serializable]
     public class ModiferConfig
     {
+        public float TotalValue(int rarity) => modifier.amount + (rarity - 1) * growth;
         public float growth;
         public Modifier modifier;
     }

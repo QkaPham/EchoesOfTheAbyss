@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
@@ -11,13 +11,17 @@ public class Shop : MonoBehaviour
     public Equipment equipment;
     public Currency currency;
 
-    public int slot;
+    public int maxSlot;
     public List<Item> sellItems = new List<Item>();
     public List<ItemProfile> itemProfiles;
     public List<RarityChance> rarityChances;
 
     public List<Item> rollingPool;
     public List<Item> PulledPool;
+
+    public List<ShopSlot> slots;
+
+    public Button rollButton;
 
     private void Awake()
     {
@@ -29,14 +33,17 @@ public class Shop : MonoBehaviour
                 rollingPool.Add(new Item(profile, 1));
             }
         }
+        slots = GetComponentsInChildren<ShopSlot>().ToList();
+        maxSlot = slots.Count();
+
         Roll();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            currency.Gain(111111);
+            currency.Gain(20);
             Roll();
         }
 
@@ -56,7 +63,7 @@ public class Shop : MonoBehaviour
         {
             Buy(3);
         }
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             Sell(inventory.Items[0]);
         }
@@ -68,6 +75,7 @@ public class Shop : MonoBehaviour
         if (newItem == null) return;
         if (currency.Use(newItem.price))
         {
+            slots[index].UpdateShopSlot(null);
             sellItems[index] = null;
 
             RollingPoolRemove(newItem);
@@ -84,7 +92,7 @@ public class Shop : MonoBehaviour
 
     private void BuyNewItem(Item item)
     {
-        inventory.Items.Add(item);
+        inventory.Add(item);
     }
 
     private void Upgrade(Item item)
@@ -99,19 +107,20 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            inventory.Items.Add(item);
+            inventory.Add(item);
         }
     }
 
-    private void Roll()
+    public void Roll()
     {
         sellItems.Clear();
-        for (int i = 0; i < slot; i++)
+        for (int i = 0; i < maxSlot; i++)
         {
             Item item = RandomItem();
-            item.rarity = RandomRarity();
+            item.Rarity = RandomRarity();
 
             sellItems.Add(item);
+            slots[i].UpdateShopSlot(item);
         }
     }
 
@@ -119,7 +128,7 @@ public class Shop : MonoBehaviour
     {
         currency.Gain(inventory.Recycle(item));
 
-        RollingPoolAdd(item.profile, (int)Mathf.Pow(2, item.rarity - 1));
+        RollingPoolAdd(item.profile, (int)Mathf.Pow(2, item.Rarity - 1));
     }
 
     protected int RandomRarity()

@@ -13,6 +13,8 @@ public class Modifier
     public StatType statType;
     public ModifierType modifierType;
     public float amount;
+
+
     public Modifier(StatType statType, ModifierType modifierType, float amount)
     {
         this.statType = statType;

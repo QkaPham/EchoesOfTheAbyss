@@ -24,7 +24,7 @@ public class Inventory : ScriptableObject
         Update();
     }
 
-    private void Add(Item item)
+    public void Add(Item item)
     {
         Items.Add(item);
         Update();
@@ -70,6 +70,7 @@ public class Inventory : ScriptableObject
             Add(newItem);
         }
     }
+
     private void Update()
     {
         Sort();
@@ -78,7 +79,7 @@ public class Inventory : ScriptableObject
 
     private void Sort()
     {
-        Items.OrderBy(s => s.rarity).ThenBy(s => s.profile.id);
+        Items.OrderBy(s => s.Rarity).ThenBy(s => s.profile.id);
     }
 
     public Item FindSimilarItem(Item item)

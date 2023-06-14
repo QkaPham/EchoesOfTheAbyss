@@ -50,7 +50,7 @@ public class ItemCollector : MonoBehaviour
         CollectibleItem collectibleItem = collision.gameObject.GetComponent<CollectibleItem>();
         if (collectibleItem != null)
         {
-            inventory.MergeAdd(collectibleItem.item);
+            //inventory.MergeAdd(collectibleItem.item);
             AudioManager.Instance.PlaySE("Collect");
             Destroy(collectibleItem.gameObject);
         }

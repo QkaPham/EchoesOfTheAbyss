@@ -17,11 +17,22 @@ MonoBehaviour:
   description: 
   icon: {fileID: 21300000, guid: c8e77f0db68087e4d8db55b719f07c00, type: 3}
   maxRarity: 5
-  recyclePrice: 000000000100000002000000030000000400000005000000
-  price: 000000000100000002000000030000000400000005000000
+  recyclePrice: 0100000002000000030000000400000005000000
+  price: 0100000002000000030000000400000005000000
+  backGroundColor:
+  - {r: 0.9686275, g: 0.9686275, b: 0.9686275, a: 1}
+  - {r: 0.1137255, g: 0.9686275, b: 0, a: 1}
+  - {r: 0, g: 0.42352945, b: 0.83921576, a: 1}
+  - {r: 0.61960787, g: 0.20000002, b: 0.9058824, a: 1}
+  - {r: 0.9725491, g: 0.37647063, b: 0.25882354, a: 1}
   modifierConfig:
-  - growth: 3
+  - growth: 0.05
     modifier:
-      statType: 0
-      modifierType: 0
-      amount: 10
+      statType: 5
+      modifierType: 2
+      amount: 0.05
+  - growth: 0.05
+    modifier:
+      statType: 2
+      modifierType: 1
+      amount: 0.05

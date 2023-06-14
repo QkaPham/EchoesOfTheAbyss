@@ -133,7 +133,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Icon: {fileID: 1715369167615666979}
-  <Item>k__BackingField: {fileID: 0}
+  <Item>k__BackingField:
+    profile: {fileID: 0}
+    rarity: 0
+    modifiers: []
 --- !u!114 &9087556776580482623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,10 +240,10 @@ RectTransform:
   m_Father: {fileID: 7418514632384067298}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1889776477263833465
 CanvasRenderer:

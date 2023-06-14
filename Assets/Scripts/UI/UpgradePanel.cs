@@ -210,7 +210,7 @@ public class UpgradePanel : BasePanel
         var item = equipment.Items[SelectedSlotIndex];
         if (item != null)
         {
-            inventory.MergeAdd(item);
+            //inventory.MergeAdd(item);
             equipment.Remove(SelectedSlotIndex);
             DisplayCurrentSelectedItem();
         }
