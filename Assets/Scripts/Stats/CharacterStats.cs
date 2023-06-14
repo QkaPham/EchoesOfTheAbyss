@@ -17,7 +17,19 @@ public enum StatType
 public class CharacterStats : ScriptableObject
 {
     [Header("Level")]
-    public int Level = 1;
+    public int level = 1;
+    public int Level
+    {
+        get
+        {
+            return level;
+        }
+        set
+        {
+            level = value;
+            EventManager.Raise(EventID.LevelChange, new LevelChangeNotify(level, LevelUpCost));
+        }
+    }
     public int LevelUpCost => Level * 1000 + 4000;
 
     [Header("Starting Stats")]
@@ -71,11 +83,11 @@ public class CharacterStats : ScriptableObject
     public Stat CriticalHitChance;
     public Stat CriticalHitDamage;
     public Stat Haste;
-    public List<IModifierSource> ModifierSources = new List<IModifierSource>();
+    public List<Item> ModifierSources = new List<Item>();
 
-    public static event Action<CharacterStats> OnStatsChange;
     public static event Action<int, int> OnLevelChange;
 
+    private Action<Notify> OnEquipmentChange;
     private void Reset()
     {
         Init();
@@ -92,61 +104,81 @@ public class CharacterStats : ScriptableObject
         Haste = new Stat(StatType.Haste, BaseHaste);
 
         stats.AddRange(new Stat[] { Attack, Defense, MaxHealthPoint, CriticalHitChance, CriticalHitDamage, Haste });
-        OnLevelChange?.Invoke(Level, LevelUpCost);
-        OnStatsChange?.Invoke(this);
-        ModifierSources.Clear();
+        RemoveAllModifier();
+
+        OnEquipmentChange = thisNotify =>
+        {
+            if (thisNotify is EquipmentChangeNotify notify)
+            {
+                if (notify.isEquip)
+                {
+                    AddModifiers(notify.item);
+                }
+                else
+                {
+                    RemoveModifiers(notify.item);
+                }
+            }
+        };
     }
 
     private void OnEnable()
     {
-        Equipment.OnEquipmentChange += (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
+        EventManager.AddListiener(EventID.EquipmentChange, OnEquipmentChange);
+        //Equipment.OnEquipmentChange += (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
     }
 
     private void OnDisable()
     {
-        Equipment.OnEquipmentChange -= (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
+        //Equipment.OnEquipmentChange -= (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
     }
 
-    private void OnEquipmentChange(bool isAddItem, Item item)
-    {
-        if (isAddItem)
-        {
-            AddModifiers(item);
-        }
-        else
-        {
-            RemoveModifiers(item);
-        }
-    }
-    public void AddModifiers(IModifierSource source)
+    //private void OnEquipmentChange(bool isAddItem, Item item)
+    //{
+    //    if (isAddItem)
+    //    {
+    //        AddModifiers(item);
+    //    }
+    //    else
+    //    {
+
+    //    }
+    //}
+    public void AddModifiers(Item source)
     {
         ModifierSources.Add(source);
         UpdateBonusStats();
-        OnStatsChange?.Invoke(this);
+        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
-    public void RemoveModifiers(IModifierSource source)
+    public void RemoveModifiers(Item source)
     {
         ModifierSources.Remove(source);
         UpdateBonusStats();
-        OnStatsChange?.Invoke(this);
+        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
+    }
+
+    private void RemoveAllModifier()
+    {
+        ModifierSources.Clear();
+        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
     private void UpdateBonusStats()
     {
         foreach (Stat stat in stats)
         {
-            float flatModifiers = ModifierSources.Sum(s => s.Modifiers
-                .Where(m => m.StatType == stat.StatType && m.ModifierType == ModifierType.Flat)
-                .Sum(m => m.Amount));
+            float flatModifiers = ModifierSources.Sum(s => s.modifiers
+                .Where(m => m.statType == stat.StatType && m.modifierType == ModifierType.Flat)
+                .Sum(m => m.amount));
 
-            float percentModifiers = ModifierSources.Sum(s => s.Modifiers
-                .Where(m => m.StatType == stat.StatType && m.ModifierType == ModifierType.PercentMultiply)
-                .Sum(m => m.Amount));
+            float percentModifiers = ModifierSources.Sum(s => s.modifiers
+                .Where(m => m.statType == stat.StatType && m.modifierType == ModifierType.PercentMultiply)
+                .Sum(m => m.amount));
 
-            float percentaddModifiers = ModifierSources.Sum(s => s.Modifiers
-                .Where(m => m.StatType == stat.StatType && m.ModifierType == ModifierType.PercentAdd)
-                .Sum(m => m.Amount));
+            float percentaddModifiers = ModifierSources.Sum(s => s.modifiers
+                .Where(m => m.statType == stat.StatType && m.modifierType == ModifierType.PercentAdd)
+                .Sum(m => m.amount));
 
             stat.Modifier = stat.Base * percentModifiers + flatModifiers + percentaddModifiers;
         }
@@ -161,7 +193,7 @@ public class CharacterStats : ScriptableObject
         CriticalHitChance.Base += CritGrowth;
         CriticalHitDamage.Base += CritDamageGrowth;
         Haste.Base += HasteGrowth;
-        OnStatsChange?.Invoke(this);
+        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
         OnLevelChange?.Invoke(Level, LevelUpCost);
     }
 }

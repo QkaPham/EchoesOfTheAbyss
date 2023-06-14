@@ -20,7 +20,7 @@ public class Health : ScriptableObject
         private set
         {
             currentHealth = Mathf.Clamp(value, 0, MaxHealth);
-            OnHealthChange?.Invoke(this);
+            EventManager.Raise(EventID.HealthChange, new HealthChangeNotify(currentHealth, maxHealth));
         }
     }
     public float MaxHealth
@@ -36,12 +36,12 @@ public class Health : ScriptableObject
                 CurrentHealth = value;
             }
             maxHealth = value;
-            OnHealthChange?.Invoke(this);
+            EventManager.Raise(EventID.HealthChange, new HealthChangeNotify(currentHealth, maxHealth));
         }
     }
 
-    public static event Action<Health> OnHealthChange;
     private event Action Death, Hurt;
+    private Action<Notify> OnStatsChange;
 
     public void Init(CharacterStats stats, Action OnDeath, Action OnHurt)
     {
@@ -50,20 +50,16 @@ public class Health : ScriptableObject
         Recovery = stats.HPRecovery;
         Death = OnDeath;
         Hurt = OnHurt;
-
+        OnStatsChange = thisNotify => { if (thisNotify is StatsChangeNotify notify) UpdateStats(notify.stats); };
     }
+
 
     private void OnEnable()
     {
-        CharacterStats.OnStatsChange += OnStatsChange;
+        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
     }
 
-    private void OnDisable()
-    {
-        CharacterStats.OnStatsChange -= OnStatsChange;
-    }
-
-    private void OnStatsChange(CharacterStats stats)
+    private void UpdateStats(CharacterStats stats)
     {
         MaxHealth = stats.MaxHealthPoint.Total;
         deffense = stats.Defense.Total;

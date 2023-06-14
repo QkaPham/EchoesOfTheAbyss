@@ -38,11 +38,12 @@ MonoBehaviour:
   MaxMana: 100
   ManaRecovery: 10
   DelayManaRecoverTime: 1
+  HPRecovery: 1
   Attack:
     StatType: 0
     Base: 12
     Modifier: 0
-    total: 0
+    total: 12
   Defense:
     StatType: 1
     Base: 5
@@ -57,14 +58,14 @@ MonoBehaviour:
     StatType: 3
     Base: 0.1
     Modifier: 0
-    total: 0
+    total: 0.1
   CriticalHitDamage:
     StatType: 4
     Base: 0.5
     Modifier: 0
-    total: 0
+    total: 0.5
   Haste:
     StatType: 5
     Base: 0.5
     Modifier: 0
-    total: 0
+    total: 0.5

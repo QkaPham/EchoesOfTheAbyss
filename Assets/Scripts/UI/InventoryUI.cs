@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -11,26 +13,41 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     private InventorySlotUI inventorySlotPrefabs;
 
+    private Action<Notify> OnInventoryChange;
+
     public void Awake()
     {
-        foreach (Transform child in transform)
+        InventorySlots = new List<InventorySlotUI>();
+        for (int i = 0; i < 20; i++)
         {
-            InventorySlots.Add(child.GetComponent<InventorySlotUI>());
+            InventorySlotUI newSlot = Instantiate(inventorySlotPrefabs, transform);
+            InventorySlots.Add(newSlot);
+        }
+        OnInventoryChange = thisNotify => { if (thisNotify is InventoryChangeNotify notify) UpdateInventoryUI(notify.items); };
+    }
+
+    private void Start()
+    {
+        EventManager.AddListiener(EventID.InventoryChange, OnInventoryChange);
+    }
+
+    private void UpdateInventoryUI(List<Item> items)
+    {
+        for (int i = 0; i < InventorySlots.Count; i++)
+        {
+            if (i < items.Count)
+            {
+                UpdateInventoryUI(items[i], i);
+            }
+            else
+            {
+                UpdateInventoryUI(null,i);
+            }
         }
     }
 
-    public void OnEnable()
-    {
-        Inventory.OnInventoryChange += UpdateInventoryUI;
-    }
-
-    private void OnDisable()
-    {
-        Inventory.OnInventoryChange -= UpdateInventoryUI;
-    }
     private void UpdateInventoryUI(Item item, int slot)
     {
-        //if(item==null) return;
         if (InventorySlots.Count - 1 >= slot)
         {
             InventorySlots[slot].UpdateUISlot(item);
@@ -42,4 +59,5 @@ public class InventoryUI : MonoBehaviour
             InventorySlots.Add(newSlot);
         }
     }
+
 }

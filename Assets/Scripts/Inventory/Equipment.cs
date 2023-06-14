@@ -14,15 +14,13 @@ public class Equipment : ScriptableObject
     [SerializeField]
     private Currency currency;
 
-    public static event Action<bool, Item, int> OnEquipmentChange;
-
     public void Init()
     {
         Items = new List<Item>();
         for (int index = 0; index < size; index++)
         {
             Items.Add(null);
-            OnEquipmentChange?.Invoke(false, null, index);
+            EventManager.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(false, null, index));
         }
     }
 
@@ -32,8 +30,7 @@ public class Equipment : ScriptableObject
         if (index >= 0)
         {
             Items[index] = item;
-            OnEquipmentChange?.Invoke(true, item, index);
-            
+            EventManager.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(true, item, index));
             return true;
         }
         return false;
@@ -42,15 +39,15 @@ public class Equipment : ScriptableObject
     public void Remove(int index)
     {
         Item item = Items[index];
-        OnEquipmentChange?.Invoke(false, item, index);
+        EventManager.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(false, item, index));
         Items[index] = null;
     }
 
     public void Recycle(int index)
     {
         Item item = Items[index];
-        OnEquipmentChange?.Invoke(false, item, index);
-        currency.Gain(item.RecyclePrice);
+        EventManager.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(false, item, index));
+        currency.Gain(item.recyclePrice);
         Items[index] = null;
     }
 }

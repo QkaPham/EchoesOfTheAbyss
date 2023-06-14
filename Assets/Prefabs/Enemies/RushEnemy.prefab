@@ -225,11 +225,10 @@ MonoBehaviour:
   nextState: 0
   FlipTransform: {fileID: 7123257138107155700}
   dropItems:
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
-  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
+  - {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
   dropChance: 0.5
   stats: {fileID: 11400000, guid: f7e7646cb7841204dabf9966bcafaffb, type: 2}
+  stopAttack: 0
   lineRenderer: {fileID: 7123257137506396404}
   profile: {fileID: 11400000, guid: 66920fbc3aabd7b4a9ed253705788204, type: 2}
 --- !u!50 &7123257137451411174

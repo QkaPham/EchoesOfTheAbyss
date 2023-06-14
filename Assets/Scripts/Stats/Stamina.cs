@@ -25,6 +25,7 @@ public class Stamina : ScriptableObject
         private set
         {
             currentStamina = Mathf.Clamp(value, 0, maxStamina);
+            //EventManager.FireNotify(EventName.StaminaChange, new StaminaChangeNotify(currentStamina, maxStamina));
         }
     }
     public float MaxStanima { get => maxStamina; private set => maxStamina = value; }
@@ -46,10 +47,6 @@ public class Stamina : ScriptableObject
             if (recoverStamina)
             {
                 CurrentStamina += staminaRecovery * Time.deltaTime;
-            }
-            if (UIManager.Instance.GamePanel != null)
-            {
-                UIManager.Instance.GamePanel.UpdateStaminaBar(this);
             }
         }
     }

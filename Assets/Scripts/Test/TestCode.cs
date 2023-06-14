@@ -5,24 +5,16 @@ using UnityEngine.UI;
 
 public class TestCode : MonoBehaviour
 {
-    [SerializeField]
-    public Slider slider;
+    public CollectibleItem colect;
+    public ItemProfile profile;
 
-    private void Start()
-    {
-        slider.maxValue = 100;
-        slider.value = 100;
-    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            slider.value -= 10;
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            slider.value += 10;
+            var c = Instantiate(colect);
+            c.item = new Item(profile, 1);
         }
     }
 }

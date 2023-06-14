@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,25 @@ using UnityEngine.Pool;
 
 public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
 {
-    protected override void OnEnable()
+    Action<Notify> OnRetry, OnRoundEnd, OnVictory;
+    protected override void Awake()
     {
-        base.OnEnable();
-        GameManager.OnStartGame += Destroy;
-        GameManager.OnRoundEnd += Death;
-        GameManager.OnVictory += Death;
+        base.Awake();
+        OnRoundEnd = thisNotify => Death();
+        OnVictory = thisNotify => Death();
+        OnRetry = thisNotify => Destroy();
+    }
+    protected override void Start()
+    {
+        base.Start();
+        EventManager.AddListiener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.AddListiener(EventID.Victory, OnVictory);
+        EventManager.AddListiener(EventID.Retry, OnRetry);
     }
 
-    protected override void OnDisable()
+    protected void OnDisable()
     {
-        base.OnDisable();
         animator.SetTrigger("Reset");
-        GameManager.OnStartGame -= Destroy;
-        GameManager.OnRoundEnd -= Death;
-        GameManager.OnVictory -= Death;
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;

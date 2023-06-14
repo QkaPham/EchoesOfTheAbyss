@@ -6,13 +6,12 @@ public class VictoryPanel : BasePanel
 {
     public void OnNewGameButtonClick()
     {
-        GameManager.Instance.StartGame();
-        Activate(false);
+        UIManager.Instance.ShowLast();
+        //GameManager.Instance.StartGame();
     }
 
     public void OnMainMenuButtonClick()
     {
-        Activate(false, 2f);
         GameManager.Instance.ReturnToMainMenu();
     }
 }

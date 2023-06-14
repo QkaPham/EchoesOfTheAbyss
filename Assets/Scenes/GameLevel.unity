@@ -1711,9 +1711,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRound: 0
   roundNumber: 5
-  roundDuration: 60
-  roundTimer: 0
-  enemySpawn: {fileID: 113934207}
+  duration: 60
+  timer: 0
   enemiesStats:
   - {fileID: 11400000, guid: a725bbe096d413444a55846fb56c03c1, type: 2}
   - {fileID: 11400000, guid: caaa25966ec473342a61882d6b5ad137, type: 2}
@@ -6739,30 +6738,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1299563943913022533, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5e6e58ae6efc4d646986b82e1caca726, type: 2}
-    - target: {fileID: 3633180604186210259, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6303552142035690746, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: damageMultifier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6672643111595062913, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: ca18e36c984ac2c4d95302f8d2686750, type: 2}
-    - target: {fileID: 6771249028612756343, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Radius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7671312195846999942, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 5e6e58ae6efc4d646986b82e1caca726, type: 2}
     - target: {fileID: 7671312196939594498, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -6807,17 +6782,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7671312196939594500, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7671312196939594503, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 8111890959323058832, guid: 3974c9393e110534f9d8233d665f4372, type: 3}
-      propertyPath: m_ForceMagnitude
-      value: -200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

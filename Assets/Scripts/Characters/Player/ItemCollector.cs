@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ItemCollector : MonoBehaviour
@@ -12,21 +13,20 @@ public class ItemCollector : MonoBehaviour
     private CircleCollider2D magnetCollider;
     private float magnetRadius;
 
+    private Action<Notify> OnRoundEnd, OnStartNextRound;
+
     private void Awake()
     {
         magnetRadius = magnetCollider.radius;
+
+        OnRoundEnd = thisNotify => ExpandMagnetRadius();
+        OnStartNextRound = thisNotify => ResetMagnetRadius();
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        GameManager.OnRoundEnd += ExpandMagnetRadius;
-        GameManager.OnStartNextRound += ResetMagnetRadius;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnRoundEnd -= ExpandMagnetRadius;
-        GameManager.OnStartNextRound -= ResetMagnetRadius;
+        EventManager.AddListiener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.AddListiener(EventID.StartNextRound, OnStartNextRound);
     }
 
     private void ExpandMagnetRadius()
@@ -50,11 +50,9 @@ public class ItemCollector : MonoBehaviour
         CollectibleItem collectibleItem = collision.gameObject.GetComponent<CollectibleItem>();
         if (collectibleItem != null)
         {
-            if (inventory.Add(collectibleItem.item))
-            {
-                AudioManager.Instance.PlaySE("Collect");
-                Destroy(collectibleItem.gameObject);
-            }
+            inventory.MergeAdd(collectibleItem.item);
+            AudioManager.Instance.PlaySE("Collect");
+            Destroy(collectibleItem.gameObject);
         }
     }
 

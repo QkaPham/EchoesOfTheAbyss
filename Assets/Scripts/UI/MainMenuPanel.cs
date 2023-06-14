@@ -5,27 +5,12 @@ using UnityEditor.Search;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenuPanel : BasePanel
 {
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    private void Update()
-    {
-
-    }
-
-    protected override void Animation(bool active, float delay)
-    {
-        
-    }
-
     public void OnStartGameButtonClick()
     {
-        UIManager.Instance.LoadScene("GameLevel", View.Game);
         GameManager.Instance.StartGame();
     }
 
@@ -38,5 +23,4 @@ public class MainMenuPanel : BasePanel
     {
         Application.Quit();
     }
-
 }

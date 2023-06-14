@@ -6,7 +6,7 @@ public class EquipmentSlotUI : SlotUI
 {
     [SerializeField] Image Icon;
     [field: SerializeField] public Item Item { get; private set; }
-    public override SlotType SlotType => SlotType.EquipmentSlot;
+    public override SlotType SlotType => SlotType.Equipment;
     protected override void Awake()
     {
         base.Awake();
@@ -19,13 +19,13 @@ public class EquipmentSlotUI : SlotUI
             {
                 HasItem = true;
                 Item = item;
-                Icon.sprite = item.Icon;
+                Icon.sprite = item.profile.icon;
             }
             else
             {
                 HasItem = false;
                 Item = null;
-                Icon.sprite = GameResources.Instance.GetItem(ItemID.NoneItem).Icon;
+                Icon.sprite = AssetLoader.Instance.GetItem(ItemID.NoneItem).icon;
             }
         }
     }

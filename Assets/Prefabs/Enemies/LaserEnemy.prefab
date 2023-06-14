@@ -392,9 +392,7 @@ MonoBehaviour:
   nextState: 0
   FlipTransform: {fileID: 5151409397747472302}
   dropItems:
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 0054615a979014749a3963bc5735945b, type: 2}
-  - {fileID: 11400000, guid: 51a25d214064e7f43a01a873aed036d7, type: 2}
+  - {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
   dropChance: 0.5
   stats: {fileID: 11400000, guid: f47d3ed3422edf446b6deca6a669cccf, type: 2}
   stopAttack: 0

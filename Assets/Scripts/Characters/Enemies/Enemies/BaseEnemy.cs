@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -45,8 +46,10 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField]
     protected Transform FlipTransform;
 
+    protected EnemyDrop drop;
+
     [SerializeField]
-    protected List<Item> dropItems;
+    protected List<ItemProfile> dropItems;
 
     [SerializeField]
     protected float dropChance = 0.5f;
@@ -61,27 +64,21 @@ public abstract class BaseEnemy : MonoBehaviour
     [SerializeField]
     private bool stopAttack;
 
+    protected Action<Notify> OnPlayerDeath;
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         health = GetComponentInChildren<EnemyHealth>();
+
+        OnPlayerDeath = thisNotify => StopAttack();
     }
 
-    protected virtual void OnEnable()
-    {
-        //GameManager.OnStartGame += Destroy;
-        GameManager.OnGameOver += StopAttack;
-    }
-
-    protected virtual void OnDisable()
-    {
-        //GameManager.OnStartGame -= Destroy;
-        GameManager.OnGameOver -= StopAttack;
-    }
     protected virtual void Start()
     {
         stats.Init();
+        EventManager.AddListiener(EventID.PlayerDeath, OnPlayerDeath);
     }
 
     protected virtual void Update()
@@ -158,6 +155,7 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void Destroy()
     {
         Drop();
+        drop.Drop();
         Destroy(gameObject);
     }
 
@@ -188,12 +186,15 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected void Drop()
     {
-        var random = Random.value;
+        var random = UnityEngine.Random.value;
         if (random < dropChance && dropItems.Count >= 1)
         {
             var item = collectibleItemPool.Get();
             item.transform.position = this.transform.position;
-            item.item = dropItems[Random.Range(0, dropItems.Count)];
+            ItemProfile profile = dropItems[UnityEngine.Random.Range(0, dropItems.Count)];
+            int rarity = UnityEngine.Random.Range(1, 3);
+            item.item = new Item(profile, rarity);
+            ;
         }
 
         var fragment = fragmentPool.Get();

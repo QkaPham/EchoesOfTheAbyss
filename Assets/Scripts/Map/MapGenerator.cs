@@ -1,4 +1,5 @@
 //using System;
+using System;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -20,19 +21,30 @@ public class MapGenerator : MonoBehaviour
     public bool isUseSeed;
     public int seed = 12345;
 
-    private void OnEnable()
+    Action<Notify> OnStartGame;
+    private void Awake()
     {
-        GameManager.OnStartGame += GenerateObstacles;
+        //OnStartGame = thisNotify => GenerateObstacles();
+        GenerateObstacles();
     }
 
-    private void OnDisable()
+    private void Start()
     {
-        GameManager.OnStartGame -= GenerateObstacles;
+        //EventManager.AddListiener(EventName.StartGame, OnStartGame);
     }
+    //private void OnEnable()
+    //{
+    //    GameManager.OnStartGame += GenerateObstacles;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    GameManager.OnStartGame -= GenerateObstacles;
+    //}
     private void GenerateObstacles()
     {
         DestroyAllChild();
-        if (isUseSeed) Random.InitState(seed);
+        if (isUseSeed) UnityEngine.Random.InitState(seed);
 
         for (int x = -width / 2; x <= width / 2; x += 2)
         {
@@ -40,23 +52,23 @@ public class MapGenerator : MonoBehaviour
             {
                 if (x == -width / 2 || x == width / 2 || y == -height / 2 || y == height / 2)
                 {
-                    Instantiate(borderPrefabs, new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
+                    Instantiate(borderPrefabs, new Vector2(x, y) + UnityEngine.Random.insideUnitCircle, Quaternion.identity, transform);
                     continue;
                 }
                 if (x >= -exclusionArea && x <= exclusionArea && y >= -exclusionArea && y <= exclusionArea)
                 {
                     continue;
                 }
-                float rand = Random.value;
+                float rand = UnityEngine.Random.value;
                 if (rand < propRate)
                 {
-                    int index = Random.Range(0, propPrefabs.Length - 1);
-                    Instantiate(propPrefabs[index], new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
+                    int index = UnityEngine.Random.Range(0, propPrefabs.Length - 1);
+                    Instantiate(propPrefabs[index], new Vector2(x, y) + UnityEngine.Random.insideUnitCircle, Quaternion.identity, transform);
                 }
 
                 if (rand >= propRate && rand < propRate + obstacleRate)
                 {
-                    Instantiate(obstaclePrefab, new Vector2(x, y) + Random.insideUnitCircle, Quaternion.identity, transform);
+                    Instantiate(obstaclePrefab, new Vector2(x, y) + UnityEngine.Random.insideUnitCircle, Quaternion.identity, transform);
                 }
             }
         }

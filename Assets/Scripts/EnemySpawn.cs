@@ -33,41 +33,41 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField]
     private float Offset = 1.0f;
 
-    [SerializeField] 
+    [SerializeField]
     private float enemySpawnTime = 1;
     private float lastSpawnTime = float.MinValue;
 
-    private bool isSpawning;
+    private bool isSpawning = true;
 
     [SerializeField]
     private CinemachineVirtualCamera vCam;
 
-    private Action stopSpawn;
-    private Action startSpawn;
+    private Action<Notify> StopSpawn, OnRoundChange;
 
     private void Awake()
     {
-        stopSpawn = () => isSpawning = false;
-        startSpawn = () => isSpawning = true;
+        StopSpawn = thisNotify => isSpawning = false;
+        OnRoundChange = thisNotify =>
+        {
+            isSpawning = true;
+            if (thisNotify is RoundChangeNotify notify)
+            {
+                if (notify.isBossRound)
+                {
+                    SpawnBoss();
+                }
+            }
+        };
+    }
+    private void Start()
+    {
+        EventManager.AddListiener(EventID.RoundEnd, StopSpawn);
+        EventManager.AddListiener(EventID.RoundChange, OnRoundChange);
+        EventManager.AddListiener(EventID.Victory, StopSpawn);
+        EventManager.AddListiener(EventID.GameOver, StopSpawn);
+
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnStartGame += startSpawn;
-        GameManager.OnRoundEnd += stopSpawn;
-        GameManager.OnStartNextRound += startSpawn;
-        GameManager.OnGameOver += stopSpawn;
-        GameManager.OnVictory += stopSpawn;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnStartGame -= startSpawn;
-        GameManager.OnRoundEnd -= stopSpawn;
-        GameManager.OnStartNextRound -= startSpawn;
-        GameManager.OnGameOver -= stopSpawn;
-        GameManager.OnVictory -= stopSpawn;
-    }
 
     private void Update()
     {

@@ -3,16 +3,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUI : SlotUI//, ISelectHandler
+public class InventorySlotUI : SlotUI
 {
     [SerializeField] private Image Icon;
     [field: SerializeField] public Item Item { get; private set; }
-    public override SlotType SlotType => SlotType.InventorySlot;
-    //public static event Action<Item, SlotType> OnItemSlotSelect;
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    public override SlotType SlotType => SlotType.Inventory;
     public override void UpdateUISlot(Item item)
     {
         if (Icon != null)
@@ -21,19 +16,14 @@ public class InventorySlotUI : SlotUI//, ISelectHandler
             {
                 HasItem = true;
                 Item = item;
-                Icon.sprite = item.Icon;
+                Icon.sprite = item.profile.icon;
             }
             else
             {
                 HasItem = false;
                 Item = null;
-                Icon.sprite = GameResources.Instance.GetItem(ItemID.NoneItem).Icon;
+                Icon.sprite = AssetLoader.Instance.GetItem(ItemID.NoneItem).icon;
             }
         }
     }
-
-    //public void OnSelect(BaseEventData eventData)
-    //{
-    //    OnItemSlotSelect?.Invoke(Item, SlotType);
-    //}
 }

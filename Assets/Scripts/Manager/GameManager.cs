@@ -8,96 +8,74 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-    public static event Action OnStartGame;
-    public static event Action OnRoundEnd;
-    public static event Action OnStartNextRound;
-    //public static event Action OnRetryGame;
-    public static event Action OnGameOver;
-    public static event Action OnVictory;
-
     public void StartGame()
     {
-        SceneManager.sceneLoaded += OnGameLevelLoaded;
-        //UIManager.Instance.LoadScene("GameLevel");
-    }
-
-    private void OnGameLevelLoaded(Scene scene, LoadSceneMode mode)
-    {
-        SceneManager.sceneLoaded -= OnGameLevelLoaded;
-        InputManager.instance.EnablePlayerInput(true);
-        OnStartGame?.Invoke();
+        UIManager.Instance.LoadScene("GameLevel", View.Game, () =>
+        {
+            InputManager.Instance.EnablePlayerInput(true);
+            EventManager.Raise(EventID.StartGame, null);
+        });
     }
 
     public void Pause()
     {
-        //UIManager.Instance.PausePanel.Activate(true);
-        //UIManager.Instance.ActiveDepthOfField(true);
+        UIManager.Instance.Show(View.Pause);
         InputManager.Instance.EnablePlayerInput(false);
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        //UIManager.Instance.PausePanel.Activate(false);
-        //UIManager.Instance.ActiveDepthOfField(false);
-        InputManager.Instance.EnablePlayerInput(true);
-        Time.timeScale = 1f;
+        UIManager.Instance.ShowLast(() =>
+        {
+            Time.timeScale = 1f;
+            InputManager.Instance.EnablePlayerInput(true);
+        });
     }
 
     public void RetryGame()
     {
-        Time.timeScale = 1f;
-        UIManager.Instance.GamePanel.Activate(true);
+        UIManager.Instance.ShowLast();
         InputManager.Instance.EnablePlayerInput(true);
-        OnStartGame?.Invoke();
+        EventManager.Raise(EventID.Retry, null);
+        Time.timeScale = 1f;
     }
 
     public void ReturnToMainMenu()
     {
-        SceneManager.sceneLoaded += OnMainmenuLoaded;
-        //UIManager.Instance.LoadScene("MainMenu");
-    }
-
-    private void OnMainmenuLoaded(Scene scene, LoadSceneMode mode)
-    {
-        SceneManager.sceneLoaded -= OnMainmenuLoaded;
-        UIManager.Instance.MainMenuPanel.Activate(true);
-        UIManager.Instance.GamePanel.Activate(false);
-        UIManager.Instance.ActiveDepthOfField(false);
-        UIManager.Instance.Fade(0f, 2f);
-        InputManager.Instance.EnablePlayerInput(false);
+        UIManager.Instance.LoadScene("MainMenu", View.MainMenu, () =>
+        {
+            UIManager.Instance.ActiveDepthOfField(false);
+            InputManager.Instance.EnablePlayerInput(false);
+        });
     }
 
     public void RoundEnd()
     {
         UIManager.Instance.Show(View.Upgrade);
-        //UIManager.Instance.GamePanel.Activate(false);
         InputManager.Instance.EnablePlayerInput(false);
-        OnRoundEnd?.Invoke();
+        EventManager.Raise(EventID.RoundEnd, null);
     }
 
     public void StartNextRound()
     {
-        //UIManager.Instance.UpgradePanel.Activate(false, 1f);
-        //UIManager.Instance.GamePanel.Activate(true);
+        UIManager.Instance.ShowLast();
+        EventManager.Raise(EventID.StartNextRound, null);
         InputManager.Instance.EnablePlayerInput(true);
-        OnStartNextRound?.Invoke();
     }
 
     public void GameOver()
     {
-        UIManager.Instance.GamePanel.Activate(false, 2);
-        UIManager.Instance.GameoverPanel.Activate(true, 2);
+        UIManager.Instance.Show(View.GameOver);
+        EventManager.Raise(EventID.GameOver, null);
         InputManager.Instance.EnablePlayerInput(false);
-        OnGameOver?.Invoke();
     }
 
     public void Victory()
     {
-        UIManager.Instance.GamePanel.Activate(false);
-        UIManager.Instance.VictoryPanel.Activate(true);
+        UIManager.Instance.Show(View.Victory);
+        EventManager.Raise(EventID.Victory, null);
         InputManager.Instance.EnablePlayerInput(false);
-        OnVictory?.Invoke();
     }
 
     public void Quit()

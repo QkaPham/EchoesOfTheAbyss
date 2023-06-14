@@ -10,8 +10,8 @@ using UnityEngine.EventSystems;
 public enum SlotType
 {
     Undefined,
-    InventorySlot,
-    EquipmentSlot
+    Inventory,
+    Equipment
 }
 
 public class UpgradePanel : BasePanel
@@ -55,24 +55,6 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private GameProgressUI gameProgress;
 
-    [SerializeField]
-    private float moveDuration;
-    [SerializeField]
-    private float fadeDuration;
-
-    [SerializeField]
-    private Vector3 moveDir;
-
-    [SerializeField]
-    private CanvasGroup statsCanvasGroup;
-    [SerializeField]
-    private Vector3 statsMoveDir;
-
-    [SerializeField]
-    private CanvasGroup itemsCanvasGroup;
-    [SerializeField]
-    private Vector3 itemsMoveDir;
-
     private SlotType SelectedSlotType
     {
         get
@@ -104,55 +86,33 @@ public class UpgradePanel : BasePanel
         }
     }
 
+    private Action<Notify> OnStatsChange, OnLevelChange, OnCurrencyChange;
 
-    public void OnEnable()
+    private void Awake()
     {
-        CharacterStats.OnStatsChange += UpdateStatsTxt;
-        CharacterStats.OnLevelChange += (level, cost) => UpdateLevelUpCost(cost);
-        Currency.OnCurrencyChange += UpdateFragmentText;
+        OnStatsChange = thisNotify => { if (thisNotify is StatsChangeNotify notify) UpdateStats(notify.stats); };
+        OnLevelChange = thisNotify =>
+        {
+            if (thisNotify is LevelChangeNotify notify)
+            {
+                UpdateLevelUpCost(notify.levelUpCost);
+                UpdateLevel(notify.level);
+            }
+        };
+
+        OnCurrencyChange = thisNotify => { if (thisNotify is CurrencyChangeNotify notify) UpdateFragmentText(notify.balance); };
     }
 
-    public void OnDisable()
+    public void Start()
     {
-        CharacterStats.OnStatsChange -= UpdateStatsTxt;
-        CharacterStats.OnLevelChange -= (level, cost) => UpdateLevelUpCost(cost);
-        Currency.OnCurrencyChange -= UpdateFragmentText;
-    }
-
-    public Ease InEase;
-    public Ease Outease;
-
-    protected override void Animation(bool active, float delay)
-    {
-        //if (active)
-        //{
-        //    Sequence seq = DOTween.Sequence();
-        //    seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position + moveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position + statsMoveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(statsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
-        //    seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position + itemsMoveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(itemsCanvasGroup.DOFade(1f, delay).SetEase(Ease.InExpo));
-        //}
-        //else
-        //{
-        //    Sequence seq = DOTween.Sequence();
-        //    seq.Append(gameProgress.transform.DOMove(gameProgress.transform.position - moveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(statsCanvasGroup.transform.DOMove(statsCanvasGroup.transform.position - statsMoveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(statsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
-        //    seq.Join(itemsCanvasGroup.transform.DOMove(itemsCanvasGroup.transform.position - itemsMoveDir, delay).SetEase(Ease.Linear));
-        //    seq.Join(itemsCanvasGroup.DOFade(0f, delay * 0.5f).SetEase(Ease.OutExpo));
-        //}
-    }
-
-    public override void Activate(bool active, float delay = 0f)
-    {
-        base.Activate(active, delay);
-        itemDetailUI.UpdateItemDetailUI(null, SelectedSlotType);
+        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
+        EventManager.AddListiener(EventID.LevelChange, OnLevelChange);
+        EventManager.AddListiener(EventID.CurrencyChange, OnCurrencyChange);
     }
 
     private void Update()
     {
-        if (isActive)
+        if (UIManager.Instance.CompareCurrentView(View.Upgrade))
         {
             PreventLoseFocus();
             if (InputManager.Instance.LevelUp)
@@ -165,11 +125,11 @@ public class UpgradePanel : BasePanel
             }
             if (InputManager.Instance.Equip)
             {
-                if (SelectedSlotType == SlotType.InventorySlot)
+                if (SelectedSlotType == SlotType.Inventory)
                 {
                     OnEquipButtonClick();
                 }
-                else if (SelectedSlotType == SlotType.EquipmentSlot)
+                else if (SelectedSlotType == SlotType.Equipment)
                 {
                     OnUnequipButtonClick();
                 }
@@ -187,7 +147,6 @@ public class UpgradePanel : BasePanel
         {
             stats.LevelUp();
             UpdateLevelUpCost(stats.LevelUpCost);
-            UpdateStatsTxt(stats);
         }
     }
 
@@ -196,10 +155,13 @@ public class UpgradePanel : BasePanel
         levelUpCostTxt.text = cost.ToString();
     }
 
-
-    private void UpdateStatsTxt(CharacterStats stats)
+    private void UpdateLevel(int level)
     {
-        levelTxt.text = $"Lv <size=150%>{stats.Level}";
+        levelTxt.text = $"Lv <size=150%>{level}";
+    }
+
+    private void UpdateStats(CharacterStats stats)
+    {
         statsTxt.text = String.Format("{0:0}\n{1:0}\n{2:0}\n{3:0.0}%\n{4:0.0}%\n{5:0.0}%", stats.Attack.Total, stats.MaxHealthPoint.Total, stats.Defense.Total, stats.CriticalHitChance.Total * 100, stats.CriticalHitDamage.Total * 100, stats.Haste.Total * 100);
     }
 
@@ -210,9 +172,7 @@ public class UpgradePanel : BasePanel
 
     public void OnNextRoundButtonClick()
     {
-        UIManager.Instance.ShowLast();
         GameManager.Instance.StartNextRound();
-
     }
 
     private void PreventLoseFocus()
@@ -240,7 +200,7 @@ public class UpgradePanel : BasePanel
         {
             if (equipment.Add(item))
             {
-                inventory.Remove(SelectedSlotIndex);
+                inventory.Remove(item);
             }
             DisplayCurrentSelectedItem();
         }
@@ -250,20 +210,19 @@ public class UpgradePanel : BasePanel
         var item = equipment.Items[SelectedSlotIndex];
         if (item != null)
         {
-            if (inventory.Add(item))
-            {
-                equipment.Remove(SelectedSlotIndex);
-            }
+            inventory.MergeAdd(item);
+            equipment.Remove(SelectedSlotIndex);
             DisplayCurrentSelectedItem();
         }
     }
     public void OnRecycleButtonClick()
     {
-        if (SelectedSlotType == SlotType.InventorySlot)
+        if (SelectedSlotType == SlotType.Inventory)
         {
-            inventory.Recycle(SelectedSlotIndex);
+            int currency = inventory.Recycle(SelectedSlotIndex);
+            this.currency.Gain(currency);
         }
-        if (SelectedSlotType == SlotType.EquipmentSlot)
+        if (SelectedSlotType == SlotType.Equipment)
         {
             equipment.Recycle(SelectedSlotIndex);
         }
@@ -273,7 +232,7 @@ public class UpgradePanel : BasePanel
     private void DisplayCurrentSelectedItem()
     {
         if (SelectedSlotIndex < 0) return;
-        var item = SelectedSlotType == SlotType.InventorySlot ? inventory.Items[SelectedSlotIndex] : equipment.Items[SelectedSlotIndex];
+        var item = SelectedSlotType == SlotType.Inventory ? inventory.Items[SelectedSlotIndex] : equipment.Items[SelectedSlotIndex];
         itemDetailUI.UpdateItemDetailUI(item, SelectedSlotType);
     }
 

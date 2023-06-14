@@ -135,15 +135,9 @@ public class LaserEnemy : BasePoolableEnemy
     {
         PreventPushing(false);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, shotDirection, profile.laserRange, profile.PlayerLayerMask);
-        if (!hit)
-        {
-            return;
-        }
-
-        if (hit.transform.TryGetComponent<Player>(out Player player))
-        {
-            player.health.TakeDamage(stats.totalAttack);
-        }
+        if (!hit) return;
+        Player player = hit.transform.GetComponentInParent<Player>();
+        player.health.TakeDamage(stats.totalAttack);
     }
 
     public override void Hurt()

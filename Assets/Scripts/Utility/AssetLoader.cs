@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameResources : Singleton<GameResources>
+public class AssetLoader : Singleton<AssetLoader>
 {
-    private Dictionary<ItemID,Item> Items;
+    private Dictionary<ItemID,ItemProfile> Items;
     protected override void Awake()
     {
-        Item[] items = Resources.LoadAll<Item>("Items");
+        ItemProfile[] items = Resources.LoadAll<ItemProfile>("Items");
 
-        Items = new Dictionary<ItemID, Item>();
+        Items = new Dictionary<ItemID, ItemProfile>();
 
-        foreach (Item item in items)
+        foreach (ItemProfile item in items)
         {
-            Items.Add(item.ID, item);
+            Items.Add(item.id, item);
         }
     }
-    public Item GetItem(ItemID id)
+    public ItemProfile GetItem(ItemID id)
     {
-        Item item;
+        ItemProfile item;
         if (Items.TryGetValue(id, out item))
         {
             return item;

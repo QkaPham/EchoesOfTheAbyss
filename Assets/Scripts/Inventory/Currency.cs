@@ -1,32 +1,40 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="Currency", menuName ="Scriptable Object/Currency")]
+[CreateAssetMenu(fileName = "Currency", menuName = "Scriptable Object/Currency")]
 public class Currency : ScriptableObject
 {
     [SerializeField]
-    private int currencyAmount;
-    private bool EnoughCurrency(int amount) => currencyAmount >= amount;
-    public static event Action<int> OnCurrencyChange;
+    private int balance;
+    public int Balance
+    {
+        get
+        {
+            return balance;
+        }
+        private set
+        {
+            balance = value;
+            EventManager.Raise(EventID.CurrencyChange, new CurrencyChangeNotify(balance));
+        }
+    }
+
+    private bool EnoughCurrency(int amount) => Balance >= amount;
 
     public void Init()
     {
-        currencyAmount= 0;
-        OnCurrencyChange?.Invoke(currencyAmount);
+        Balance = 0;
     }
 
     public void Gain(int amount)
     {
-        currencyAmount += amount;
-        OnCurrencyChange?.Invoke(currencyAmount);
+        Balance += amount;
     }
 
     public bool Use(int amount)
     {
         if (!EnoughCurrency(amount)) return false;
-        currencyAmount -= amount;
-        OnCurrencyChange?.Invoke(currencyAmount);
-
+        Balance -= amount;
         return true;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,63 +11,44 @@ public class LoadingPanel : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI loadingText;
     protected LoadView view;
+    protected Action onSceneLoaded;
 
     private void Awake()
     {
         view = GetComponent<LoadView>();
     }
 
-    public void LoadScene(string scene, View viewName)
+    public void LoadScene(string scene, View viewName, Action onSceneLoaded = null)
     {
-        // canvasGroup.alpha = 1f;
-        //StartCoroutine(Load(scene, viewName));
+        this.onSceneLoaded = onSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
         asyncOperation.allowSceneActivation = false;
         UIManager.Instance.Show(View.Load, () =>
         {
             asyncOperation.allowSceneActivation = true;
-            UIManager.Instance.Show(viewName, null, true);
+            UIManager.Instance.Show(viewName, null, false);
         }, false);
     }
 
-    private IEnumerator Load(string scene, View viewName, float minDuration = 1f)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Time.timeScale = 1f;
-        float startTime = Time.time;
-        yield return null;
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
-        asyncOperation.allowSceneActivation = false;
-        UIManager.Instance.Show(View.Load, () =>
-        {
-            asyncOperation.allowSceneActivation = true;
-            UIManager.Instance.Show(viewName, null, true);
-        }, false);
-        //view.Activate(minDuration, 0f, () =>
-        //{
-
-        //    view.DeActivate(minDuration, 0f, () =>
-        //    {
-
-        //    });
-        //}
-        //);
-
-        //while (!asyncOperation.isDone)
-        //{
-
-        //    //loadingSlider.value = asyncOperation.progress;
-        //    //loadingText.text = $"Loading... {asyncOperation.progress}%";
-        //    if (asyncOperation.progress >= 0.9f)
-        //    {
-        //        //loadingSlider.value = 1f;
-        //        //loadingText.text = $"Press any key to continue";
-        //        if (Time.time >= startTime + minDuration)
-        //        {
-        //            // canvasGroup.alpha = 0f;
-        //            asyncOperation.allowSceneActivation = true;
-        //        }
-        //    }
-        //    yield return null;
-        //}
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        onSceneLoaded?.Invoke();
     }
+
+    //private IEnumerator Load(string scene, View viewName, float minDuration = 1f)
+    //{
+    //    Time.timeScale = 1f;
+    //    float startTime = Time.time;
+    //    yield return null;
+    //    AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(scene);
+    //    asyncOperation.allowSceneActivation = false;
+    //    UIManager.Instance.Show(View.Load, () =>
+    //    {
+    //        asyncOperation.allowSceneActivation = true;
+    //        UIManager.Instance.Show(viewName, null, true);
+    //    }, false);
+    //}
 }

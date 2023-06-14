@@ -6,54 +6,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using UnityEditor.Search;
 
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField]
-    private RectTransform CanvasTransform;
-
+    private RectTransform canvas;
     [SerializeField]
     private Texture2D customCursor;
-
-    [field: SerializeField]
-    public MainMenuPanel MainMenuPanel { get; set; }
-
-    [field: SerializeField]
-    public GamePanel GamePanel { get; set; }
-
-    [field: SerializeField]
-    public PausePanel PausePanel { get; set; }
-
-    [field: SerializeField]
-    public SettingsPanel SettingsPanel { get; set; }
-
-    [field: SerializeField]
-    public UpgradePanel UpgradePanel { get; set; }
-
-    [field: SerializeField]
-    public GameOverPanel GameoverPanel { get; set; }
-
-    [field: SerializeField]
-    public VictoryPanel VictoryPanel { get; set; }
-
-    [field: SerializeField]
-    public LoadingPanel LoadingPanel { get; set; }
-
-    [field: SerializeField]
-    public FadePanel FadePanel { get; set; }
-
     [SerializeField]
     private Volume volume;
-    [SerializeField]
     private DepthOfField depthOfField;
 
+    private LoadingPanel loadingPanel;
 
-    //public MainMenuView mainMenuView;
-    //public SettingsView settingsView;
-
-    public BaseView startingView;
-    public BaseView currentView;
-    public Stack<BaseView> history = new Stack<BaseView>();
+    [SerializeField]
+    private BaseView startingView;
+    private BaseView currentView;
+    private Stack<BaseView> history = new Stack<BaseView>();
     private Dictionary<View, BaseView> viewsMap = new Dictionary<View, BaseView>();
 
     protected override void Awake()
@@ -63,25 +33,13 @@ public class UIManager : Singleton<UIManager>
         {
             Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
-        if (CanvasTransform == null)
+        if (canvas == null)
         {
-            CanvasTransform = GetComponentInChildren<Canvas>().transform as RectTransform;
+            canvas = GetComponentInChildren<Canvas>().transform as RectTransform;
         }
 
         ActiveAllPanel();
-
-        MainMenuPanel = GetComponentInChildren<MainMenuPanel>();
-        GamePanel = GetComponentInChildren<GamePanel>();
-        PausePanel = GetComponentInChildren<PausePanel>();
-        SettingsPanel = GetComponentInChildren<SettingsPanel>();
-        UpgradePanel = GetComponentInChildren<UpgradePanel>();
-        GameoverPanel = GetComponentInChildren<GameOverPanel>();
-        VictoryPanel = GetComponentInChildren<VictoryPanel>();
-        LoadingPanel = GetComponentInChildren<LoadingPanel>();
-        FadePanel = GetComponentInChildren<FadePanel>();
-
-        //mainMenuView = GetComponentInChildren<MainMenuView>();
-        //settingsView = GetComponentInChildren<SettingsView>();
+        loadingPanel = GetComponentInChildren<LoadingPanel>();
 
         List<BaseView> baseViews = GetComponentsInChildren<BaseView>().ToList();
         foreach (BaseView view in baseViews)
@@ -91,19 +49,16 @@ public class UIManager : Singleton<UIManager>
                 viewsMap.Add(view.viewName, view);
             }
         }
+
+        if(startingView == null)
+        {
+            startingView = GetComponentInChildren<MainMenuView>();
+        }
         currentView = startingView;
         history.Push(startingView);
 
-        MainMenuPanel.Activate(true, 1f);
-        GamePanel.Activate(false);
-        PausePanel.Activate(false);
-        SettingsPanel.Activate(false);
-        UpgradePanel.Activate(false);
-        GameoverPanel.Activate(false);
-        VictoryPanel.Activate(false);
-
         volume = GetComponentInChildren<Volume>();
-        if (volume.profile.TryGet<DepthOfField>(out DepthOfField dof))
+        if (volume.profile.TryGet(out DepthOfField dof))
         {
             depthOfField = dof;
         }
@@ -116,7 +71,7 @@ public class UIManager : Singleton<UIManager>
 
     private void ActiveAllPanel()
     {
-        foreach (Transform child in CanvasTransform)
+        foreach (Transform child in canvas)
         {
             child.gameObject.SetActive(true);
         }
@@ -127,15 +82,10 @@ public class UIManager : Singleton<UIManager>
         depthOfField.active = active;
     }
 
-    public void LoadScene(string scene, View viewName)
+    public void LoadScene(string scene, View viewName, Action onSceneLoaded)
     {
-        //Show(View.Load, null, false);
-        LoadingPanel.LoadScene(scene, viewName);
-    }
-
-    public void Fade(float value, float fadeTime)
-    {
-        FadePanel.Fade(value, fadeTime);
+        history.Clear();
+        loadingPanel.LoadScene(scene, viewName, onSceneLoaded);
     }
 
     public void Show(View viewName, Action onComplete = null, bool remember = true)
@@ -146,7 +96,6 @@ public class UIManager : Singleton<UIManager>
     public IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
     {
         yield return null;
-        Debug.Log("Show View " + viewName);
         viewsMap.TryGetValue(viewName, out BaseView view);
         if (view != null)
         {
@@ -172,5 +121,5 @@ public class UIManager : Singleton<UIManager>
         Show(view.viewName, onComplete, false);
     }
 
-
+    public bool CompareCurrentView(View view) => currentView.viewName == view;
 }

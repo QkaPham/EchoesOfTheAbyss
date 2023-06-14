@@ -8,14 +8,16 @@ public class HitBox : MonoBehaviour
     [SerializeField]
     private List<EnemyHealth> DamageableObjects = new List<EnemyHealth>();
 
-    private void OnEnable()
+    Action<Notify> OnRoundEnd;
+
+    private void Awake()
     {
-        GameManager.OnRoundEnd += OnRoundEnd;
+        OnRoundEnd = thisNotify => DamageableObjects.Clear();
     }
 
-    private void OnDisable()
+    private void Start()
     {
-        GameManager.OnRoundEnd -= OnRoundEnd;
+        EventManager.AddListiener(EventID.RoundEnd, OnRoundEnd);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -85,10 +87,5 @@ public class HitBox : MonoBehaviour
         {
             transform.localScale = Vector3.one;
         }
-    }
-
-    private void OnRoundEnd()
-    {
-        DamageableObjects.Clear();
     }
 }

@@ -25,6 +25,8 @@ public class Weapon : MonoBehaviour
     protected float CooldownTime => BaseAttackCooldown / stats.Haste.Total;
     protected float lastAttackTime = 0f;
 
+    Action<Notify> OnStatsChange;
+
     protected void Awake()
     {
         player = GetComponentInParent<Player>();
@@ -44,18 +46,14 @@ public class Weapon : MonoBehaviour
 
         //Cooldown 10% when start game
         lastAttackTime = -CooldownTime * 1.1f;
+
+        OnStatsChange = notify => SpeedUpAttackAnimation((notify as StatsChangeNotify).stats);
     }
 
     protected void OnEnable()
     {
-        CharacterStats.OnStatsChange += SpeedUpAttackAnimation;
+        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
     }
-
-    protected void OnDisable()
-    {
-        CharacterStats.OnStatsChange -= SpeedUpAttackAnimation;
-    }
-
 
     protected void Update()
     {
@@ -112,6 +110,7 @@ public class Weapon : MonoBehaviour
             rootTransform.rotation = Quaternion.Lerp(rootTransform.rotation, Quaternion.identity, Time.deltaTime / 0.2f);
         }
     }
+
 
     protected void SpeedUpAttackAnimation(CharacterStats stats)
     {

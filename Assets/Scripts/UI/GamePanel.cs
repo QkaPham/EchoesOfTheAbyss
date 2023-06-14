@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -27,27 +28,51 @@ public class GamePanel : BasePanel
     [SerializeField]
     private TextMeshProUGUI roundText;
 
-    private void OnEnable()
+    private Action<Notify> OnHealthChange, OnManaChange, OnStanimaChange, OnCurrencyChange;
+    private Action<Notify> OnTimerChange, OnRoundChange;
+    private Action<Notify> OnBossHealthChange;
+
+    private void Awake()
     {
-        Health.OnHealthChange += UpdateHPBar;
-        Currency.OnCurrencyChange += UpdateFragmentText;
-        RoundTimer.BossRoundStart += OnBossRoundStart;
-        BossHealth.OnHealthChange += UpdateBossHPBar;
+        OnHealthChange = thisNotify => { if (thisNotify is HealthChangeNotify notify) UpDateHPBar(notify.currentHealth / notify.maxHealth); };
+        OnManaChange = thisNotify => { if (thisNotify is ManaChangeNotify notify) UpdateManaBar(notify.currentMana / notify.maxMana); };
+        OnStanimaChange = thisNotify => { if (thisNotify is StaminaChangeNotify notify) UpdateStaminaBar(notify.currentStanima / notify.maxStamina); };
+        OnCurrencyChange = thisNotify => { if (thisNotify is CurrencyChangeNotify notify) UpdateFragmentText(notify.balance); };
+
+        OnTimerChange = thisNotify => { if (thisNotify is TimeChangeNotify notify) UpdateTimerText(notify.time); };
+        OnRoundChange = thisNotify =>
+        {
+            if (thisNotify is RoundChangeNotify notify)
+            {
+                UpdateRoundText(notify.round);
+                if (notify.isBossRound)
+                {
+                    ShowBossHPBar(true);
+                    UpdateRoundtimerText("");
+                }
+            }
+        };
+        OnBossHealthChange = thisNotify => { if (thisNotify is HealthChangeNotify notify) UpdateBossHPBar(notify.currentHealth / notify.maxHealth); };
     }
 
-    private void OnDisable()
+    private void Start()
     {
-        Health.OnHealthChange -= UpdateHPBar;
-        Currency.OnCurrencyChange -= UpdateFragmentText;
-        RoundTimer.BossRoundStart -= OnBossRoundStart;
-        BossHealth.OnHealthChange -= UpdateBossHPBar;
+        EventManager.AddListiener(EventID.HealthChange, OnHealthChange);
+        EventManager.AddListiener(EventID.ManaChange, OnManaChange);
+        EventManager.AddListiener(EventID.StaminaChange, OnStanimaChange);
+        EventManager.AddListiener(EventID.CurrencyChange, OnCurrencyChange);
+
+        EventManager.AddListiener(EventID.TimerChange, OnTimerChange);
+        EventManager.AddListiener(EventID.RoundChange, OnRoundChange);
+
+        EventManager.AddListiener(EventID.BossHealthChange, OnBossHealthChange);
     }
 
     private void Update()
     {
         if (InputManager.Instance.Cancel)
         {
-            if (UIManager.Instance.currentView.viewName == View.Game)
+            if (UIManager.Instance.CompareCurrentView(View.Game))
             {
                 OnPauseButtonClick();
             }
@@ -57,28 +82,24 @@ public class GamePanel : BasePanel
     private void OnPauseButtonClick()
     {
         GameManager.Instance.Pause();
-        UIManager.Instance.Show(View.Pause);
     }
 
-    private void UpdateHPBar(Health health)
+    public void UpDateHPBar(float value)
     {
-        float percentHealtPoint = Mathf.Clamp01(health.CurrentHealth / health.MaxHealth);
-        hpBar.fillAmount = percentHealtPoint;
+        hpBar.fillAmount = value;
     }
 
-    public void UpdateStaminaBar(Stamina stamina)
+    public void UpdateManaBar(float value)
     {
-        float percentStamina = Mathf.Clamp01(stamina.CurrentStamina / stamina.MaxStanima);
-        staminaBar.fillAmount = percentStamina;
+        mpBar.fillAmount = value;
     }
 
-    public void UpdateManaBar(Mana mana)
+    public void UpdateStaminaBar(float value)
     {
-        float percentMana = Mathf.Clamp01(mana.CurrentMana / mana.MaxMana);
-        mpBar.fillAmount = percentMana;
+        staminaBar.fillAmount = value;
     }
 
-    public void UpdateRoundtimerText(float time)
+    public void UpdateTimerText(float time)
     {
         time = Mathf.Clamp(time, 0f, float.MaxValue);
         UpdateRoundtimerText(Mathf.Ceil(time).ToString());
@@ -99,19 +120,13 @@ public class GamePanel : BasePanel
         fragmentText.text = currency.ToString();
     }
 
-    private void OnBossRoundStart()
-    {
-        ShowBossHPBar(true);
-    }
-
     public void ShowBossHPBar(bool active)
     {
         bossHPBar.transform.parent.gameObject.SetActive(active);
     }
 
-    private void UpdateBossHPBar(BossHealth health)
+    private void UpdateBossHPBar(float value)
     {
-        float percentHealtPoint = Mathf.Clamp01(health.CurrentHealth / health.MaxHealth);
-        bossHPBar.fillAmount = percentHealtPoint;
+        bossHPBar.fillAmount = value;
     }
 }

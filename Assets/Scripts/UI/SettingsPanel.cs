@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using System.IO;
-using System.Collections;
-using UnityEngine.EventSystems;
 
 public class SettingsPanel : BasePanel
 {
@@ -32,11 +30,8 @@ public class SettingsPanel : BasePanel
 
     private string FilePath;
 
-    private BasePanel TurnOnSettingsPanel;
-
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        base.Awake();
         FilePath = Application.persistentDataPath + Path.AltDirectorySeparatorChar + "SettingsData.json";
 
         MasterSlider.onValueChanged.AddListener(SetMasterVolume);
@@ -56,38 +51,10 @@ public class SettingsPanel : BasePanel
     {
         if (InputManager.Instance.Cancel)
         {
-            if (UIManager.Instance.currentView.viewName == View.Settings)
+            if (UIManager.Instance.CompareCurrentView(View.Settings))
             {
                 OnSaveButtonClick();
             }
-            //if (!isActive) return;
-        }
-    }
-
-    public void ActivateByPanel(BasePanel panel)
-    {
-        TurnOnSettingsPanel = panel;
-        Activate(true);
-    }
-
-    protected override IEnumerator DelayActivate(bool active, float delay)
-    {
-        if (active)
-        {
-            yield return new WaitForSeconds(delay);
-            isActive = true;
-            EventSystem.current.SetSelectedGameObject(firstSelectedGameObject);
-            canvasGroup.alpha = 1;
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-        }
-        else
-        {
-            yield return new WaitForSeconds(delay);
-            isActive = false;
-            canvasGroup.alpha = 0;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
         }
     }
 
@@ -134,20 +101,6 @@ public class SettingsPanel : BasePanel
     {
         SaveToJson();
         UIManager.Instance.ShowLast();
-        // Activate(false);
-        //UIManager.Instance.settingsView.DeActivate(1f, 0f, () =>
-        //{
-        //    UIManager.Instance.mainMenuView.Activate(1f);
-        //});
-        //if (TurnOnSettingsPanel.GetType() == typeof(MainMenuPanel))
-        //{
-        //    UIManager.Instance.MainMenuPanel.Activate(true);
-        //    UIManager.Instance.ActiveDepthOfField(false);
-        //}
-        //else if (TurnOnSettingsPanel.GetType() == typeof(PausePanel))
-        //{
-        //    UIManager.Instance.PausePanel.Activate(true);
-        //}
     }
 
     private void SaveToJson()

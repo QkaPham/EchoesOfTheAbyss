@@ -42,7 +42,7 @@ public class EnemyBullet : MonoBehaviour, PoolableObject<EnemyBullet>
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
+        Player player = collision.gameObject.GetComponentInParent<Player>();
         if (player != null)
         {
             player.health.TakeDamage(damage);

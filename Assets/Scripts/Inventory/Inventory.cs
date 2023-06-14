@@ -1,6 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "Inventory", menuName = "Scriptable Object/InventorySystem")]
 public class Inventory : ScriptableObject
@@ -10,72 +17,72 @@ public class Inventory : ScriptableObject
     [field: SerializeField]
     public List<Item> Items { get; private set; }
 
-    [SerializeField]
-    private Currency currency;
-
-    public static event Action<Item, int> OnInventoryChange;
-
-
-    private void OnEnable()
-    {
-        //UpgradePanel.OnNextRound += SortItems;
-    }
-
     public void Init()
     {
-        Items = new List<Item>();
-        for (int index = 0; index < size; index++)
-        {
-            Items.Add(null);
-            OnInventoryChange?.Invoke(null, index);
-        }
+        if (Items == null) Items = new List<Item>();
+        else Items.Clear();
+        Update();
     }
 
-    public bool Add(Item item)
+    private void Add(Item item)
     {
-        int index = Items.FindIndex(item => item == null);
-
-        if (index >= 0)
-        {
-            Items[index] = item;
-            OnInventoryChange?.Invoke(item, index);
-            return true;
-        }
-        else
-        {
-            Items.Add(item);
-            Debug.Log(Items.Count - 1);
-            OnInventoryChange?.Invoke(item, Items.Count - 1);
-            return true;
-        }
-        // return false;
+        Items.Add(item);
+        Update();
     }
 
     public void Remove(int index)
     {
-        var item = Items[index];
-        OnInventoryChange?.Invoke(null, index);
-        Items[index] = null;
+        Items.RemoveAt(index);
+        Update();
     }
 
-    public void Recycle(int index)
+    public void Remove(Item item)
+    {
+        Items.Remove(item);
+        Update();
+    }
+
+    public int Recycle(int index)
     {
         var item = Items[index];
-        currency.Gain(item.RecyclePrice);
-        OnInventoryChange?.Invoke(null, index);
-        Items[index] = null;
+        Remove(index);
+        return item.recyclePrice;
     }
 
-    //private void SortItems()
-    //{
-    //    for (int i = 0; i < Items.Count; i++)
-    //    {
-    //        if (Items.Count == size) break;
-    //        if (Items[i] == null)
-    //        {
-    //            Items.RemoveAt(i);
-    //            i--;
-    //        }
-    //    }
-    //}
+    public int Recycle(Item item)
+    {
+        Remove(item);
+        return item.recyclePrice;
+    }
+
+    public void MergeAdd(Item newItem)
+    {
+        var similarItem = Items.FirstOrDefault(item => item.Equals(newItem));
+
+        if (similarItem != null)
+        {
+            Remove(similarItem);
+            similarItem.Upgrade();
+            MergeAdd(similarItem);
+        }
+        else
+        {
+            Add(newItem);
+        }
+    }
+    private void Update()
+    {
+        Sort();
+        EventManager.Raise(EventID.InventoryChange, new InventoryChangeNotify(Items));
+    }
+
+    private void Sort()
+    {
+        Items.OrderBy(s => s.rarity).ThenBy(s => s.profile.id);
+    }
+
+    public Item FindSimilarItem(Item item)
+    {
+        return Items.FirstOrDefault(i => i.Equals(item));
+    }
 }

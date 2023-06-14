@@ -13,13 +13,13 @@ public class ItemDetailUI : MonoBehaviour
 
     public void UpdateItemDetailUI(Item item, SlotType slotType)
     {
-        bool isEquipmentSlot = slotType == SlotType.EquipmentSlot;
-        bool isInventorySlot = slotType == SlotType.InventorySlot;
+        bool isEquipmentSlot = slotType == SlotType.Equipment;
+        bool isInventorySlot = slotType == SlotType.Inventory;
         bool hasItem = item != null;
 
-        ItemImage.sprite = hasItem ? item.Icon : GameResources.Instance.GetItem(ItemID.NoneItem).Icon;
-        ItemName.text = hasItem ? item.Name : "";
-        ItemDescription.text = hasItem ? string.Join("\n", item.Modifiers) : "";
+        ItemImage.sprite = hasItem ? item.profile.icon : AssetLoader.Instance.GetItem(ItemID.NoneItem).icon;
+        ItemName.text = hasItem ? item.profile.itemName : "";
+        ItemDescription.text = hasItem ? string.Join("\n", item.modifiers) : "";
 
         EquipButton.gameObject.SetActive(hasItem && isInventorySlot);
         UnequipButton.gameObject.SetActive(hasItem && isEquipmentSlot);

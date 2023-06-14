@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
 public enum ModifierType
@@ -9,21 +10,27 @@ public enum ModifierType
 [Serializable]
 public class Modifier
 {
-    public StatType StatType;
-    public ModifierType ModifierType;
-    public float Amount;
-    public IModifierSource Source;
-    public Modifier(IModifierSource source, StatType statType, ModifierType modifierType, float amount)
+    public StatType statType;
+    public ModifierType modifierType;
+    public float amount;
+    public Modifier(StatType statType, ModifierType modifierType, float amount)
     {
-        Source = source;
-        StatType = statType;
-        ModifierType = modifierType;
-        Amount = amount;
+        this.statType = statType;
+        this.modifierType = modifierType;
+        this.amount = amount;
     }
+
+    public Modifier(Modifier modifier)
+    {
+        statType = modifier.statType;
+        modifierType = modifier.modifierType;
+        amount = modifier.amount;
+    }
+
     public override string ToString()
     {
         string type = "";
-        switch (StatType)
+        switch (statType)
         {
             case StatType.Attack:
                 type = "Atk";
@@ -46,13 +53,13 @@ public class Modifier
             default:
                 break;
         }
-        if (ModifierType == ModifierType.Flat)
+        if (modifierType == ModifierType.Flat)
         {
-            return $"{type} {Amount}";
+            return $"{type} {amount}";
         }
-        else if (ModifierType == ModifierType.PercentMultiply || ModifierType == ModifierType.PercentAdd)
+        else if (modifierType == ModifierType.PercentMultiply || modifierType == ModifierType.PercentAdd)
         {
-            return $"{type} {Amount * 100}%";
+            return $"{type} {amount * 100}%";
         }
         return base.ToString();
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class Mana : ScriptableObject
         private set
         {
             currentMana = Mathf.Clamp(value, 0, maxMana);
+            EventManager.Raise(EventID.ManaChange, new ManaChangeNotify(currentMana, maxMana));
         }
     }
 
@@ -27,7 +29,6 @@ public class Mana : ScriptableObject
     private bool recoverMana => Time.time >= delayManaRecoverTime + LastTimeConsumeMana;
     private bool fullyRecovered => currentMana == maxMana;
     private float manaRecovery;
-
     public void Init(CharacterStats stats)
     {
         maxMana = stats.MaxMana;
@@ -43,10 +44,6 @@ public class Mana : ScriptableObject
             if (recoverMana)
             {
                 CurrentMana += manaRecovery * Time.deltaTime;
-            }
-            if (UIManager.Instance.GamePanel != null)
-            {
-                UIManager.Instance.GamePanel.UpdateManaBar(this);
             }
         }
     }

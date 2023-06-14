@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9053f0adbab797e49b05a1945b26a122, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  size: 20
+  size: 1
   <Items>k__BackingField: []
-  currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
