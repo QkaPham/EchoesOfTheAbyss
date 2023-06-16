@@ -8,15 +8,23 @@ public class ShopSlot : MonoBehaviour
 {
     public Shop shop;
     public int slotIndex;
+    public Item item;
 
     public TextMeshProUGUI itemNameText;
-    public Image iconImage;
+
     public Image itemBackGround;
-    public GameObject itemRarityStar;
+    public Image itemLight;
+    public Image iconImage;
+    public GameObject stars;
+
     public TextMeshProUGUI itemStatsText;
     public TextMeshProUGUI itemStatsValueText;
+
     public TextMeshProUGUI priceText;
     public Button buyButton;
+
+    public List<Color> backGroundColor;
+    public List<Color> lightColor;
 
     private void Awake()
     {
@@ -28,6 +36,7 @@ public class ShopSlot : MonoBehaviour
 
     public void UpdateShopSlot(Item item)
     {
+        this.item = item;
         if (item != null)
         {
             iconImage.color = Color.white;
@@ -36,7 +45,8 @@ public class ShopSlot : MonoBehaviour
 
             itemNameText.text = item.profile.itemName;
             iconImage.sprite = item.profile.icon;
-            itemBackGround.color = item.backGroundColor;
+            itemBackGround.color = backGroundColor[item.Rarity - 1];
+            itemLight.color = lightColor[item.Rarity - 1];
             ShowStar(item.Rarity);
             itemStatsText.text = item.ModifierType();
             itemStatsValueText.text = item.ModifierValue();
@@ -44,13 +54,15 @@ public class ShopSlot : MonoBehaviour
         }
         else
         {
-            itemNameText.text = " ";
+            itemNameText.text = "";
+
             iconImage.color = Color.clear;
             itemBackGround.color = Color.clear;
+            itemLight.color = Color.clear;
 
             ShowStar(0);
-            itemStatsText.text = " ";
-            itemStatsValueText.text = " ";
+            itemStatsText.text = "";
+            itemStatsValueText.text = "";
             buyButton.gameObject.SetActive(false);
         }
     }
@@ -62,20 +74,16 @@ public class ShopSlot : MonoBehaviour
 
     private void ShowStar(int number)
     {
-        int childCount = itemRarityStar.transform.childCount;
-        //Debug.Log(childCount);
+        int childCount = stars.transform.childCount;
         for (int i = 0; i < childCount; i++)
         {
-            //Debug.Log(itemRarityStar.transform.GetChild(i).name);
             if (i < childCount - number)
             {
-                itemRarityStar.transform.GetChild(i).gameObject.SetActive(false);
-                // gameObject.SetActive(false);
+                stars.transform.GetChild(i).gameObject.SetActive(false);
             }
             else
             {
-                itemRarityStar.transform.GetChild(i).gameObject.SetActive(true);
-                // gameObject.SetActive(true);
+                stars.transform.GetChild(i).gameObject.SetActive(true);
             }
         }
     }

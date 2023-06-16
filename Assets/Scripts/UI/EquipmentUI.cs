@@ -4,17 +4,24 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+
 public class EquipmentUI : MonoBehaviour
 {
     [SerializeField] public List<EquipmentSlotUI> EquipmentSlots;
     private Action<Notify> OnEquipmentChange;
     public void Awake()
     {
-        foreach (Transform child in transform)
+        EquipmentSlots = new List<EquipmentSlotUI>();
+        EquipmentSlots.AddRange(GetComponentsInChildren<EquipmentSlotUI>());
+
+        foreach (EquipmentSlotUI slot in EquipmentSlots)
         {
-            EquipmentSlots.Add(child.GetComponent<EquipmentSlotUI>());
+            slot.UpdateUISlot(null);
         }
-        OnEquipmentChange = thisNotify => { if (thisNotify is EquipmentChangeNotify notify) UpdateEquipmentUI(notify.isEquip, notify.item, notify.slot); };
+
+
+
+        OnEquipmentChange = thisNotify => { if (thisNotify is EquipmentChangeNotify notify) UpdateEquipmentUI(notify.items); };
     }
 
     private void OnEnable()
@@ -22,15 +29,20 @@ public class EquipmentUI : MonoBehaviour
         EventManager.AddListiener(EventID.EquipmentChange, OnEquipmentChange);
     }
 
-    private void UpdateEquipmentUI(bool isAddItem, Item item, int slot)
+    private void UpdateEquipmentUI(List<Item> items)
     {
-        if (isAddItem)
+        for (int i = 0; i < EquipmentSlots.Count; i++)
         {
-            EquipmentSlots[slot].UpdateUISlot(item);
-        }
-        else
-        {
-            EquipmentSlots[slot].UpdateUISlot(null);
+            if (i < items.Count)
+            {
+                EquipmentSlots[i].UpdateUISlot(items[i]);
+                //UpdateEquipmentUI(items[i], i);
+            }
+            else
+            {
+                EquipmentSlots[i].UpdateUISlot(null);
+                //UpdateEquipmentUI(null, i);
+            }
         }
     }
 }

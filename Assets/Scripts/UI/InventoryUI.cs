@@ -18,11 +18,13 @@ public class InventoryUI : MonoBehaviour
     public void Awake()
     {
         InventorySlots = new List<InventorySlotUI>();
-        for (int i = 0; i < 20; i++)
+        InventorySlots.AddRange(GetComponentsInChildren<InventorySlotUI>());
+
+        foreach(InventorySlotUI slot in InventorySlots)
         {
-            InventorySlotUI newSlot = Instantiate(inventorySlotPrefabs, transform);
-            InventorySlots.Add(newSlot);
+            slot.UpdateUISlot(null);
         }
+
         OnInventoryChange = thisNotify => { if (thisNotify is InventoryChangeNotify notify) UpdateInventoryUI(notify.items); };
     }
 

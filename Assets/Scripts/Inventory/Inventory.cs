@@ -1,89 +1,86 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "Inventory", menuName = "Scriptable Object/InventorySystem")]
-public class Inventory : ScriptableObject
+public class Inventory : ItemKeeper
 {
-    public int size;
-
-    [field: SerializeField]
-    public List<Item> Items { get; private set; }
-
-    public void Init()
+    public override void UpdateUI()
     {
-        if (Items == null) Items = new List<Item>();
-        else Items.Clear();
-        Update();
-    }
-
-    public void Add(Item item)
-    {
-        Items.Add(item);
-        Update();
-    }
-
-    public void Remove(int index)
-    {
-        Items.RemoveAt(index);
-        Update();
-    }
-
-    public void Remove(Item item)
-    {
-        Items.Remove(item);
-        Update();
-    }
-
-    public int Recycle(int index)
-    {
-        var item = Items[index];
-        Remove(index);
-        return item.recyclePrice;
-    }
-
-    public int Recycle(Item item)
-    {
-        Remove(item);
-        return item.recyclePrice;
-    }
-
-    public void MergeAdd(Item newItem)
-    {
-        var similarItem = Items.FirstOrDefault(item => item.Equals(newItem));
-
-        if (similarItem != null)
-        {
-            Remove(similarItem);
-            similarItem.Upgrade();
-            MergeAdd(similarItem);
-        }
-        else
-        {
-            Add(newItem);
-        }
-    }
-
-    private void Update()
-    {
-        Sort();
+        base.UpdateUI();
         EventManager.Raise(EventID.InventoryChange, new InventoryChangeNotify(Items));
     }
+    //[SerializeField] private int size = 10;
+    //[field: SerializeField] public List<Item> Items { get; private set; }
+    //public bool isFull => Items.Count >= size;
 
-    private void Sort()
-    {
-        Items.OrderBy(s => s.Rarity).ThenBy(s => s.profile.id);
-    }
+    //public void Init()
+    //{
+    //    if (Items == null) Items = new List<Item>();
+    //    else Items.Clear();
+    //    UpdateUI();
+    //}
 
-    public Item FindSimilarItem(Item item)
-    {
-        return Items.FirstOrDefault(i => i.Equals(item));
-    }
+    //public bool Add(Item item)
+    //{
+    //    if (isFull) return false;
+
+    //    Items.Add(item);
+    //    UpdateUI();
+    //    return true;
+    //}
+
+    //public void Remove(int index)
+    //{
+    //    if (index < Items.Count && index >= 0)
+    //    {
+    //        Items.RemoveAt(index);
+    //        UpdateUI();
+    //    }
+    //}
+
+    //public bool Remove(Item item)
+    //{
+    //    bool result = Items.Remove(item);
+    //    UpdateUI();
+    //    return result;
+    //}
+
+    //public int Recycle(int index)
+    //{
+    //    var item = Items[index];
+    //    Remove(index);
+    //    return item.recyclePrice;
+    //}
+
+    //public int Recycle(Item item)
+    //{
+    //    Remove(item);
+    //    return item.recyclePrice;
+    //}
+
+    ////public void Upgrade(Item item)
+    ////{
+    ////    item.Upgrade();
+    ////    UpdateUI();
+    ////}
+
+    //public void UpdateUI()
+    //{
+    //    Sort();
+    //    EventManager.Raise(EventID.InventoryChange, new InventoryChangeNotify(Items));
+    //}
+
+    //private void Sort()
+    //{
+    //    Items = Items.OrderByDescending(s => s.Rarity).ThenBy(s => s.profile.id).ToList();
+    //}
+
+    //public Item FindSimilarItem(Item item)
+    //{
+    //    return Items.FirstOrDefault(i => i.Compare(item));
+    //}
 }

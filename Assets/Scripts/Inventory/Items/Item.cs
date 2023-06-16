@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Rendering;
+using static UnityEditor.Progress;
 
 [Serializable]
 public class Item
@@ -23,6 +25,8 @@ public class Item
             UpDateModifiers(rarity);
         }
     }
+
+    public int quantityValue => (int)Mathf.Pow(2, Rarity - 1);
 
     public List<Modifier> modifiers;
     public int recyclePrice => profile.recyclePrice[Rarity - 1];
@@ -62,16 +66,9 @@ public class Item
         }
     }
 
-    public override bool Equals(object obj)
+    public bool Compare(Item other)
     {
-        if (obj is Item item)
-        {
-            return item.profile == profile && item.Rarity == Rarity;
-        }
-        else
-        {
-            return false;
-        }
+        return other.profile == profile && other.Rarity == Rarity;
     }
 
     public string ModifierType()

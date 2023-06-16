@@ -75,7 +75,6 @@ public class CharacterStats : ScriptableObject
     [Header("HP")]
     public float HPRecovery = 5f;
 
-
     private List<Stat> stats = new List<Stat>();
     public Stat Attack;
     public Stat Defense;
@@ -110,13 +109,18 @@ public class CharacterStats : ScriptableObject
         {
             if (thisNotify is EquipmentChangeNotify notify)
             {
-                if (notify.isEquip)
+                //if (notify.isEquip)
+                //{
+                //    AddModifiers(notify.item);
+                //}
+                //else
+                //{
+                //    RemoveModifiers(notify.item);
+                //}
+                ModifierSources.Clear();
+                foreach (var item in notify.items)
                 {
-                    AddModifiers(notify.item);
-                }
-                else
-                {
-                    RemoveModifiers(notify.item);
+                    AddModifiers(item);
                 }
             }
         };
@@ -125,25 +129,8 @@ public class CharacterStats : ScriptableObject
     private void OnEnable()
     {
         EventManager.AddListiener(EventID.EquipmentChange, OnEquipmentChange);
-        //Equipment.OnEquipmentChange += (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
     }
 
-    private void OnDisable()
-    {
-        //Equipment.OnEquipmentChange -= (isAddItem, item, index) => OnEquipmentChange(isAddItem, item);
-    }
-
-    //private void OnEquipmentChange(bool isAddItem, Item item)
-    //{
-    //    if (isAddItem)
-    //    {
-    //        AddModifiers(item);
-    //    }
-    //    else
-    //    {
-
-    //    }
-    //}
     public void AddModifiers(Item source)
     {
         ModifierSources.Add(source);

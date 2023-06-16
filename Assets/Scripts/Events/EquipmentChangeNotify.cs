@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class EquipmentChangeNotify : Notify
 {
-    public bool isEquip;
-    public Item item;
-    public int slot;
+    public List<Item> items;
 
-    public EquipmentChangeNotify(bool isEquip, Item item, int slot)
+    public EquipmentChangeNotify(List<Item> items)
     {
-        this.isEquip = isEquip;
-        this.item = item;
-        this.slot = slot;
+        this.items = items;
     }
 }

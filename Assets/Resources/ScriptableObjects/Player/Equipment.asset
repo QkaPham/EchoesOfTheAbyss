@@ -12,11 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b3c278c27625b43830e4ddfefcb304, type: 3}
   m_Name: Equipment
   m_EditorClassIdentifier: 
-  size: 5
+  size: 3
   <Items>k__BackingField:
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  - {fileID: 11400000, guid: 24725357e00ee8b4c910d3a6062b789d, type: 2}
-  currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
+  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    rarity: 5
+    modifiers:
+    - statType: 0
+      modifierType: 1
+      amount: 0.5
+    - statType: 1
+      modifierType: 1
+      amount: 0.5
+  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    rarity: 5
+    modifiers:
+    - statType: 0
+      modifierType: 1
+      amount: 0.5
+    - statType: 1
+      modifierType: 1
+      amount: 0.5
+  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    rarity: 5
+    modifiers:
+    - statType: 0
+      modifierType: 1
+      amount: 0.5
+    - statType: 1
+      modifierType: 1
+      amount: 0.5
