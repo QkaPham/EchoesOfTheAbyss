@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlotUI : SlotUI
+public class InventorySlotUI : SlotUI, ISelectHandler
 {
+    [SerializeField] private ItemDetailUI itemDetailUI;
     [SerializeField] private Image Icon;
     [SerializeField] private Image backGround;
     [SerializeField] private Image lightImage;
@@ -16,6 +17,8 @@ public class InventorySlotUI : SlotUI
 
     [field: SerializeField] public Item Item { get; private set; }
     public override SlotType SlotType => SlotType.Inventory;
+
+
     public override void UpdateUISlot(Item item)
     {
         if (item != null)
@@ -25,7 +28,7 @@ public class InventorySlotUI : SlotUI
 
             Icon.color = Color.white;
             Icon.sprite = item.profile.icon;
-            
+
             ShowStar(item.Rarity);
             backGround.color = colors.DarkColor(item.Rarity);
             lightImage.color = colors.LightColor(item.Rarity);
@@ -57,5 +60,10 @@ public class InventorySlotUI : SlotUI
                 stars.transform.GetChild(i).gameObject.SetActive(true);
             }
         }
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        itemDetailUI.UpdateItemDetailUI(Item,false);
     }
 }

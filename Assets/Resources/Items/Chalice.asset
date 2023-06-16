@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chalice
   m_EditorClassIdentifier: 
   id: 1
-  itemName: 
+  itemName: Chalice
   description: 
   icon: {fileID: 21300000, guid: 4d66edd20490d35488a0f838858e1f1f, type: 3}
   maxRarity: 5

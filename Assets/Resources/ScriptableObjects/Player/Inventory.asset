@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9053f0adbab797e49b05a1945b26a122, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  size: 3
+  size: 10
   <Items>k__BackingField:
   - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
     rarity: 5

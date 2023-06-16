@@ -48,7 +48,7 @@ public class ShopSlot : MonoBehaviour
             itemBackGround.color = backGroundColor[item.Rarity - 1];
             itemLight.color = lightColor[item.Rarity - 1];
             ShowStar(item.Rarity);
-            itemStatsText.text = item.ModifierType();
+            itemStatsText.text = item.ModifierStat();
             itemStatsValueText.text = item.ModifierValue();
             priceText.text = item.price.ToString();
         }

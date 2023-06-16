@@ -233,11 +233,21 @@ public class UpgradePanel : BasePanel
     {
         if (SelectedSlotIndex < 0) return;
         var item = SelectedSlotType == SlotType.Inventory ? inventory.Items[SelectedSlotIndex] : equipment.Items[SelectedSlotIndex];
-        itemDetailUI.UpdateItemDetailUI(item, SelectedSlotType);
+        //itemDetailUI.UpdateItemDetailUI(item, SelectedSlotType);
     }
 
     public void UpdateGameProgress(int round)
     {
         gameProgress.UpdateProgress(round);
+    }
+
+    public void Buy()
+    {
+
+    }
+
+    public void Roll()
+    {
+
     }
 }

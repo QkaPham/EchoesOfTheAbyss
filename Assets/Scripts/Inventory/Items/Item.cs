@@ -71,7 +71,7 @@ public class Item
         return other.profile == profile && other.Rarity == Rarity;
     }
 
-    public string ModifierType()
+    public string ModifierStat()
     {
         StringBuilder builder = new StringBuilder();
         foreach (var modifier in modifiers)
