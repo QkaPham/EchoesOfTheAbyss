@@ -9,35 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9053f0adbab797e49b05a1945b26a122, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fe40eb75469e164fa1d007b04d723fa, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  size: 10
-  <Items>k__BackingField:
-  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
-    rarity: 5
-    modifiers:
-    - statType: 0
-      modifierType: 1
-      amount: 0.5
-    - statType: 1
-      modifierType: 1
-      amount: 0.5
-  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
-    rarity: 5
-    modifiers:
-    - statType: 0
-      modifierType: 1
-      amount: 0.5
-    - statType: 1
-      modifierType: 1
-      amount: 0.5
-  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
-    rarity: 5
-    modifiers:
-    - statType: 0
-      modifierType: 1
-      amount: 0.5
-    - statType: 1
-      modifierType: 1
-      amount: 0.5
+  inventorySize: 10
+  equipmentSize: 2
+  ownedItems: []

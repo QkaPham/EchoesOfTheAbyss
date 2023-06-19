@@ -7,13 +7,15 @@ using UnityEngine.UIElements;
 
 public class RangeEnemy : BasePoolableEnemy
 {
-    [SerializeField]
-    protected Transform bulletStartPoint;
-    public ObjectPool<EnemyBullet> bulletPool;
-    [SerializeField]
-    private RangeEnemyProfile profile;
+    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected RangeEnemyConfig config;
+    [HideInInspector] public ObjectPool<EnemyBullet> bulletPool;
+    protected float moveTime;
+    protected float idleTime;
+    protected Vector3 currentDirection;
+    protected Vector3 moveDir;
     protected Vector3 targetDirection => (playerPositon + new Vector3(0f, 0.5f, 0f) - transform.position).normalized;
-    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
+    protected bool canAttack => Time.time >= lastAttackTime + config.attackCooldownTime;
 
     protected override void Update()
     {
@@ -40,11 +42,6 @@ public class RangeEnemy : BasePoolableEnemy
         }
     }
 
-    protected float moveTime;
-    protected float idleTime;
-    protected Vector3 currentDirection;
-    Vector3 moveDir;
-
     protected virtual void HandleIdleState()
     {
         idleTime -= Time.deltaTime;
@@ -53,12 +50,12 @@ public class RangeEnemy : BasePoolableEnemy
         if (idleTime <= 0)
         {
             idleTime = 2;
-            float alpha = Mathf.Clamp((profile.attackRange - playerDistance) / (profile.attackRange - profile.fleeRange) * 180, 0, 180);
+            float alpha = Mathf.Clamp((config.attackRange - playerDistance) / (config.attackRange - config.fleeRange) * 180, 0, 180);
             moveDir = Quaternion.Euler(0f, 0f, alpha * (Random.Range(0, 2) * 2 - 1)) * playerDirection;
             NextState = EnemyState.Move;
         }
 
-        if (playerDistance > profile.attackRange)
+        if (playerDistance > config.attackRange)
         {
             idleTime = 2;
             moveDir = playerDirection;
@@ -66,7 +63,7 @@ public class RangeEnemy : BasePoolableEnemy
             return;
         }
 
-        if (playerDistance < profile.fleeRange)
+        if (playerDistance < config.fleeRange)
         {
             idleTime = 2;
             moveDir = -playerDirection;
@@ -74,7 +71,7 @@ public class RangeEnemy : BasePoolableEnemy
             return;
         }
 
-        if (playerDistance <= profile.attackRange && canAttack)
+        if (playerDistance <= config.attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
         }
@@ -82,19 +79,18 @@ public class RangeEnemy : BasePoolableEnemy
 
     protected virtual void HandleMoveState()
     {
-        //Vector3 moveDir = Quaternion.Euler(0f, 0f, Random.Range(-30, 30)) * playerDirection;
-        rb.velocity = moveDir * profile.moveSpeed;
+        rb.velocity = moveDir * config.moveSpeed;
         moveTime -= Time.deltaTime;
 
         if (moveTime <= 0)
         {
-            if (playerDistance <= profile.attackRange && canAttack)
+            if (playerDistance <= config.attackRange && canAttack)
             {
                 NextState = EnemyState.Attack;
                 moveTime = 1;
                 return;
             }
-            if (playerDistance <= profile.attackRange && !canAttack)
+            if (playerDistance <= config.attackRange && !canAttack)
             {
                 moveTime = 1;
                 NextState = EnemyState.Idle;
@@ -110,15 +106,15 @@ public class RangeEnemy : BasePoolableEnemy
         {
             lastAttackTime = Time.time;
             EnemyBullet bullet = bulletPool.Get();
-            bullet.Init(bulletStartPoint.position, targetDirection, stats.totalAttack, profile.bulletSpeed, profile.bulletRange);
+            bullet.Init(firePoint.position, targetDirection, stats.totalAttack, config.bulletSpeed, config.bulletRange);
         }
 
-        if (playerDistance > profile.attackRange)
+        if (playerDistance > config.attackRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= profile.attackRange)
+        if (playerDistance <= config.attackRange)
         {
             NextState = EnemyState.Idle;
         }
@@ -127,12 +123,12 @@ public class RangeEnemy : BasePoolableEnemy
     protected virtual void HandleHurtState()
     {
         rb.velocity = Vector3.zero;
-        DelayNextAttack(profile.attackTimeDelayByHurt);
+        DelayNextAttack(config.attackTimeDelayByHurt);
     }
 
     private void DelayNextAttack(float timedelay)
     {
-        lastAttackTime = Time.time - profile.attackCooldownTime + timedelay;
+        lastAttackTime = Time.time - config.attackCooldownTime + timedelay;
     }
 
     protected virtual void HandleDeathState()

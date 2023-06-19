@@ -384,6 +384,51 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Buy1"",
+                    ""type"": ""Button"",
+                    ""id"": ""3f3aafa5-6c10-4332-b71a-e995a27da447"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Buy2"",
+                    ""type"": ""Button"",
+                    ""id"": ""32c15f74-35f7-45ae-83b3-0d52e7953032"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Buy3"",
+                    ""type"": ""Button"",
+                    ""id"": ""d784ff66-eaef-4fed-91ac-ff951e198580"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Buy4"",
+                    ""type"": ""Button"",
+                    ""id"": ""ca255657-14c7-4b55-84b7-5f91ba510bd4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Roll"",
+                    ""type"": ""Button"",
+                    ""id"": ""54d6ed89-b369-4a92-9f29-245829aaf54e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -819,7 +864,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5dbca29a-7fb2-479f-a2cb-b09692db17f0"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""MouseKeyboard"",
@@ -857,6 +902,61 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""MouseKeyboard"",
                     ""action"": ""NextRound"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a86c875-b4d7-44a4-a4a8-cea2f1974535"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad;MouseKeyboard"",
+                    ""action"": ""Buy1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4548f357-1d1e-4ca0-a630-a9f76497a05b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Buy2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc47e3f5-7b02-4c95-b42c-9256cd4f5ddb"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Buy3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""32f286e6-0880-46d4-8271-9eccc2753ac7"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Buy4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf0007ee-0484-4f79-9b50-fd2984df0fda"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -903,6 +1003,11 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_UI_Equip = m_UI.FindAction("Equip", throwIfNotFound: true);
         m_UI_LevelUp = m_UI.FindAction("LevelUp", throwIfNotFound: true);
         m_UI_NextRound = m_UI.FindAction("NextRound", throwIfNotFound: true);
+        m_UI_Buy1 = m_UI.FindAction("Buy1", throwIfNotFound: true);
+        m_UI_Buy2 = m_UI.FindAction("Buy2", throwIfNotFound: true);
+        m_UI_Buy3 = m_UI.FindAction("Buy3", throwIfNotFound: true);
+        m_UI_Buy4 = m_UI.FindAction("Buy4", throwIfNotFound: true);
+        m_UI_Roll = m_UI.FindAction("Roll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1088,6 +1193,11 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Equip;
     private readonly InputAction m_UI_LevelUp;
     private readonly InputAction m_UI_NextRound;
+    private readonly InputAction m_UI_Buy1;
+    private readonly InputAction m_UI_Buy2;
+    private readonly InputAction m_UI_Buy3;
+    private readonly InputAction m_UI_Buy4;
+    private readonly InputAction m_UI_Roll;
     public struct UIActions
     {
         private @Controls m_Wrapper;
@@ -1106,6 +1216,11 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Equip => m_Wrapper.m_UI_Equip;
         public InputAction @LevelUp => m_Wrapper.m_UI_LevelUp;
         public InputAction @NextRound => m_Wrapper.m_UI_NextRound;
+        public InputAction @Buy1 => m_Wrapper.m_UI_Buy1;
+        public InputAction @Buy2 => m_Wrapper.m_UI_Buy2;
+        public InputAction @Buy3 => m_Wrapper.m_UI_Buy3;
+        public InputAction @Buy4 => m_Wrapper.m_UI_Buy4;
+        public InputAction @Roll => m_Wrapper.m_UI_Roll;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1157,6 +1272,21 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @NextRound.started += instance.OnNextRound;
             @NextRound.performed += instance.OnNextRound;
             @NextRound.canceled += instance.OnNextRound;
+            @Buy1.started += instance.OnBuy1;
+            @Buy1.performed += instance.OnBuy1;
+            @Buy1.canceled += instance.OnBuy1;
+            @Buy2.started += instance.OnBuy2;
+            @Buy2.performed += instance.OnBuy2;
+            @Buy2.canceled += instance.OnBuy2;
+            @Buy3.started += instance.OnBuy3;
+            @Buy3.performed += instance.OnBuy3;
+            @Buy3.canceled += instance.OnBuy3;
+            @Buy4.started += instance.OnBuy4;
+            @Buy4.performed += instance.OnBuy4;
+            @Buy4.canceled += instance.OnBuy4;
+            @Roll.started += instance.OnRoll;
+            @Roll.performed += instance.OnRoll;
+            @Roll.canceled += instance.OnRoll;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1203,6 +1333,21 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @NextRound.started -= instance.OnNextRound;
             @NextRound.performed -= instance.OnNextRound;
             @NextRound.canceled -= instance.OnNextRound;
+            @Buy1.started -= instance.OnBuy1;
+            @Buy1.performed -= instance.OnBuy1;
+            @Buy1.canceled -= instance.OnBuy1;
+            @Buy2.started -= instance.OnBuy2;
+            @Buy2.performed -= instance.OnBuy2;
+            @Buy2.canceled -= instance.OnBuy2;
+            @Buy3.started -= instance.OnBuy3;
+            @Buy3.performed -= instance.OnBuy3;
+            @Buy3.canceled -= instance.OnBuy3;
+            @Buy4.started -= instance.OnBuy4;
+            @Buy4.performed -= instance.OnBuy4;
+            @Buy4.canceled -= instance.OnBuy4;
+            @Roll.started -= instance.OnRoll;
+            @Roll.performed -= instance.OnRoll;
+            @Roll.canceled -= instance.OnRoll;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1266,5 +1411,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnEquip(InputAction.CallbackContext context);
         void OnLevelUp(InputAction.CallbackContext context);
         void OnNextRound(InputAction.CallbackContext context);
+        void OnBuy1(InputAction.CallbackContext context);
+        void OnBuy2(InputAction.CallbackContext context);
+        void OnBuy3(InputAction.CallbackContext context);
+        void OnBuy4(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
     }
 }

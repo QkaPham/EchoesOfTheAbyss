@@ -56,8 +56,8 @@ public class GameRound : MonoBehaviour
     }
     private void Start()
     {
-        EventManager.AddListiener(EventID.StartNextRound, OnStartNextRound);
-        EventManager.AddListiener(EventID.GameOver, OnGameOver);
+        EventManager.AddListener(EventID.StartNextRound, OnStartNextRound);
+        EventManager.AddListener(EventID.GameOver, OnGameOver);
     }
 
     private void OnEnable()

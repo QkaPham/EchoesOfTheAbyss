@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c5f6bf74a4b894f8566777836814d6, type: 3}
+  m_Name: LaserEnemyConfig
+  m_EditorClassIdentifier: 
+  moveSpeed: 4
+  fleeDistance: 2
+  aimingRange: 5
+  aimingTime: 0.5
+  delayAttackTime: 0.5
+  PlayerLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  laserRange: 30
+  attackCooldownTime: 1.5
+  attackTimeDelayByHurt: 1.5

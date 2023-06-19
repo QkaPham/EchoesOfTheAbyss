@@ -12,13 +12,13 @@ public class SelectableContainer : MonoBehaviour
     protected int maxColumn = 1;
     protected Selectable selectable;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         selectable = GetComponent<Selectable>();
         Setup();
     }
 
-    protected void Setup()
+    protected virtual void Setup()
     {
         List<Selectable> selectables = GetComponentsInChildren<Selectable>().ToList();
         selectables.RemoveAt(0);

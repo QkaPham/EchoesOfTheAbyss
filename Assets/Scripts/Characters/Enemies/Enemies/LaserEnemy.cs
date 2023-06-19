@@ -4,20 +4,14 @@ using UnityEngine;
 
 public class LaserEnemy : BasePoolableEnemy
 {
-    [SerializeField]
-    protected LaserEnemyProfile profile;
-
-    [Header("Additonal References")]
-    [SerializeField]
-    protected LineRenderer lineRenderer;
-
-    [SerializeField]
-    protected Transform ShotPoint;
+    [SerializeField] protected LineRenderer lineRenderer;
+    [SerializeField] protected Transform ShotPoint;
+    [SerializeField] protected LaserEnemyConfig config;
 
     protected float elapsedAimingTime = 0;
     protected float elapsedDelayAttackTime = 0;
     protected Vector3 shotDirection;
-    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
+    protected bool canAttack => Time.time >= lastAttackTime + config.attackCooldownTime;
 
     protected override void Update()
     {
@@ -52,12 +46,12 @@ public class LaserEnemy : BasePoolableEnemy
     {
         rb.velocity = Vector3.zero;
 
-        if (playerDistance < profile.fleeDistance || playerDistance > profile.aimingRange)
+        if (playerDistance < config.fleeDistance || playerDistance > config.aimingRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= profile.aimingRange && canAttack)
+        if (playerDistance <= config.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
             PreventPushing(true);
@@ -66,22 +60,22 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected virtual void HandleMoveState()
     {
-        if (playerDistance > profile.aimingRange)
+        if (playerDistance > config.aimingRange)
         {
-            rb.velocity = playerDirection * profile.moveSpeed;
+            rb.velocity = playerDirection * config.moveSpeed;
         }
-        else if (playerDistance < profile.fleeDistance)
+        else if (playerDistance < config.fleeDistance)
         {
-            rb.velocity = -playerDirection * profile.moveSpeed;
+            rb.velocity = -playerDirection * config.moveSpeed;
         }
 
 
-        if (playerDistance >= profile.fleeDistance && playerDistance <= profile.aimingRange)
+        if (playerDistance >= config.fleeDistance && playerDistance <= config.aimingRange)
         {
             NextState = EnemyState.Idle;
             return;
         }
-        if (playerDistance <= profile.aimingRange && canAttack)
+        if (playerDistance <= config.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
             PreventPushing(true);
@@ -106,11 +100,11 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected virtual void HandleAimingState()
     {
-        if (elapsedAimingTime < profile.aimingTime)
+        if (elapsedAimingTime < config.aimingTime)
         {
             rb.velocity = Vector3.zero;
             lineRenderer.SetPosition(0, ShotPoint.position);
-            lineRenderer.SetPosition(1, (player.TargetPoint.position - ShotPoint.position).normalized * profile.laserRange + ShotPoint.position);
+            lineRenderer.SetPosition(1, (player.TargetPoint.position - ShotPoint.position).normalized * config.laserRange + ShotPoint.position);
             elapsedAimingTime += Time.deltaTime;
         }
         else
@@ -118,12 +112,12 @@ public class LaserEnemy : BasePoolableEnemy
             elapsedDelayAttackTime += Time.deltaTime;
         }
 
-        if (elapsedAimingTime >= profile.aimingTime && elapsedDelayAttackTime == 0)
+        if (elapsedAimingTime >= config.aimingTime && elapsedDelayAttackTime == 0)
         {
             shotDirection = playerDirection;
         }
 
-        if (elapsedDelayAttackTime >= profile.delayAttackTime)
+        if (elapsedDelayAttackTime >= config.delayAttackTime)
         {
             elapsedDelayAttackTime = 0;
             elapsedAimingTime = 0;
@@ -134,7 +128,7 @@ public class LaserEnemy : BasePoolableEnemy
     protected virtual void LaserShot()
     {
         PreventPushing(false);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, shotDirection, profile.laserRange, profile.PlayerLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, shotDirection, config.laserRange, config.PlayerLayerMask);
         if (!hit) return;
         Player player = hit.transform.GetComponentInParent<Player>();
         player.health.TakeDamage(stats.totalAttack);
@@ -150,14 +144,14 @@ public class LaserEnemy : BasePoolableEnemy
         {
             elapsedDelayAttackTime = 0f;
             elapsedAimingTime = 0f;
-            DelayNextAttack(profile.attackTimeDelayByHurt);
+            DelayNextAttack(config.attackTimeDelayByHurt);
         }
         base.Hurt();
     }
 
     private void DelayNextAttack(float timedelay)
     {
-        lastAttackTime = Time.time - profile.attackCooldownTime + timedelay;
+        lastAttackTime = Time.time - config.attackCooldownTime + timedelay;
     }
 
     public override void Death()
@@ -167,7 +161,7 @@ public class LaserEnemy : BasePoolableEnemy
 
     protected override void Flip()
     {
-        if (CurrentState == EnemyState.Move && playerDistance < profile.fleeDistance)
+        if (CurrentState == EnemyState.Move && playerDistance < config.fleeDistance)
         {
             ReverseFlip();
             return;

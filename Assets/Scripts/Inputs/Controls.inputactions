@@ -362,6 +362,51 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Buy1",
+                    "type": "Button",
+                    "id": "3f3aafa5-6c10-4332-b71a-e995a27da447",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Buy2",
+                    "type": "Button",
+                    "id": "32c15f74-35f7-45ae-83b3-0d52e7953032",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Buy3",
+                    "type": "Button",
+                    "id": "d784ff66-eaef-4fed-91ac-ff951e198580",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Buy4",
+                    "type": "Button",
+                    "id": "ca255657-14c7-4b55-84b7-5f91ba510bd4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Roll",
+                    "type": "Button",
+                    "id": "54d6ed89-b369-4a92-9f29-245829aaf54e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -797,7 +842,7 @@
                 {
                     "name": "",
                     "id": "5dbca29a-7fb2-479f-a2cb-b09692db17f0",
-                    "path": "<Keyboard>/r",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "MouseKeyboard",
@@ -835,6 +880,61 @@
                     "processors": "",
                     "groups": "MouseKeyboard",
                     "action": "NextRound",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5a86c875-b4d7-44a4-a4a8-cea2f1974535",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad;MouseKeyboard",
+                    "action": "Buy1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4548f357-1d1e-4ca0-a630-a9f76497a05b",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Buy2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc47e3f5-7b02-4c95-b42c-9256cd4f5ddb",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Buy3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "32f286e6-0880-46d4-8271-9eccc2753ac7",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Buy4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cf0007ee-0484-4f79-9b50-fd2984df0fda",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

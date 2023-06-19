@@ -17,9 +17,9 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
     protected override void Start()
     {
         base.Start();
-        EventManager.AddListiener(EventID.RoundEnd, OnRoundEnd);
-        EventManager.AddListiener(EventID.Victory, OnVictory);
-        EventManager.AddListiener(EventID.Retry, OnRetry);
+        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.AddListener(EventID.Victory, OnVictory);
+        EventManager.AddListener(EventID.Retry, OnRetry);
     }
 
     protected void OnDisable()

@@ -1,17 +1,47 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SlotUI : MonoBehaviour
+public class SlotUI : MonoBehaviour//, ISelectHandler
 {
-    public bool HasItem { get; protected set; }
-    public int Index { get; protected set; }
-    public virtual SlotType SlotType { get; protected set; }
-    protected virtual void Awake()
+    [SerializeField] private Image Icon;
+    [SerializeField] private Image backGround;
+    [SerializeField] private Image lightImage;
+    [SerializeField] private Image border;
+    [SerializeField] private ItemStars stars;
+    [SerializeField] private RarityColor colors;
+    [HideInInspector] public ItemDetailUI itemDetailUI;
+    private Item item;
+    public Item Item { get; private set; }
+    private void Start()
     {
-        Index = transform.GetSiblingIndex();
+        Item = null;
     }
-    public virtual void UpdateUISlot(Item item)
+    public void UpdateUISlot(Item item)
     {
-        
+        this.Item = item;
+        if (item != null)
+        {
+            Icon.color = Color.white;
+            Icon.sprite = item.profile.icon;
+
+            stars.ShowStar(item.Rarity);
+            backGround.color = colors.DarkColor(item.Rarity);
+            lightImage.color = colors.LightColor(item.Rarity);
+        }
+        else
+        {
+            Icon.color = Color.clear;
+            stars.ShowStar(0);
+            backGround.color = Color.black;
+            lightImage.color = Color.clear;
+        }
     }
+
+    //public void OnSelect(BaseEventData eventData)
+    //{
+    //    Debug.Log("Select");
+    //    //itemDetailUI.UpdateItemDetailUI(Item);
+    //}
 }

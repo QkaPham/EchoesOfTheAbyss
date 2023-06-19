@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ShopSlot : MonoBehaviour
 {
-    public Shop shop;
     public int slotIndex;
     public Item item;
 
@@ -16,22 +15,20 @@ public class ShopSlot : MonoBehaviour
     public Image itemLight;
     public Image iconImage;
     public GameObject stars;
+    public Image border;
+    public GameObject require;
 
     public TextMeshProUGUI itemStatsText;
     public TextMeshProUGUI itemStatsValueText;
 
     public TextMeshProUGUI priceText;
     public Button buyButton;
-
-    public List<Color> backGroundColor;
-    public List<Color> lightColor;
+    public RarityColor colors;
 
     private void Awake()
     {
-        shop = GetComponentInParent<Shop>();
         slotIndex = transform.GetSiblingIndex();
-        buyButton = GetComponentInChildren<Button>();
-        buyButton.onClick.AddListener(OnBuyButtonClick);
+        buyButton = GetComponent<Button>();
     }
 
     public void UpdateShopSlot(Item item)
@@ -40,13 +37,13 @@ public class ShopSlot : MonoBehaviour
         if (item != null)
         {
             iconImage.color = Color.white;
-            buyButton.gameObject.SetActive(true);
+            buyButton.interactable = true;
 
 
             itemNameText.text = item.profile.itemName;
             iconImage.sprite = item.profile.icon;
-            itemBackGround.color = backGroundColor[item.Rarity - 1];
-            itemLight.color = lightColor[item.Rarity - 1];
+            itemBackGround.color = colors.DarkColor(item.Rarity);
+            itemLight.color = colors.LightColor(item.Rarity);
             ShowStar(item.Rarity);
             itemStatsText.text = item.ModifierStat();
             itemStatsValueText.text = item.ModifierValue();
@@ -63,13 +60,8 @@ public class ShopSlot : MonoBehaviour
             ShowStar(0);
             itemStatsText.text = "";
             itemStatsValueText.text = "";
-            buyButton.gameObject.SetActive(false);
+            buyButton.interactable = false;
         }
-    }
-
-    private void OnBuyButtonClick()
-    {
-        shop.Buy(slotIndex);
     }
 
     private void ShowStar(int number)

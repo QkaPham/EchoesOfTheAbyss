@@ -57,15 +57,15 @@ public class GamePanel : BasePanel
 
     private void Start()
     {
-        EventManager.AddListiener(EventID.HealthChange, OnHealthChange);
-        EventManager.AddListiener(EventID.ManaChange, OnManaChange);
-        EventManager.AddListiener(EventID.StaminaChange, OnStanimaChange);
-        EventManager.AddListiener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.AddListener(EventID.HealthChange, OnHealthChange);
+        EventManager.AddListener(EventID.ManaChange, OnManaChange);
+        EventManager.AddListener(EventID.StaminaChange, OnStanimaChange);
+        EventManager.AddListener(EventID.CurrencyChange, OnCurrencyChange);
 
-        EventManager.AddListiener(EventID.TimerChange, OnTimerChange);
-        EventManager.AddListiener(EventID.RoundChange, OnRoundChange);
+        EventManager.AddListener(EventID.TimerChange, OnTimerChange);
+        EventManager.AddListener(EventID.RoundChange, OnRoundChange);
 
-        EventManager.AddListiener(EventID.BossHealthChange, OnBossHealthChange);
+        EventManager.AddListener(EventID.BossHealthChange, OnBossHealthChange);
     }
 
     private void Update()

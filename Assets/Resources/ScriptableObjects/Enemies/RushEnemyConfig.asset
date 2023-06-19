@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1febc7781099bd945b85b1d71e11bab8, type: 3}
+  m_Name: RushEnemyConfig
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  aimingRange: 7
+  aimingTime: 0.8
+  delayAttackTime: 0.2
+  rushSpeed: 15
+  rushRange: 10
+  attackCooldownTime: 5
+  damageDistance: 1.5
+  timeBetweenEachDamage: 1
