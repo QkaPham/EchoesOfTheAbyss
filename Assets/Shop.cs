@@ -10,10 +10,6 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private Button rollButton;
 
-    //[SerializeField]
-    // private Inventory inventory;
-    // [SerializeField]
-    // private Equipment equipment;
     [SerializeField]
     private Currency currency;
 
