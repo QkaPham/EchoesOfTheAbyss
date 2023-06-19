@@ -367,8 +367,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5151409397329497943}
   - {fileID: 5151409397747472302}
+  - {fileID: 5151409397329497943}
   - {fileID: 5151409396817030983}
   - {fileID: 5854185910690489030}
   m_Father: {fileID: 0}
@@ -390,13 +390,11 @@ MonoBehaviour:
   enemyDescription: 
   currentState: 0
   nextState: 0
-  FlipTransform: {fileID: 5151409397747472302}
-  dropItems:
-  - {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+  rootTransform: {fileID: 5151409397747472302}
   dropChance: 0.5
   stats: {fileID: 11400000, guid: f47d3ed3422edf446b6deca6a669cccf, type: 2}
   stopAttack: 0
-  profile: {fileID: 11400000, guid: 4f5fb871edd270547a49100619403969, type: 2}
+  config: {fileID: 11400000, guid: 4f5fb871edd270547a49100619403969, type: 2}
   lineRenderer: {fileID: 5151409397329497936}
   ShotPoint: {fileID: 5151409398064979902}
 --- !u!50 &5151409397631111262
@@ -492,7 +490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5151409397747472302}
   m_Layer: 0
-  m_Name: Flip
+  m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

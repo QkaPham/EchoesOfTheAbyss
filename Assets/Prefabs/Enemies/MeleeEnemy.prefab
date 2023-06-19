@@ -125,7 +125,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6812212291574360863}
   m_Layer: 6
-  m_Name: Flip
+  m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,13 +370,11 @@ MonoBehaviour:
   enemyDescription: 
   currentState: 0
   nextState: 0
-  FlipTransform: {fileID: 6812212291574360863}
-  dropItems:
-  - {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+  rootTransform: {fileID: 6812212291574360863}
   dropChance: 0.5
   stats: {fileID: 11400000, guid: a725bbe096d413444a55846fb56c03c1, type: 2}
   stopAttack: 0
-  profile: {fileID: 11400000, guid: 1cdf2219b7cfd614ea32614ec71dc603, type: 2}
+  config: {fileID: 11400000, guid: 1cdf2219b7cfd614ea32614ec71dc603, type: 2}
 --- !u!50 &6812212292482767656
 Rigidbody2D:
   serializedVersion: 4

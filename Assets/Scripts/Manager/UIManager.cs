@@ -1,34 +1,30 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
-using UnityEditor.Search;
 
 public class UIManager : Singleton<UIManager>
 {
-    [SerializeField]
-    private RectTransform canvas;
-    [SerializeField]
-    private Texture2D customCursor;
-    [SerializeField]
-    private Volume volume;
+    [SerializeField] private RectTransform canvas;
+    [SerializeField] private Texture2D customCursor;
+    [SerializeField] private Volume volume;
     private DepthOfField depthOfField;
 
     private LoadingPanel loadingPanel;
 
-    [SerializeField]
-    private BaseView startingView;
+    [SerializeField] private View startView;
     private BaseView currentView;
     private Stack<BaseView> history = new Stack<BaseView>();
     private Dictionary<View, BaseView> viewsMap = new Dictionary<View, BaseView>();
 
+
     protected override void Awake()
     {
         base.Awake();
+
         if (customCursor != null)
         {
             Cursor.SetCursor(customCursor, Vector2.zero, CursorMode.ForceSoftware);
@@ -50,12 +46,9 @@ public class UIManager : Singleton<UIManager>
             }
         }
 
-        if(startingView == null)
-        {
-            startingView = GetComponentInChildren<MainMenuView>();
-        }
-        currentView = startingView;
-        history.Push(startingView);
+        var starttingView = viewsMap.GetValueOrDefault(startView);
+        currentView = starttingView;
+        history.Push(starttingView);
 
         volume = GetComponentInChildren<Volume>();
         if (volume.profile.TryGet(out DepthOfField dof))

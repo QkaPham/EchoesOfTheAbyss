@@ -61,10 +61,10 @@ public class EnemySpawn : MonoBehaviour
     }
     private void Start()
     {
-        EventManager.AddListiener(EventID.RoundEnd, StopSpawn);
-        EventManager.AddListiener(EventID.RoundChange, OnRoundChange);
-        EventManager.AddListiener(EventID.Victory, StopSpawn);
-        EventManager.AddListiener(EventID.GameOver, StopSpawn);
+        EventManager.AddListener(EventID.RoundEnd, StopSpawn);
+        EventManager.AddListener(EventID.RoundChange, OnRoundChange);
+        EventManager.AddListener(EventID.Victory, StopSpawn);
+        EventManager.AddListener(EventID.GameOver, StopSpawn);
 
     }
 
@@ -106,7 +106,7 @@ public class EnemySpawn : MonoBehaviour
         }
         float randomValue = UnityEngine.Random.Range(0f, totalSpawnRate);
 
-        float cumulativeSpawnRate = 0f;
+        float cumulativeSpawnRate = 0f; 
 
         foreach (var enemyType in enemyTypes)
         {
@@ -114,8 +114,8 @@ public class EnemySpawn : MonoBehaviour
 
             if (randomValue <= cumulativeSpawnRate)
             {
-                BasePoolableEnemy meleeEnemy = enemyType.enemyPool.Get();
-                meleeEnemy.Init(player, fragmentPool.pool, position, itemPool.pool);
+                BasePoolableEnemy enemy = enemyType.enemyPool.Get();
+                enemy.Init(player, fragmentPool.pool, position);
                 break;
             }
         }

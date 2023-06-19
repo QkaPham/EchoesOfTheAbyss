@@ -38,7 +38,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Flip/Sprite
+    path: Root/Sprite
   m_PositionCurves: []
   m_ScaleCurves:
   - curve:
@@ -65,7 +65,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Flip/Sprite
+    path: Root/Sprite
   m_FloatCurves:
   - serializedVersion: 2
     curve:
@@ -114,7 +114,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Color.a
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 212
     script: {fileID: 0}
     flags: 0
@@ -135,7 +135,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._FlashAmount
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 212
     script: {fileID: 0}
     flags: 0
@@ -148,7 +148,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 2025276079
+      path: 2063546773
       attribute: 4
       script: {fileID: 0}
       typeID: 4
@@ -157,7 +157,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2025276079
+      path: 2063546773
       attribute: 3
       script: {fileID: 0}
       typeID: 4
@@ -175,7 +175,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2025276079
+      path: 2063546773
       attribute: 304273561
       script: {fileID: 0}
       typeID: 212
@@ -184,7 +184,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 2025276079
+      path: 2063546773
       attribute: 2303582593
       script: {fileID: 0}
       typeID: 212
@@ -261,7 +261,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -291,7 +291,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -321,7 +321,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -351,7 +351,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.x
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -381,7 +381,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.y
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -411,7 +411,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalScale.z
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -441,7 +441,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Color.a
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 212
     script: {fileID: 0}
     flags: 0
@@ -462,7 +462,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._FlashAmount
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 212
     script: {fileID: 0}
     flags: 0
@@ -475,7 +475,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -487,7 +487,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0
@@ -499,7 +499,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Flip/Sprite
+    path: Root/Sprite
     classID: 4
     script: {fileID: 0}
     flags: 0

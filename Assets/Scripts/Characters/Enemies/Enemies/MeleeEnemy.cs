@@ -5,9 +5,9 @@ using UnityEngine;
 public class MeleeEnemy : BasePoolableEnemy
 {
     [SerializeField]
-    private MeleeEnemyProfile profile;
+    private MeleeEnemyConfig config;
 
-    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
+    protected bool canAttack => Time.time >= lastAttackTime + config.attackCooldownTime;
     protected override void Awake()
     {
         base.Awake();
@@ -42,12 +42,12 @@ public class MeleeEnemy : BasePoolableEnemy
     {
         rb.velocity = Vector3.zero;
 
-        if (playerDistance > profile.attackRange)
+        if (playerDistance > config.attackRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= profile.attackRange && canAttack)
+        if (playerDistance <= config.attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
         }
@@ -55,9 +55,9 @@ public class MeleeEnemy : BasePoolableEnemy
 
     protected virtual void HandleMoveState()
     {
-        rb.velocity = playerDirection * profile.moveSpeed;
+        rb.velocity = playerDirection * config.moveSpeed;
 
-        if (playerDistance <= profile.attackRange && canAttack)
+        if (playerDistance <= config.attackRange && canAttack)
         {
             NextState = EnemyState.Attack;
         }
@@ -68,12 +68,12 @@ public class MeleeEnemy : BasePoolableEnemy
         rb.velocity = Vector3.zero;
         lastAttackTime = Time.time;
 
-        if (playerDistance > profile.attackRange)
+        if (playerDistance > config.attackRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= profile.attackRange)
+        if (playerDistance <= config.attackRange)
         {
             NextState = EnemyState.Idle;
         }
@@ -91,7 +91,7 @@ public class MeleeEnemy : BasePoolableEnemy
 
     protected void DealDamage()
     {
-        if (playerDistance <= profile.damageRange)
+        if (playerDistance <= config.damageRange)
         {
             player.health.TakeDamage(stats.totalAttack);
         }

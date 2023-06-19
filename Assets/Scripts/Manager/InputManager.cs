@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    private Controls controls;
+    public Controls controls { get; private set; }
     [field: SerializeField] public Vector2 MousePosition { get; private set; }
     [field: SerializeField] public Vector2 MouseDelta { get; private set; }
     public Vector2 MouseOnScreen => Camera.main.ScreenToViewportPoint(MousePosition);
@@ -23,6 +23,11 @@ public class InputManager : Singleton<InputManager>
     public bool Equip { get; private set; }
     public bool LevelUp { get; private set; }
     public bool NextRound { get; private set; }
+    public bool Buy1 { get; private set; }
+    public bool Buy2 { get; private set; }
+    public bool Buy3 { get; private set; }
+    public bool Buy4 { get; private set; }
+    public bool Roll { get; private set; }
 
     protected override void Awake()
     {
@@ -44,19 +49,19 @@ public class InputManager : Singleton<InputManager>
 
         controls.Player.RangeAttack.performed += OnRangeAttack;
         controls.Player.RangeAttack.canceled += OnRangeAttack;
-        
+
         controls.Player.Attack.performed += OnAttack;
         controls.Player.Attack.canceled += OnAttack;
     }
 
 
-    public void EnablePlayerInput(bool enable)
+    public void EnablePlayerInput(bool enable = true)
     {
         if (enable) controls.Player.Enable();
         else controls.Player.Disable();
     }
 
-    public void EnableUIInput(bool enable)
+    public void EnableUIInput(bool enable = true)
     {
         if (enable) controls.UI.Enable();
         else controls.UI.Disable();
@@ -71,6 +76,11 @@ public class InputManager : Singleton<InputManager>
         Equip = controls.UI.Equip.triggered;
         LevelUp = controls.UI.LevelUp.triggered;
         NextRound = controls.UI.NextRound.triggered;
+        Buy1 = controls.UI.Buy1.triggered;
+        Buy2 = controls.UI.Buy2.triggered;
+        Buy3 = controls.UI.Buy3.triggered;
+        Buy4 = controls.UI.Buy4.triggered;
+        Roll = controls.UI.Roll.triggered;
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
@@ -100,7 +110,6 @@ public class InputManager : Singleton<InputManager>
 
     private void OnAttack(InputAction.CallbackContext ctx)
     {
-        Attack = controls.Player.Attack.ReadValue<float>() != 0;
+        Attack = ctx.ReadValue<float>() != 0;
     }
 }
-

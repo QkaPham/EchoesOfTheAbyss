@@ -3,26 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : SelectableContainer
 {
-    [SerializeField]
-    public List<InventorySlotUI> InventorySlots;
-
-    [SerializeField]
-    private InventorySlotUI inventorySlotPrefabs;
-
+    [SerializeField] private ItemDetailUI itemDetailUI;
+    [SerializeField] private List<SlotUI> slots;
     private Action<Notify> OnInventoryChange;
 
-    public void Awake()
+    protected override void Awake()
     {
-        InventorySlots = new List<InventorySlotUI>();
-        InventorySlots.AddRange(GetComponentsInChildren<InventorySlotUI>());
-
-        foreach(InventorySlotUI slot in InventorySlots)
+        selectable = GetComponent<Selectable>();
+        slots = new List<SlotUI>();
+        slots.AddRange(GetComponentsInChildren<SlotUI>());
+        foreach (var slot in slots)
         {
             slot.UpdateUISlot(null);
+            slot.itemDetailUI = itemDetailUI;
         }
 
         OnInventoryChange = thisNotify => { if (thisNotify is InventoryChangeNotify notify) UpdateInventoryUI(notify.items); };
@@ -30,36 +26,21 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        EventManager.AddListiener(EventID.InventoryChange, OnInventoryChange);
+        EventManager.AddListener(EventID.InventoryChange, OnInventoryChange);
     }
 
     private void UpdateInventoryUI(List<Item> items)
     {
-        for (int i = 0; i < InventorySlots.Count; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
             if (i < items.Count)
             {
-                UpdateInventoryUI(items[i], i);
+                slots[i].UpdateUISlot(items[i]);
             }
             else
             {
-                UpdateInventoryUI(null,i);
+                slots[i].UpdateUISlot(null);
             }
         }
     }
-
-    private void UpdateInventoryUI(Item item, int slot)
-    {
-        if (InventorySlots.Count - 1 >= slot)
-        {
-            InventorySlots[slot].UpdateUISlot(item);
-        }
-        else
-        {
-            InventorySlotUI newSlot = Instantiate(inventorySlotPrefabs, transform);
-            newSlot.UpdateUISlot(item);
-            InventorySlots.Add(newSlot);
-        }
-    }
-
 }

@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class RushEnemy : BasePoolableEnemy
 {
-    [SerializeField]
-    protected LineRenderer lineRenderer;
-    [SerializeField]
-    protected RushEnemyProfile profile;
+    [SerializeField]   protected LineRenderer lineRenderer;
+    [SerializeField]   protected RushEnemyConfig config;
     protected float elapsedAimingTime = 0;
     protected float elapsedDelayAttackTime = 0f;
     protected Vector3 rushDirection;
     protected Vector3 rushPositon;
-    protected bool canAttack => Time.time >= lastAttackTime + profile.attackCooldownTime;
+    protected bool canAttack => Time.time >= lastAttackTime + config.attackCooldownTime;
     protected float elapsedTimeBetweenEachDamage;
     protected float attackTime;
 
@@ -49,12 +47,12 @@ public class RushEnemy : BasePoolableEnemy
     {
         rb.velocity = Vector3.zero;
 
-        if (playerDistance > profile.aimingRange)
+        if (playerDistance > config.aimingRange)
         {
             NextState = EnemyState.Move;
             return;
         }
-        if (playerDistance <= profile.aimingRange && canAttack)
+        if (playerDistance <= config.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
         }
@@ -62,17 +60,17 @@ public class RushEnemy : BasePoolableEnemy
 
     protected virtual void HandleMoveState()
     {
-        if (playerDistance > profile.aimingRange)
+        if (playerDistance > config.aimingRange)
         {
-            rb.velocity = playerDirection * profile.moveSpeed;
+            rb.velocity = playerDirection * config.moveSpeed;
         }
 
-        if (playerDistance <= profile.aimingRange)
+        if (playerDistance <= config.aimingRange)
         {
             NextState = EnemyState.Idle;
             return;
         }
-        if (playerDistance <= profile.aimingRange && canAttack)
+        if (playerDistance <= config.aimingRange && canAttack)
         {
             NextState = EnemyState.Aiming;
         }
@@ -81,21 +79,21 @@ public class RushEnemy : BasePoolableEnemy
 
     protected virtual void HandleAttackState()
     {
-        rb.velocity = rushDirection * profile.rushSpeed;
+        rb.velocity = rushDirection * config.rushSpeed;
         attackTime += Time.deltaTime;
 
-        if (playerDistance < profile.damageDistance && elapsedTimeBetweenEachDamage >= profile.timeBetweenEachDamage)
+        if (playerDistance < config.damageDistance && elapsedTimeBetweenEachDamage >= config.timeBetweenEachDamage)
         {
             player.health.TakeDamage(stats.totalAttack);
             elapsedTimeBetweenEachDamage = 0;
         }
 
-        if (elapsedTimeBetweenEachDamage < profile.timeBetweenEachDamage)
+        if (elapsedTimeBetweenEachDamage < config.timeBetweenEachDamage)
         {
             elapsedTimeBetweenEachDamage += Time.deltaTime;
         }
 
-        if (attackTime >= profile.rushRange / profile.rushSpeed)
+        if (attackTime >= config.rushRange / config.rushSpeed)
         {
             attackTime = 0;
             lastAttackTime = Time.time;
@@ -120,27 +118,27 @@ public class RushEnemy : BasePoolableEnemy
 
     protected virtual void HandleAimingState()
     {
-        if (elapsedAimingTime < profile.aimingTime)
+        if (elapsedAimingTime < config.aimingTime)
         {
             rb.velocity = Vector3.zero;
             elapsedAimingTime += Time.deltaTime;
             lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, transform.position + playerDirection * profile.rushRange);
+            lineRenderer.SetPosition(1, transform.position + playerDirection * config.rushRange);
         }
         else
         {
             elapsedDelayAttackTime += Time.deltaTime;
         }
 
-        if (elapsedAimingTime >= profile.aimingTime && elapsedDelayAttackTime == 0)
+        if (elapsedAimingTime >= config.aimingTime && elapsedDelayAttackTime == 0)
         {
-            rushPositon = transform.position + playerDirection * profile.rushRange;
+            rushPositon = transform.position + playerDirection * config.rushRange;
             rushDirection = playerDirection;
         }
 
-        if (elapsedDelayAttackTime >= profile.delayAttackTime && canAttack)
+        if (elapsedDelayAttackTime >= config.delayAttackTime && canAttack)
         {
-            elapsedTimeBetweenEachDamage = profile.timeBetweenEachDamage;
+            elapsedTimeBetweenEachDamage = config.timeBetweenEachDamage;
             elapsedDelayAttackTime = 0;
             elapsedAimingTime = 0;
             NextState = EnemyState.Attack;

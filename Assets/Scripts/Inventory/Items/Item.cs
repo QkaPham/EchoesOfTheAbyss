@@ -11,6 +11,8 @@ using static UnityEditor.Progress;
 public class Item
 {
     public ItemProfile profile;
+    public bool isEquip;
+
     [SerializeField]
     private int rarity;
     public int Rarity
@@ -27,7 +29,6 @@ public class Item
     }
 
     public int quantityValue => (int)Mathf.Pow(2, Rarity - 1);
-
     public List<Modifier> modifiers;
     public int recyclePrice => profile.recyclePrice[Rarity - 1];
     public int price => profile.price[Rarity - 1];

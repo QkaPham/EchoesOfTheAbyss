@@ -41,7 +41,7 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public static void AddListiener(EventID eventID, Action<Notify> action)
+    public static void AddListener(EventID eventID, Action<Notify> action)
     {
         if (instance.eventDictionary.ContainsKey(eventID))
         {

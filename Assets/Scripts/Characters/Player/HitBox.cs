@@ -17,7 +17,7 @@ public class HitBox : MonoBehaviour
 
     private void Start()
     {
-        EventManager.AddListiener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

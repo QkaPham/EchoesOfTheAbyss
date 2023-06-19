@@ -15290,7 +15290,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7031d81fd92174a44b4276e2982c4cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 11400000, guid: fd9a5ea169fa89147a91b7184d5a40e3, type: 2}
   currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
   magnetCollider: {fileID: 6771249028612756343}
 --- !u!1 &7671312195847000057
@@ -15440,13 +15439,12 @@ MonoBehaviour:
   dashParticle: {fileID: 351464224740314304}
   hurtParticle: {fileID: 7891627297193795599}
   DeathParticle: {fileID: 2501287290097980328}
+  newInventory: {fileID: 11400000, guid: 4134167394c078448b8fc5d278cbed26, type: 2}
   currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
   stats: {fileID: 11400000, guid: b0e5917c561a06b4c825554028170112, type: 2}
   health: {fileID: 11400000, guid: 7a1f95a479d42a94cb7502b5f1aa08fb, type: 2}
   mana: {fileID: 11400000, guid: df7b01cb566e42846b7b24172f417e5c, type: 2}
   stamina: {fileID: 11400000, guid: 41f00deacf68db94b87cde362ab9aae7, type: 2}
-  inventory: {fileID: 11400000, guid: fd9a5ea169fa89147a91b7184d5a40e3, type: 2}
-  equipment: {fileID: 11400000, guid: 97cde2f6e3cf43b4d87fa1bc9c4f3ade, type: 2}
   weapon: {fileID: 6303552142035690746}
   rangeWeapon: {fileID: 2456548263356282122}
 --- !u!95 &1695829787

@@ -321,11 +321,8 @@ MonoBehaviour:
   enemyDescription: 
   currentState: 0
   nextState: 0
-  FlipTransform: {fileID: 6377379286155959096}
-  dropItems: []
-  dropChance: 0.5
+  rootTransform: {fileID: 6377379286155959096}
   stats: {fileID: 11400000, guid: ae06dab058dcda2438dd45a88b822f59, type: 2}
-  stopAttack: 0
   laserLineRenderer: {fileID: 8799442319700907061}
   ShotPoint: {fileID: 85687451789523954}
   rushLineRenderer: {fileID: 3883072904809869901}

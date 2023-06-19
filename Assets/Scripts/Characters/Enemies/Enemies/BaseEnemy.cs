@@ -44,24 +44,10 @@ public abstract class BaseEnemy : MonoBehaviour
     public EnemyState NextState { get => nextState; set => nextState = value; }
 
     [SerializeField]
-    protected Transform FlipTransform;
-
-    protected EnemyDrop drop;
-
-    [SerializeField]
-    protected List<ItemProfile> dropItems;
-
-    [SerializeField]
-    protected float dropChance = 0.5f;
-
+    protected Transform rootTransform;
     protected ObjectPool<Fragment> fragmentPool;
-    protected ObjectPool<CollectibleItem> collectibleItemPool;
-
     protected float lastAttackTime = float.MinValue;
-
     public EnemyStats stats;
-
-    [SerializeField]
     private bool stopAttack;
 
     protected Action<Notify> OnPlayerDeath;
@@ -78,7 +64,7 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void Start()
     {
         stats.Init();
-        EventManager.AddListiener(EventID.PlayerDeath, OnPlayerDeath);
+        EventManager.AddListener(EventID.PlayerDeath, OnPlayerDeath);
     }
 
     protected virtual void Update()
@@ -87,12 +73,11 @@ public abstract class BaseEnemy : MonoBehaviour
         StateUpdate();
     }
 
-    public virtual void Init(Player player = null, ObjectPool<Fragment> fragmentPool = null, Vector3 position = default, ObjectPool<CollectibleItem> collectibleItemPool = null)
+    public virtual void Init(Player player = null, ObjectPool<Fragment> fragmentPool = null, Vector3 position = default)
     {
         this.player = player;
         transform.position = position;
         this.fragmentPool = fragmentPool;
-        this.collectibleItemPool = collectibleItemPool;
         health.Init(this);
         NextState = EnemyState.Idle;
         stopAttack = false;
@@ -107,22 +92,22 @@ public abstract class BaseEnemy : MonoBehaviour
     {
         if (playerDirection.x > 0)
         {
-            FlipTransform.localScale = Vector3.one;
+            rootTransform.localScale = Vector3.one;
         }
         if (playerDirection.x < 0)
         {
-            FlipTransform.localScale = new Vector3(-1f, 1f, 1f);
+            rootTransform.localScale = new Vector3(-1f, 1f, 1f);
         }
     }
     protected virtual void ReverseFlip()
     {
         if (playerDirection.x > 0)
         {
-            FlipTransform.localScale = new Vector3(-1f, 1f, 1f);
+            rootTransform.localScale = new Vector3(-1f, 1f, 1f);
         }
         if (playerDirection.x < 0)
         {
-            FlipTransform.localScale = Vector3.one;
+            rootTransform.localScale = Vector3.one;
         }
     }
 
@@ -155,7 +140,6 @@ public abstract class BaseEnemy : MonoBehaviour
     public virtual void Destroy()
     {
         Drop();
-        drop.Drop();
         Destroy(gameObject);
     }
 
@@ -186,19 +170,8 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected void Drop()
     {
-        var random = UnityEngine.Random.value;
-        if (random < dropChance && dropItems.Count >= 1)
-        {
-            var item = collectibleItemPool.Get();
-            item.transform.position = this.transform.position;
-            ItemProfile profile = dropItems[UnityEngine.Random.Range(0, dropItems.Count)];
-            int rarity = UnityEngine.Random.Range(1, 3);
-            item.item = new Item(profile, rarity);
-            ;
-        }
-
         var fragment = fragmentPool.Get();
-        fragment.transform.position = this.transform.position;
+        fragment.transform.position = transform.position;
         fragment.Amount = stats.totalfragment;
     }
 }

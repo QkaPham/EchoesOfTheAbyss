@@ -56,7 +56,7 @@ public class Health : ScriptableObject
 
     private void OnEnable()
     {
-        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
+        EventManager.AddListener(EventID.StatsChange, OnStatsChange);
     }
 
     private void UpdateStats(CharacterStats stats)

@@ -18,6 +18,9 @@ public class CharacterStats : ScriptableObject
 {
     [Header("Level")]
     public int level = 1;
+    [SerializeField]
+    private int maxLevel = 10;
+    public bool isMaxLevel => level >= maxLevel;
     public int Level
     {
         get
@@ -26,11 +29,11 @@ public class CharacterStats : ScriptableObject
         }
         set
         {
-            level = value;
+            level = Mathf.Clamp(value, 1, 10);
             EventManager.Raise(EventID.LevelChange, new LevelChangeNotify(level, LevelUpCost));
         }
     }
-    public int LevelUpCost => Level * 1000 + 4000;
+    public int LevelUpCost => Level * 10 + 40;
 
     [Header("Starting Stats")]
     public int BaseAttack = 12;
@@ -92,6 +95,20 @@ public class CharacterStats : ScriptableObject
         Init();
     }
 
+    private void OnEnable()
+    {
+        OnEquipmentChange = thisNotify =>
+        {
+            if (thisNotify is EquipmentChangeNotify notify)
+            {
+                ClearModifier();
+                foreach (var item in notify.items)
+                {
+                    AddModifiers(item);
+                }
+            }
+        };
+    }
     public void Init()
     {
         Level = 1;
@@ -103,32 +120,9 @@ public class CharacterStats : ScriptableObject
         Haste = new Stat(StatType.Haste, BaseHaste);
 
         stats.AddRange(new Stat[] { Attack, Defense, MaxHealthPoint, CriticalHitChance, CriticalHitDamage, Haste });
-        RemoveAllModifier();
+        ClearModifier();
 
-        OnEquipmentChange = thisNotify =>
-        {
-            if (thisNotify is EquipmentChangeNotify notify)
-            {
-                //if (notify.isEquip)
-                //{
-                //    AddModifiers(notify.item);
-                //}
-                //else
-                //{
-                //    RemoveModifiers(notify.item);
-                //}
-                ModifierSources.Clear();
-                foreach (var item in notify.items)
-                {
-                    AddModifiers(item);
-                }
-            }
-        };
-    }
-
-    private void OnEnable()
-    {
-        EventManager.AddListiener(EventID.EquipmentChange, OnEquipmentChange);
+        EventManager.AddListener(EventID.EquipmentChange, OnEquipmentChange);
     }
 
     public void AddModifiers(Item source)
@@ -145,9 +139,10 @@ public class CharacterStats : ScriptableObject
         EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
-    private void RemoveAllModifier()
+    private void ClearModifier()
     {
         ModifierSources.Clear();
+        UpdateBonusStats();
         EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
@@ -171,8 +166,10 @@ public class CharacterStats : ScriptableObject
         }
     }
 
-    public void LevelUp()
+    public bool LevelUp()
     {
+        if (level >= maxLevel) return false;
+
         Level++;
         Attack.Base += AttackGrowth;
         Defense.Base += DefenseGrowth;
@@ -182,6 +179,7 @@ public class CharacterStats : ScriptableObject
         Haste.Base += HasteGrowth;
         EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
         OnLevelChange?.Invoke(Level, LevelUpCost);
+        return true;
     }
 }
 

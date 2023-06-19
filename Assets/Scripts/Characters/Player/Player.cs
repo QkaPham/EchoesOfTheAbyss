@@ -16,58 +16,23 @@ public enum PlayerState
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody2D rb;
-
-    [SerializeField]
-    public Animator animator;
-
-    [SerializeField]
-    public Transform rootTransform;
-
-    [SerializeField]
-    private Transform firePoint;
-
-    [SerializeField]
-    public Transform TargetPoint;
-
-    [SerializeField]
-    private ParticleSystem dashParticle;
-
-    [SerializeField]
-    protected ParticleSystem hurtParticle;
-
-    [SerializeField]
-    protected ParticleSystem DeathParticle;
-
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] public Animator animator;
+    [SerializeField] public Transform rootTransform;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] public Transform TargetPoint;
+    [SerializeField] private ParticleSystem dashParticle;
+    [SerializeField] protected ParticleSystem hurtParticle;
+    [SerializeField] protected ParticleSystem DeathParticle;
+    [SerializeField] private Inventory newInventory;
+    [SerializeField] private Currency currency;
+    [SerializeField] public CharacterStats stats;
+    [SerializeField] public Health health;
+    [SerializeField] public Mana mana;
+    [SerializeField] public Stamina stamina;
+    [SerializeField] private Weapon weapon;
+    [SerializeField] private RangeWeapon rangeWeapon;
     private StateMachine stateMachine;
-
-    [SerializeField]
-    private Currency currency;
-
-    [SerializeField]
-    public CharacterStats stats;
-
-    [SerializeField]
-    public Health health;
-
-    [SerializeField]
-    public Mana mana;
-
-    [SerializeField]
-    public Stamina stamina;
-
-    [SerializeField]
-    private Inventory inventory;
-
-    [SerializeField]
-    private Equipment equipment;
-
-    [SerializeField]
-    private Weapon weapon;
-
-    [SerializeField]
-    private RangeWeapon rangeWeapon;
 
     private Action<Notify> OnRetry;
 
@@ -97,7 +62,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Init();
-        EventManager.AddListiener(EventID.StartGame, OnRetry);
+        EventManager.AddListener(EventID.StartGame, OnRetry);
     }
 
     private void Init()
@@ -108,8 +73,7 @@ public class Player : MonoBehaviour
         health.Init(stats, Death, Hurt);
         mana.Init(stats);
         stamina.Init(stats);
-        inventory.Init();
-        equipment.Init();
+        newInventory.Init();
         weapon.Init();
         rangeWeapon.firePoint = firePoint;
     }

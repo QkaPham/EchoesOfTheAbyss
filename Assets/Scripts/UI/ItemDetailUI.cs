@@ -20,14 +20,14 @@ public class ItemDetailUI : MonoBehaviour
 
     private void Awake()
     {
-        UpdateItemDetailUI(null, false);
+        UpdateItemDetailUI(null);
     }
 
-    public void UpdateItemDetailUI(Item item, bool isEquip)
+    public void UpdateItemDetailUI(Item item)
     {
         if (item != null)
         {
-            itemName.text = item.profile.itemName;
+            itemName.text = item.profile?.itemName;
             stars.ShowStar(item.Rarity);
 
             itemIcon.color = Color.white;
@@ -38,8 +38,8 @@ public class ItemDetailUI : MonoBehaviour
             modifierStatsText.text = item.ModifierStat();
             modifierValuesText.text = item.ModifierValue();
 
-            equipButton.gameObject.SetActive(!isEquip);
-            unequipButton.gameObject.SetActive(isEquip);
+            equipButton.gameObject.SetActive(!item.isEquip);
+            unequipButton.gameObject.SetActive(item.isEquip);
             recycleButton.gameObject.SetActive(true);
 
         }

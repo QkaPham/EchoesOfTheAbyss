@@ -52,7 +52,7 @@ public class Weapon : MonoBehaviour
 
     protected void OnEnable()
     {
-        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
+        EventManager.AddListener(EventID.StatsChange, OnStatsChange);
     }
 
     protected void Update()

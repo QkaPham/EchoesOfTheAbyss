@@ -1,35 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
-    [SerializeField]
-    private Button rollButton;
+    [SerializeField] private Currency currency;
+    [SerializeField] private List<ItemProfile> itemProfiles;
+    [SerializeField] private RollingConfig rollingConfig;
+    [SerializeField] private Inventory inventory;
+    [SerializeField] private TextMeshProUGUI rollCostText;
 
-    [SerializeField]
-    private Currency currency;
+    [SerializeField] private Button RollButton;
 
-    [SerializeField]
-    private int maxSlot;
-    [SerializeField]
     private List<ShopSlot> slots;
-    [SerializeField]
-    private List<ItemProfile> itemProfiles;
-    [SerializeField]
-    private List<RarityChance> rarityChances;
+    private List<RarityChance> rollingChance;
 
-    [SerializeField]
     private List<Item> rollingPool;
-    [SerializeField]
     private List<Item> sellItems;
-    [SerializeField]
     private List<Item> junkItems;// contain item used to upgrade and waiting for return to rolling pool;
-    [SerializeField]
-    private OwnItemManager ownItem;
+
+    private Action<Notify> OnRoundEnd, OnLevelChange;
 
     private void Awake()
     {
@@ -47,37 +40,20 @@ public class Shop : MonoBehaviour
             }
         }
         slots = GetComponentsInChildren<ShopSlot>().ToList();
-        maxSlot = slots.Count();
+
+        OnRoundEnd = thisNotify =>
+        {
+            FreeRoll();
+            rollingConfig.ResetRollingCost();
+            rollCostText.text = rollingConfig.RollingCost.ToString();
+        };
+        OnLevelChange = thisNotify => { if (thisNotify is LevelChangeNotify notify) rollingChance = rollingConfig.RollingChanceMap[notify.level]; };
     }
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            currency.Gain(20);
-            Roll();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Buy(0);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Buy(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            Buy(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            Buy(3);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Sell(ownItem.inventory.Items.FirstOrDefault());
-        }
+        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.AddListener(EventID.LevelChange, OnLevelChange);
     }
 
     public void Buy(int index)
@@ -85,9 +61,9 @@ public class Shop : MonoBehaviour
         Item newItem = slots[index].item;
         if (newItem == null) return;
 
-        Item similarItem = ownItem.FindSimilarItem(newItem);
+        Item similarItem = inventory.FindSimilarItem(newItem);
 
-        if (!ownItem.isFull && (similarItem == null || similarItem.isMaxUpgrade))
+        if (!inventory.isFull && (similarItem == null || similarItem.isMaxUpgrade))
         {
             if (currency.Use(newItem.price))
             {
@@ -112,13 +88,13 @@ public class Shop : MonoBehaviour
         }
 
         // try buy higher upgrade 
-        if (ownItem.isFull && similarItem == null && !newItem.isMaxUpgrade)
+        if (inventory.isFull && similarItem == null && !newItem.isMaxUpgrade)
         {
             for (int i = 0; i < 4; i++) // 4 is (MaxRarity - 1)
             {
                 List<Item> upgradeRequires = HigherUpgradeRequire(newItem, i + 1);
 
-                similarItem = ownItem.FindSimilarItem(new Item(newItem.profile, i + 1));
+                similarItem = inventory.FindSimilarItem(new Item(newItem.profile, i + 1));
                 if (upgradeRequires != null && similarItem != null)
                 {
                     if (currency.Use(upgradeRequires.Sum(i => i.price)))
@@ -156,12 +132,8 @@ public class Shop : MonoBehaviour
         BackTracking(answer, current, 0, 0, remainValue, candidates);
 
         List<Item> result = answer.FirstOrDefault();
-        if (result != null)
-        {
-            result.Add(item);
-            return result;
-        }
-        else return null;
+        result?.Add(item);
+        return result;
     }
 
     public void BackTracking(List<List<Item>> answer, List<Item> current, int i, int total, int target, List<Item> candidates)
@@ -191,37 +163,51 @@ public class Shop : MonoBehaviour
         BackTracking(answer, current, i + 1, total, target, candidates);
     }
 
-
     private void BuyNewItem(Item item)
     {
-        ownItem.Add(item);
+        inventory.Add(item);
         sellItems.Remove(item);
     }
 
     private void Upgrade(Item item)
     {
-        item.Upgrade();
-        ownItem.UpdateUI();
+        inventory.Upgrade(item);
         if (item.isMaxUpgrade) return;
 
-        ownItem.Remove(item);
-        Item similarItem = ownItem.FindSimilarItem(item);
+        inventory.Remove(item);
+        Item similarItem = inventory.FindSimilarItem(item);
         if (similarItem != null)
         {
             Upgrade(similarItem);
         }
         else
         {
-            ownItem.Add(item);
+            inventory.Add(item);
         }
     }
 
     public void Roll()
     {
+        if (currency.Use(rollingConfig.RollingCost))
+        {
+            rollingConfig.IncreaseRollCost();
+            rollCostText.text = rollingConfig.RollingCost.ToString();
+
+            FreeRoll();
+
+            if (rollingConfig.RollingCost > currency.Balance)
+            {
+                RollButton.interactable = false;
+            }
+        }
+    }
+
+    public void FreeRoll()
+    {
         rollingPool.AddRange(sellItems);
         sellItems.Clear();
 
-        for (int i = 0; i < maxSlot; i++)
+        for (int i = 0; i < slots.Count(); i++)
         {
             Item item = RandomItem();
             item.Rarity = RandomRarity();
@@ -231,22 +217,20 @@ public class Shop : MonoBehaviour
         }
     }
 
-    public void Sell(Item item)
+    public void Recycle(Item item)
     {
         if (item == null) return;
-        currency.Gain(ownItem.inventory.Recycle(item));
-
         rollingPool.Add(item);
-        ReturnRollingPool(item.profile, item.quantityValue);
+        ReturnRollingPool(item.profile, item.quantityValue - 1);
     }
 
     protected int RandomRarity()
     {
-        float totalChance = rarityChances.Sum(item => item.chance);
+        float totalChance = rollingChance.Sum(item => item.chance);
         var random = UnityEngine.Random.Range(0f, totalChance);
         float cumulativeChance = 0f;
 
-        foreach (var raritychange in rarityChances)
+        foreach (var raritychange in rollingChance)
         {
             cumulativeChance += raritychange.chance;
             if (random <= cumulativeChance)
@@ -260,10 +244,6 @@ public class Shop : MonoBehaviour
     private void ReturnRollingPool(ItemProfile profile, int quantity)
     {
         List<Item> items = junkItems.Where(item => item.profile == profile).Take(quantity).ToList();
-        foreach (var item in ownItem.inventory.Items)
-        {
-            items.Remove(item);
-        }
         items.ForEach(item => junkItems.Remove(item));
         rollingPool.AddRange(items);
     }
@@ -273,13 +253,5 @@ public class Shop : MonoBehaviour
         Item item = rollingPool[UnityEngine.Random.Range(0, rollingPool.Count)];
         rollingPool.Remove(item);
         return item;
-    }
-
-    [Serializable]
-    public class RarityChance
-    {
-        public int rarity;
-        public float chance;
-        public float growth;
     }
 }

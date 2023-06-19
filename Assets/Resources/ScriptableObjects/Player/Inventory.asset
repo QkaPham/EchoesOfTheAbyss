@@ -9,12 +9,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9053f0adbab797e49b05a1945b26a122, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fe40eb75469e164fa1d007b04d723fa, type: 3}
   m_Name: Inventory
   m_EditorClassIdentifier: 
-  size: 10
-  <Items>k__BackingField:
+  inventorySize: 10
+  equipmentSize: 1
+  ownedItems:
   - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    isEquip: 0
+    rarity: 5
+    modifiers:
+    - statType: 0
+      modifierType: 1
+      amount: 0.5
+    - statType: 1
+      modifierType: 1
+      amount: 0.5
+  - profile: {fileID: 11400000, guid: d5a7b4ba86f4d9f4aa44ec9b13a762ce, type: 2}
+    isEquip: 0
+    rarity: 1
+    modifiers:
+    - statType: 5
+      modifierType: 2
+      amount: 0.05
+    - statType: 2
+      modifierType: 1
+      amount: 0.05
+  - profile: {fileID: 11400000, guid: d5a7b4ba86f4d9f4aa44ec9b13a762ce, type: 2}
+    isEquip: 0
+    rarity: 5
+    modifiers:
+    - statType: 5
+      modifierType: 2
+      amount: 0.25
+    - statType: 2
+      modifierType: 1
+      amount: 0.25
+  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    isEquip: 0
+    rarity: 1
+    modifiers:
+    - statType: 0
+      modifierType: 1
+      amount: 0.1
+    - statType: 1
+      modifierType: 1
+      amount: 0.1
+  - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    isEquip: 0
     rarity: 5
     modifiers:
     - statType: 0
@@ -24,15 +66,27 @@ MonoBehaviour:
       modifierType: 1
       amount: 0.5
   - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
-    rarity: 5
+    isEquip: 0
+    rarity: 2
     modifiers:
     - statType: 0
       modifierType: 1
-      amount: 0.5
+      amount: 0.2
     - statType: 1
       modifierType: 1
+      amount: 0.2
+  - profile: {fileID: 11400000, guid: f2fb139cca27cd140bbb18ccc10d3b37, type: 2}
+    isEquip: 0
+    rarity: 5
+    modifiers:
+    - statType: 2
+      modifierType: 1
       amount: 0.5
+    - statType: 3
+      modifierType: 2
+      amount: 0.25
   - profile: {fileID: 11400000, guid: b3db6ad5d90084c49ba384800425ebd4, type: 2}
+    isEquip: 1
     rarity: 5
     modifiers:
     - statType: 0
@@ -41,3 +95,23 @@ MonoBehaviour:
     - statType: 1
       modifierType: 1
       amount: 0.5
+  - profile: {fileID: 11400000, guid: d5a7b4ba86f4d9f4aa44ec9b13a762ce, type: 2}
+    isEquip: 0
+    rarity: 4
+    modifiers:
+    - statType: 5
+      modifierType: 2
+      amount: 0.2
+    - statType: 2
+      modifierType: 1
+      amount: 0.2
+  - profile: {fileID: 11400000, guid: f2fb139cca27cd140bbb18ccc10d3b37, type: 2}
+    isEquip: 0
+    rarity: 4
+    modifiers:
+    - statType: 2
+      modifierType: 1
+      amount: 0.4
+    - statType: 3
+      modifierType: 2
+      amount: 0.2

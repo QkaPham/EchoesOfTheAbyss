@@ -1,18 +1,10 @@
-using DG.Tweening;
 using System;
 using System.Collections;
 using TMPro;
-using Unity.Mathematics;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-public enum SlotType
-{
-    Undefined,
-    Inventory,
-    Equipment
-}
+using UnityEngine.UI;
 
 public class UpgradePanel : BasePanel
 {
@@ -25,26 +17,16 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private TextMeshProUGUI currencyTxt;
 
-    [SerializeField]
-    private TextMeshProUGUI levelUpCostTxt;
-
-    [SerializeField]
-    private InventoryUI inventoryUI;
-
-    [SerializeField]
-    private EquipmentUI equipmentUI;
+    //[SerializeField]
+    //private TextMeshProUGUI levelUpCostTxt;
 
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
+    [SerializeField]
     private GameObject currentSelectedObject = null;
+    [SerializeField]
     private GameObject previousSelectedObject = null;
-
-    [SerializeField]
-    private Inventory inventory;
-
-    [SerializeField]
-    private Equipment equipment;
 
     [SerializeField]
     private Currency currency;
@@ -54,37 +36,24 @@ public class UpgradePanel : BasePanel
 
     [SerializeField]
     private GameProgressUI gameProgress;
+    [SerializeField]
+    private Inventory inventory;
 
-    private SlotType SelectedSlotType
+    [SerializeField] private LevelUpButton LevelUpButton;
+    private Item SelectedItem
     {
         get
         {
-            SlotUI slotUI = null;
-            if (currentSelectedObject != null)
-            {
-                slotUI = currentSelectedObject.GetComponent<SlotUI>();
-            }
-            if (slotUI != null)
-            {
-                return slotUI.SlotType;
-            }
-            return SlotType.Undefined;
+            var go = EventSystem.current.currentSelectedGameObject;
+            if (!go) return null;
+            var slot = go.GetComponent<SlotUI>();
+            if (!slot) return null;
+            return slot.Item;
         }
     }
-    private int SelectedSlotIndex
-    {
-        get
-        {
-            if (currentSelectedObject != null)
-            {
-                if (currentSelectedObject.GetComponent<SlotUI>())
-                {
-                    return currentSelectedObject.GetComponent<SlotUI>().Index;
-                }
-            }
-            return -1;
-        }
-    }
+
+    [SerializeField]
+    private Shop shop;
 
     private Action<Notify> OnStatsChange, OnLevelChange, OnCurrencyChange;
 
@@ -95,7 +64,7 @@ public class UpgradePanel : BasePanel
         {
             if (thisNotify is LevelChangeNotify notify)
             {
-                UpdateLevelUpCost(notify.levelUpCost);
+                UpdateLevelUpCost(notify.level, notify.levelUpCost);
                 UpdateLevel(notify.level);
             }
         };
@@ -105,16 +74,16 @@ public class UpgradePanel : BasePanel
 
     public void Start()
     {
-        EventManager.AddListiener(EventID.StatsChange, OnStatsChange);
-        EventManager.AddListiener(EventID.LevelChange, OnLevelChange);
-        EventManager.AddListiener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.AddListener(EventID.StatsChange, OnStatsChange);
+        EventManager.AddListener(EventID.LevelChange, OnLevelChange);
+        EventManager.AddListener(EventID.CurrencyChange, OnCurrencyChange);
     }
-
     private void Update()
     {
         if (UIManager.Instance.CompareCurrentView(View.Upgrade))
         {
             PreventLoseFocus();
+
             if (InputManager.Instance.LevelUp)
             {
                 OnLevelUpButtonClick();
@@ -125,11 +94,12 @@ public class UpgradePanel : BasePanel
             }
             if (InputManager.Instance.Equip)
             {
-                if (SelectedSlotType == SlotType.Inventory)
+                if (SelectedItem == null) return;
+                if (!SelectedItem.isEquip)
                 {
                     OnEquipButtonClick();
                 }
-                else if (SelectedSlotType == SlotType.Equipment)
+                else
                 {
                     OnUnequipButtonClick();
                 }
@@ -138,21 +108,67 @@ public class UpgradePanel : BasePanel
             {
                 OnRecycleButtonClick();
             }
+            if (InputManager.Instance.Buy1)
+            {
+                Buy(0);
+            }
+            if (InputManager.Instance.Buy2)
+            {
+                Buy(1);
+            }
+            if (InputManager.Instance.Buy3)
+            {
+                Buy(2);
+            }
+            if (InputManager.Instance.Buy4)
+            {
+                Buy(3);
+            }
+            if (InputManager.Instance.Roll)
+            {
+                shop.Roll();
+            }
+        }
+    }
+
+    private void PreventLoseFocus()
+    {
+        currentSelectedObject = EventSystem.current.currentSelectedGameObject;
+        if (currentSelectedObject != previousSelectedObject)
+        {
+            //TODO: play SFX
+            if (currentSelectedObject != null)
+            {
+                previousSelectedObject = currentSelectedObject;
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(previousSelectedObject);
+            }
         }
     }
 
     public void OnLevelUpButtonClick()
     {
+        if (stats.isMaxLevel) return;
+
         if (currency.Use(stats.LevelUpCost))
         {
             stats.LevelUp();
-            UpdateLevelUpCost(stats.LevelUpCost);
+            UpdateLevelUpCost(stats.level, stats.LevelUpCost);
         }
     }
 
-    private void UpdateLevelUpCost(int cost)
+    private void UpdateLevelUpCost(int level, int cost)
     {
-        levelUpCostTxt.text = cost.ToString();
+        if (level >= 10)
+        {
+            LevelUpButton.MaxLevel();
+        }
+        else
+        {
+            LevelUpButton.SetCost(cost);
+        }
     }
 
     private void UpdateLevel(int level)
@@ -175,65 +191,26 @@ public class UpgradePanel : BasePanel
         GameManager.Instance.StartNextRound();
     }
 
-    private void PreventLoseFocus()
-    {
-        currentSelectedObject = EventSystem.current.currentSelectedGameObject;
-        if (currentSelectedObject != previousSelectedObject)
-        {
-            //TODO: play SFX
-            if (currentSelectedObject != null)
-            {
-                previousSelectedObject = currentSelectedObject;
-                DisplayCurrentSelectedItem();
-            }
-            else
-            {
-                EventSystem.current.SetSelectedGameObject(previousSelectedObject);
-            }
-        }
-    }
-
     public void OnEquipButtonClick()
     {
-        var item = inventory.Items[SelectedSlotIndex];
-        if (item != null)
-        {
-            if (equipment.Add(item))
-            {
-                inventory.Remove(item);
-            }
-            DisplayCurrentSelectedItem();
-        }
+        inventory.Equip(SelectedItem);
+        DisplayCurrentSelectedItem();
     }
     public void OnUnequipButtonClick()
     {
-        var item = equipment.Items[SelectedSlotIndex];
-        if (item != null)
-        {
-            //inventory.MergeAdd(item);
-            equipment.Remove(SelectedSlotIndex);
-            DisplayCurrentSelectedItem();
-        }
+        inventory.UnEquip(SelectedItem);
+        DisplayCurrentSelectedItem();
     }
     public void OnRecycleButtonClick()
     {
-        if (SelectedSlotType == SlotType.Inventory)
-        {
-            int currency = inventory.Recycle(SelectedSlotIndex);
-            this.currency.Gain(currency);
-        }
-        if (SelectedSlotType == SlotType.Equipment)
-        {
-            equipment.Recycle(SelectedSlotIndex);
-        }
+        currency.Gain(inventory.Recycle(SelectedItem));
+        shop.Recycle(SelectedItem);
         DisplayCurrentSelectedItem();
     }
 
     private void DisplayCurrentSelectedItem()
     {
-        if (SelectedSlotIndex < 0) return;
-        var item = SelectedSlotType == SlotType.Inventory ? inventory.Items[SelectedSlotIndex] : equipment.Items[SelectedSlotIndex];
-        //itemDetailUI.UpdateItemDetailUI(item, SelectedSlotType);
+        itemDetailUI.UpdateItemDetailUI(SelectedItem);
     }
 
     public void UpdateGameProgress(int round)
@@ -241,13 +218,9 @@ public class UpgradePanel : BasePanel
         gameProgress.UpdateProgress(round);
     }
 
-    public void Buy()
+    public void Buy(int index)
     {
-
-    }
-
-    public void Roll()
-    {
-
+        shop.Buy(index);
+        DisplayCurrentSelectedItem();
     }
 }
