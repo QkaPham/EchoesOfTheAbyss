@@ -1,34 +1,76 @@
 using DG.Tweening;
+using System;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShopSlot : MonoBehaviour
+public class ShopSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public int slotIndex;
-    public Item item;
+    private UpgradePanel upgradePanel;
+    public int index;
+    public Item item { get; set; }
 
-    public TextMeshProUGUI itemNameText;
+    [SerializeField] public TextMeshProUGUI itemNameText;
 
-    public Image itemBackGround;
-    public Image itemLight;
-    public Image iconImage;
-    public GameObject stars;
-    public Image border;
-    public GameObject require;
+    [SerializeField] public Image itemBackGround;
+    [SerializeField] public Image itemLight;
+    [SerializeField] public Image iconImage;
+    [SerializeField] public GameObject stars;
+    [SerializeField] public ItemStars star;
 
-    public TextMeshProUGUI itemStatsText;
-    public TextMeshProUGUI itemStatsValueText;
+    [SerializeField] public Image border;
+    [SerializeField] private Color normalColor = new Color(255 / 255f, 255 / 255f, 255 / 255f, 30 / 100f);
+    [SerializeField] private Color highlightColor = Color.white;
+    [SerializeField] public float fadeDurarion = 0.1f;
 
-    public TextMeshProUGUI priceText;
-    public Button buyButton;
-    public RarityColor colors;
+    [SerializeField] public GameObject require;
+
+    [SerializeField] public TextMeshProUGUI itemStatsText;
+    [SerializeField] public TextMeshProUGUI itemStatsValueText;
+
+    [SerializeField] public TextMeshProUGUI priceText;
+    [SerializeField] public RarityColor colors;
+
+    [SerializeField] private Color sufficientColor = Color.white;
+    [SerializeField] private Color insufficientColor = new Color(127 / 255f, 127 / 255f, 127 / 255f, 255 / 255f);
+
+    public CanvasGroup contents;
+
+    private Action<Notify> OnCurrencyChange;
 
     private void Awake()
     {
-        slotIndex = transform.GetSiblingIndex();
-        buyButton = GetComponent<Button>();
+        index = transform.GetSiblingIndex();
+        upgradePanel = GetComponentInParent<UpgradePanel>();
+        border.color = normalColor;
+
+        OnCurrencyChange = thisNotify =>
+        {
+            if (thisNotify is CurrencyChangeNotify notify)
+            {
+                if (item == null) return;
+                if (item.price > notify.balance)
+                {
+                    Insufficient();
+                }
+                else
+                {
+                    Sufficient();
+                }
+            }
+        };
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
     }
 
     public void UpdateShopSlot(Item item)
@@ -36,8 +78,8 @@ public class ShopSlot : MonoBehaviour
         this.item = item;
         if (item != null)
         {
+            contents.alpha = 1;
             iconImage.color = Color.white;
-            buyButton.interactable = true;
             require.SetActive(true);
 
 
@@ -45,40 +87,48 @@ public class ShopSlot : MonoBehaviour
             iconImage.sprite = item.profile.icon;
             itemBackGround.color = colors.DarkColor(item.Rarity);
             itemLight.color = colors.LightColor(item.Rarity);
-            ShowStar(item.Rarity);
+            star.ShowStar(item.Rarity);
             itemStatsText.text = item.ModifierStat();
             itemStatsValueText.text = item.ModifierValue();
             priceText.text = item.price.ToString();
         }
         else
         {
-            require.SetActive(false);
-            itemNameText.text = "";
+            contents.alpha = 0;
+            //require.SetActive(false);
+            //itemNameText.text = "";
 
-            iconImage.color = Color.clear;
-            itemBackGround.color = Color.clear;
-            itemLight.color = Color.clear;
+            //iconImage.color = Color.clear;
+            //itemBackGround.color = Color.clear;
+            //itemLight.color = Color.clear;
 
-            ShowStar(0);
-            itemStatsText.text = "";
-            itemStatsValueText.text = "";
-            buyButton.interactable = false;
+            //star.ShowStar(0);
+            //itemStatsText.text = "";
+            //itemStatsValueText.text = "";
         }
     }
 
-    private void ShowStar(int number)
+    public void Insufficient()
     {
-        int childCount = stars.transform.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            if (i < childCount - number)
-            {
-                stars.transform.GetChild(i).gameObject.SetActive(false);
-            }
-            else
-            {
-                stars.transform.GetChild(i).gameObject.SetActive(true);
-            }
-        }
+        priceText.color = insufficientColor;
+    }
+
+    public void Sufficient()
+    {
+        priceText.color = sufficientColor;
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        upgradePanel.Buy(index);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        border.DOColor(highlightColor, fadeDurarion);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        border.DOColor(normalColor, fadeDurarion);
     }
 }

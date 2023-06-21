@@ -28,7 +28,7 @@ public class OpenScenEditor : EditorWindow
         EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
 
         EditorSceneManager.OpenScene
-           (string.Format(_scenePath, "GameLevel"), OpenSceneMode.Single);
+           (string.Format(_scenePath, "Game"), OpenSceneMode.Single);
     }
 
 }

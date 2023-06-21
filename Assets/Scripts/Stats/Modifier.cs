@@ -10,12 +10,12 @@ public enum ModifierType
 [Serializable]
 public class Modifier
 {
-    public StatType statType;
+    public StatID statType;
     public ModifierType modifierType;
     public float amount;
 
 
-    public Modifier(StatType statType, ModifierType modifierType, float amount)
+    public Modifier(StatID statType, ModifierType modifierType, float amount)
     {
         this.statType = statType;
         this.modifierType = modifierType;
@@ -34,22 +34,22 @@ public class Modifier
         string type = "";
         switch (statType)
         {
-            case StatType.Attack:
+            case StatID.Attack:
                 type = "Atk";
                 break;
-            case StatType.Defense:
+            case StatID.Defense:
                 type = "Def";
                 break;
-            case StatType.MaxHealthPoint:
+            case StatID.MaxHealthPoint:
                 type = "HP";
                 break;
-            case StatType.CriticalHitChance:
+            case StatID.CriticalHitChance:
                 type = "Crit Rate";
                 break;
-            case StatType.CriticalHitDamage:
+            case StatID.CriticalHitDamage:
                 type = "Crit Dmg";
                 break;
-            case StatType.Haste:
+            case StatID.Haste:
                 type = "Haste";
                 break;
             default:

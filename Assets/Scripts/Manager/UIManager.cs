@@ -80,7 +80,6 @@ public class UIManager : Singleton<UIManager>
     private IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
     {
         yield return null;
-        Debug.Log("Show View " + viewName.ToString());
         viewsMap.TryGetValue(viewName, out BaseView view);
         if (view != null)
         {

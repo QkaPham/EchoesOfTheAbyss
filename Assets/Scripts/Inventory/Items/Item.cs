@@ -77,22 +77,22 @@ public class Item
         {
             switch (modifier.statType)
             {
-                case StatType.Attack:
+                case StatID.Attack:
                     builder.Append($"Atk\n");
                     break;
-                case StatType.Defense:
+                case StatID.Defense:
                     builder.Append($"Def\n");
                     break;
-                case StatType.MaxHealthPoint:
+                case StatID.MaxHealthPoint:
                     builder.Append($"Hp\n");
                     break;
-                case StatType.CriticalHitChance:
+                case StatID.CriticalHitChance:
                     builder.Append($"Crit\n");
                     break;
-                case StatType.CriticalHitDamage:
+                case StatID.CriticalHitDamage:
                     builder.Append($"Crit Dmg\n");
                     break;
-                case StatType.Haste:
+                case StatID.Haste:
                     builder.Append($"Haste\n");
                     break;
                 default:
