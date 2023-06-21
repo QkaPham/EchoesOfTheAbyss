@@ -17,10 +17,16 @@ public class ItemCollector : MonoBehaviour
         OnStartNextRound = thisNotify => ResetMagnetRadius();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
-        EventManager.AddListener(EventID.StartNextRound, OnStartNextRound);
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
     }
 
     private void ExpandMagnetRadius()

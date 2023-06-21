@@ -1,70 +1,113 @@
+using DG.Tweening;
+using Sirenix.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LevelUpButton : MonoBehaviour
+public class LevelUpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
-    public Image shortcutImage;
-    public TextMeshProUGUI shortcutText;
-    public TextMeshProUGUI buttonName;
-    public TextMeshProUGUI cost;
+    [SerializeField] private Graphic interactArea;
     public Image fragmentImage;
-    public Button button;
+
+    [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private Graphic content;
+    private UpgradePanel upgradePanel;
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color highlightColor = new Color(94 / 255f, 224 / 255f, 221 / 255f, 255 / 255f);
+
+    [SerializeField] private Color sufficientColor = Color.white;
+    [SerializeField] private Color insufficientColor = new Color(127 / 255f, 127 / 255f, 127 / 255f, 255 / 255f);
+    [SerializeField] private float fadeDuration = 0.1f;
+
+    [SerializeField] CharacterStats stats;
+
+    private Action<Notify> OnCurrencyChange;
+
+
+    private void Awake()
+    {
+        upgradePanel = GetComponentInParent<UpgradePanel>();
+        Enable();
+
+        OnCurrencyChange = thisNotify =>
+        {
+            if (thisNotify is CurrencyChangeNotify notify) 
+            {
+                if(stats.LevelUpCost > notify.balance)
+                {
+                    Insufficient();
+                }
+                else
+                {
+                    Sufficient();
+                }
+            }
+        };
+
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);    
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
+    }
 
     public void MaxLevel()
     {
-        buttonName.text = "Max Level";
-        cost.gameObject.SetActive(false);
-        fragmentImage.gameObject.SetActive(false);
+        (content as TextMeshProUGUI).text = "Max Level";
+        Disable();
     }
-    public void SetCost(int cost)
-    {
-        SetCost(cost.ToString());
-    }
-    public void SetCost(string cost)
-    {
-        this.cost.text = cost;
-    }
+
     public void Enable()
     {
-        button.interactable = true;
+        interactArea.raycastTarget = true;
+        priceText.gameObject.SetActive(true);
+        fragmentImage.gameObject.SetActive(true);
     }
     public void Disable()
     {
-        button.interactable = false;
+        interactArea.raycastTarget = false;
+        priceText.gameObject.SetActive(false);
+        fragmentImage.gameObject.SetActive(false);
     }
 
-    public void onclick()
+    public void SetPriceText(int price)
     {
-        Debug.Log("Click");
+        priceText.text = price.ToString();
     }
 
-    public void Update()
+    public void Insufficient()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SetCost(10);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            SetCost(99);
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Disable();
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Enable();
-        }
+        priceText.color = insufficientColor;
+    }
 
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            MaxLevel();
-        }
+    public void Sufficient()
+    {
+        priceText.color = sufficientColor;
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        upgradePanel.OnLevelUpButtonClick();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        content.DOColor(highlightColor, fadeDuration);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        content.DOColor(normalColor, fadeDuration);
     }
 }

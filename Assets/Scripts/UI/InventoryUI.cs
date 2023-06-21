@@ -7,14 +7,14 @@ using UnityEngine.UI;
 public class InventoryUI : SelectableContainer
 {
     [SerializeField] private ItemDetailUI itemDetailUI;
-    [SerializeField] private List<SlotUI> slots;
+    [SerializeField] private List<ItemSlotUI> slots;
     private Action<Notify> OnInventoryChange;
 
     protected override void Awake()
     {
         selectable = GetComponent<Selectable>();
-        slots = new List<SlotUI>();
-        slots.AddRange(GetComponentsInChildren<SlotUI>());
+        slots = new List<ItemSlotUI>();
+        slots.AddRange(GetComponentsInChildren<ItemSlotUI>());
         foreach (var slot in slots)
         {
             slot.UpdateUISlot(null);
@@ -24,9 +24,14 @@ public class InventoryUI : SelectableContainer
         OnInventoryChange = thisNotify => { if (thisNotify is InventoryChangeNotify notify) UpdateInventoryUI(notify.items); };
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.InventoryChange, OnInventoryChange);
+        EventManager.Instance.AddListener(EventID.InventoryChange, OnInventoryChange);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.InventoryChange, OnInventoryChange);
     }
 
     private void UpdateInventoryUI(List<Item> items)

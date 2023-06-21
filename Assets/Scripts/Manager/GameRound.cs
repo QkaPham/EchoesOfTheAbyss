@@ -18,7 +18,7 @@ public class GameRound : MonoBehaviour
         private set
         {
             currentRound = value;
-            EventManager.Raise(EventID.RoundChange, new RoundChangeNotify(currentRound, currentRound == roundNumber));
+            EventManager.Instance.Raise(EventID.RoundChange, new RoundChangeNotify(currentRound, currentRound == roundNumber));
         }
     }
 
@@ -39,7 +39,7 @@ public class GameRound : MonoBehaviour
         private set
         {
             timer = Mathf.Clamp(value, 0, duration);
-            EventManager.Raise(EventID.TimerChange, new TimeChangeNotify(timer));
+            EventManager.Instance.Raise(EventID.TimerChange, new TimeChangeNotify(timer));
 
         }
     }
@@ -54,24 +54,17 @@ public class GameRound : MonoBehaviour
 
         Init();
     }
-    private void Start()
-    {
-        EventManager.AddListener(EventID.StartNextRound, OnStartNextRound);
-        EventManager.AddListener(EventID.GameOver, OnGameOver);
-    }
 
     private void OnEnable()
     {
-        //GameManager.OnStartGame += OnStartGame;
-        //GameManager.OnStartNextRound += StartNextRound;
-        // GameManager.OnGameOver += OnGameOver;
+        EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
+        EventManager.Instance.AddListener(EventID.GameOver, OnGameOver);
     }
 
     private void OnDisable()
     {
-        //GameManager.OnStartGame -= OnStartGame;
-        //GameManager.OnStartNextRound -= StartNextRound;
-        //GameManager.OnGameOver -= OnGameOver;
+        EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
+        EventManager.Instance.RemoveListener(EventID.GameOver, OnGameOver);
     }
 
     void Update()

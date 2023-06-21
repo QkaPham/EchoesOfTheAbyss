@@ -55,18 +55,31 @@ public class GamePanel : BasePanel
         OnBossHealthChange = thisNotify => { if (thisNotify is HealthChangeNotify notify) UpdateBossHPBar(notify.currentHealth / notify.maxHealth); };
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.HealthChange, OnHealthChange);
-        EventManager.AddListener(EventID.ManaChange, OnManaChange);
-        EventManager.AddListener(EventID.StaminaChange, OnStanimaChange);
-        EventManager.AddListener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.Instance.AddListener(EventID.HealthChange, OnHealthChange);
+        EventManager.Instance.AddListener(EventID.ManaChange, OnManaChange);
+        EventManager.Instance.AddListener(EventID.StaminaChange, OnStanimaChange);
+        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);
 
-        EventManager.AddListener(EventID.TimerChange, OnTimerChange);
-        EventManager.AddListener(EventID.RoundChange, OnRoundChange);
+        EventManager.Instance.AddListener(EventID.TimerChange, OnTimerChange);
+        EventManager.Instance.AddListener(EventID.RoundChange, OnRoundChange);
 
-        EventManager.AddListener(EventID.BossHealthChange, OnBossHealthChange);
+        EventManager.Instance.AddListener(EventID.BossHealthChange, OnBossHealthChange);
     }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.HealthChange, OnHealthChange);
+        EventManager.Instance.RemoveListener(EventID.ManaChange, OnManaChange);
+        EventManager.Instance.RemoveListener(EventID.StaminaChange, OnStanimaChange);
+        EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
+
+        EventManager.Instance.RemoveListener(EventID.TimerChange, OnTimerChange);
+        EventManager.Instance.RemoveListener(EventID.RoundChange, OnRoundChange);
+
+        EventManager.Instance.RemoveListener(EventID.BossHealthChange, OnBossHealthChange);
+    }   
 
     private void Update()
     {

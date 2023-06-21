@@ -1,9 +1,8 @@
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SlotUI : MonoBehaviour, ISelectHandler
+public class ItemSlotUI : MonoBehaviour, ISelectHandler
 {
     [SerializeField] private Image Icon;
     [SerializeField] private Image backGround;

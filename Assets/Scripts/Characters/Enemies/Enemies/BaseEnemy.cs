@@ -64,7 +64,16 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void Start()
     {
         stats.Init();
-        EventManager.AddListener(EventID.PlayerDeath, OnPlayerDeath);
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.PlayerDeath, OnPlayerDeath);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.PlayerDeath, OnPlayerDeath);
     }
 
     protected virtual void Update()

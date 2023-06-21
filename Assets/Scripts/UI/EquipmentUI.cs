@@ -8,12 +8,12 @@ using UnityEngine;
 public class EquipmentUI : MonoBehaviour
 {
     [SerializeField] private ItemDetailUI itemDetailUI;
-    [SerializeField] private List<SlotUI> slots;
+    [SerializeField] private List<ItemSlotUI> slots;
     private Action<Notify> OnEquipmentChange;
     public void Awake()
     {
-        slots = new List<SlotUI>();
-        slots.AddRange(GetComponentsInChildren<SlotUI>());
+        slots = new List<ItemSlotUI>();
+        slots.AddRange(GetComponentsInChildren<ItemSlotUI>());
         foreach (var slot in slots)
         {
             slot.UpdateUISlot(null);
@@ -25,7 +25,12 @@ public class EquipmentUI : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.AddListener(EventID.EquipmentChange, OnEquipmentChange);
+        EventManager.Instance.AddListener(EventID.EquipmentChange, OnEquipmentChange);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.EquipmentChange, OnEquipmentChange);
     }
 
     private void UpdateEquipmentUI(List<Item> items)

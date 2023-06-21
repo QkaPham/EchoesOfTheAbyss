@@ -14,10 +14,13 @@ public class HitBox : MonoBehaviour
     {
         OnRoundEnd = thisNotify => DamageableObjects.Clear();
     }
-
-    private void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+    }
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

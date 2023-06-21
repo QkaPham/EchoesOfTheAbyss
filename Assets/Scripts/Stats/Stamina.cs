@@ -6,12 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Stamina", menuName = "Scriptable Object/Stamina")]
 public class Stamina : ScriptableObject
 {
-    [SerializeField]
-    private float currentStamina;
-
-    [SerializeField]
-    private float maxStamina;
-
+    [SerializeField] private float currentStamina;
+    [SerializeField] private float maxStamina;
     private float delayStaminaRecoverTime;
     private float lastTimeConsumeStamina;
     private float staminaRecovery;
@@ -25,7 +21,7 @@ public class Stamina : ScriptableObject
         private set
         {
             currentStamina = Mathf.Clamp(value, 0, maxStamina);
-            //EventManager.FireNotify(EventName.StaminaChange, new StaminaChangeNotify(currentStamina, maxStamina));
+            EventManager.Instance.Raise(EventID.StaminaChange, new StaminaChangeNotify(currentStamina, maxStamina));
         }
     }
     public float MaxStanima { get => maxStamina; private set => maxStamina = value; }

@@ -13,8 +13,6 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Volume volume;
     private DepthOfField depthOfField;
 
-    private LoadingPanel loadingPanel;
-
     [SerializeField] private View startView;
     private BaseView currentView;
     private Stack<BaseView> history = new Stack<BaseView>();
@@ -33,9 +31,7 @@ public class UIManager : Singleton<UIManager>
         {
             canvas = GetComponentInChildren<Canvas>().transform as RectTransform;
         }
-
         ActiveAllPanel();
-        loadingPanel = GetComponentInChildren<LoadingPanel>();
 
         List<BaseView> baseViews = GetComponentsInChildren<BaseView>().ToList();
         foreach (BaseView view in baseViews)
@@ -45,12 +41,8 @@ public class UIManager : Singleton<UIManager>
                 viewsMap.Add(view.viewName, view);
             }
         }
+        currentView = viewsMap.GetValueOrDefault(startView);
 
-        var starttingView = viewsMap.GetValueOrDefault(startView);
-        currentView = starttingView;
-        history.Push(starttingView);
-
-        volume = GetComponentInChildren<Volume>();
         if (volume.profile.TryGet(out DepthOfField dof))
         {
             depthOfField = dof;
@@ -75,10 +67,9 @@ public class UIManager : Singleton<UIManager>
         depthOfField.active = active;
     }
 
-    public void LoadScene(string scene, View viewName, Action onSceneLoaded)
+    public void ClearHistoryViews()
     {
         history.Clear();
-        loadingPanel.LoadScene(scene, viewName, onSceneLoaded);
     }
 
     public void Show(View viewName, Action onComplete = null, bool remember = true)
@@ -86,9 +77,10 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(DelayShow(viewName, onComplete, remember));
     }
 
-    public IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
+    private IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
     {
         yield return null;
+        Debug.Log("Show View " + viewName.ToString());
         viewsMap.TryGetValue(viewName, out BaseView view);
         if (view != null)
         {
@@ -96,10 +88,7 @@ public class UIManager : Singleton<UIManager>
             {
                 view.Activate(onComplete);
             });
-            if (remember)
-            {
-                history.Push(currentView);
-            }
+            if (remember) history.Push(currentView);
             currentView = view;
         }
         else

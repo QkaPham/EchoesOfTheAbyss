@@ -14,17 +14,19 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         OnVictory = thisNotify => Death();
         OnRetry = thisNotify => Destroy();
     }
-    protected override void Start()
+    private void OnEnable()
     {
-        base.Start();
-        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
-        EventManager.AddListener(EventID.Victory, OnVictory);
-        EventManager.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.Victory, OnVictory);
+        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
     protected void OnDisable()
     {
         animator.SetTrigger("Reset");
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.Victory, OnVictory);
+        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;

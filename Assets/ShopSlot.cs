@@ -38,6 +38,7 @@ public class ShopSlot : MonoBehaviour
         {
             iconImage.color = Color.white;
             buyButton.interactable = true;
+            require.SetActive(true);
 
 
             itemNameText.text = item.profile.itemName;
@@ -51,6 +52,7 @@ public class ShopSlot : MonoBehaviour
         }
         else
         {
+            require.SetActive(false);
             itemNameText.text = "";
 
             iconImage.color = Color.clear;

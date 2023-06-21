@@ -17,9 +17,6 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private TextMeshProUGUI currencyTxt;
 
-    //[SerializeField]
-    //private TextMeshProUGUI levelUpCostTxt;
-
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
@@ -46,7 +43,7 @@ public class UpgradePanel : BasePanel
         {
             var go = EventSystem.current.currentSelectedGameObject;
             if (!go) return null;
-            var slot = go.GetComponent<SlotUI>();
+            var slot = go.GetComponent<ItemSlotUI>();
             if (!slot) return null;
             return slot.Item;
         }
@@ -72,12 +69,20 @@ public class UpgradePanel : BasePanel
         OnCurrencyChange = thisNotify => { if (thisNotify is CurrencyChangeNotify notify) UpdateFragmentText(notify.balance); };
     }
 
-    public void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.StatsChange, OnStatsChange);
-        EventManager.AddListener(EventID.LevelChange, OnLevelChange);
-        EventManager.AddListener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.Instance.AddListener(EventID.StatsChange, OnStatsChange);
+        EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
+        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);
     }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.StatsChange, OnStatsChange);
+        EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
+        EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
+    }
+
     private void Update()
     {
         if (UIManager.Instance.CompareCurrentView(View.Upgrade))
@@ -126,7 +131,7 @@ public class UpgradePanel : BasePanel
             }
             if (InputManager.Instance.Roll)
             {
-                shop.Roll();
+                shop.OnRollButtonClick();
             }
         }
     }
@@ -155,7 +160,7 @@ public class UpgradePanel : BasePanel
         if (currency.Use(stats.LevelUpCost))
         {
             stats.LevelUp();
-            UpdateLevelUpCost(stats.level, stats.LevelUpCost);
+            UpdateLevelUpCost(stats.Level, stats.LevelUpCost);
         }
     }
 
@@ -167,7 +172,7 @@ public class UpgradePanel : BasePanel
         }
         else
         {
-            LevelUpButton.SetCost(cost);
+            LevelUpButton.SetPriceText(cost);
         }
     }
 
@@ -222,5 +227,10 @@ public class UpgradePanel : BasePanel
     {
         shop.Buy(index);
         DisplayCurrentSelectedItem();
+    }
+
+    public void OnRollButtonClick()
+    {
+        shop.OnRollButtonClick();
     }
 }

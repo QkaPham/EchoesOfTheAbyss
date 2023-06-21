@@ -8,12 +8,15 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private SceneLoader sceneLoader;
     public void StartGame()
     {
-        UIManager.Instance.LoadScene("GameLevel", View.Game, () =>
+        sceneLoader.LoadScene("Game", () =>
         {
             InputManager.Instance.EnablePlayerInput(true);
-            EventManager.Raise(EventID.StartGame, null);
+            EventManager.Instance.Raise(EventID.StartGame, null);
+            UIManager.Instance.Show(View.Game, null, false);
+            SceneManager.UnloadSceneAsync("MainMenu");
         });
     }
 
@@ -37,16 +40,18 @@ public class GameManager : Singleton<GameManager>
     {
         UIManager.Instance.ShowLast();
         InputManager.Instance.EnablePlayerInput(true);
-        EventManager.Raise(EventID.Retry, null);
+        EventManager.Instance.Raise(EventID.Retry, null);
         Time.timeScale = 1f;
     }
 
     public void ReturnToMainMenu()
     {
-        UIManager.Instance.LoadScene("MainMenu", View.MainMenu, () =>
+        sceneLoader.LoadScene("MainMenu", () =>
         {
-            UIManager.Instance.ActiveDepthOfField(false);
             InputManager.Instance.EnablePlayerInput(false);
+            UIManager.Instance.Show(View.MainMenu, null, false);
+            UIManager.Instance.ActiveDepthOfField(false);
+            SceneManager.UnloadSceneAsync("Game");
         });
     }
 
@@ -54,27 +59,27 @@ public class GameManager : Singleton<GameManager>
     {
         UIManager.Instance.Show(View.Upgrade);
         InputManager.Instance.EnablePlayerInput(false);
-        EventManager.Raise(EventID.RoundEnd, null);
+        EventManager.Instance.Raise(EventID.RoundEnd, null);
     }
 
     public void StartNextRound()
     {
         UIManager.Instance.ShowLast();
-        EventManager.Raise(EventID.StartNextRound, null);
+        EventManager.Instance.Raise(EventID.StartNextRound, null);
         InputManager.Instance.EnablePlayerInput(true);
     }
 
     public void GameOver()
     {
         UIManager.Instance.Show(View.GameOver);
-        EventManager.Raise(EventID.GameOver, null);
+        EventManager.Instance.Raise(EventID.GameOver, null);
         InputManager.Instance.EnablePlayerInput(false);
     }
 
     public void Victory()
     {
         UIManager.Instance.Show(View.Victory);
-        EventManager.Raise(EventID.Victory, null);
+        EventManager.Instance.Raise(EventID.Victory, null);
         InputManager.Instance.EnablePlayerInput(false);
     }
 

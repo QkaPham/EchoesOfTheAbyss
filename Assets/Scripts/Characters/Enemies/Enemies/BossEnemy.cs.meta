@@ -3,7 +3,13 @@ guid: 439019775c405b2478079e3694e81921
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - rootTransform: {instanceID: 0}
+  - stats: {fileID: 11400000, guid: ae06dab058dcda2438dd45a88b822f59, type: 2}
+  - laserLineRenderer: {instanceID: 0}
+  - ShotPoint: {instanceID: 0}
+  - rushLineRenderer: {instanceID: 0}
+  - bulletFirePoint: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

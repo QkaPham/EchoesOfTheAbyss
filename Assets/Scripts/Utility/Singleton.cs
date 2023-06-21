@@ -1,6 +1,7 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour
+public abstract class Singleton<T> : SerializedMonoBehaviour
     where T : Singleton<T>
 {
     protected static T instance;
@@ -13,7 +14,7 @@ public abstract class Singleton<T> : MonoBehaviour
                 instance = FindObjectOfType<T>();
                 if (instance == null)
                 {
-                    instance = new GameObject(typeof(T).ToString()).AddComponent<T>();
+                    Debug.LogError($"There needs to be one active {typeof(T)} script on a GameObject in your scene.");
                 }
             }
             return instance;
@@ -22,14 +23,14 @@ public abstract class Singleton<T> : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (instance != null && this.gameObject != null)
+        if (instance != null && gameObject != null)
         {
+            Debug.LogError($"There are some active {typeof(T)} script on a GameObject in your scene. Destroy!");
             Destroy(gameObject);
         }
         else
         {
             instance = this as T;
         }
-        DontDestroyOnLoad(gameObject);
     }
 }

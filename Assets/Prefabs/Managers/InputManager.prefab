@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4724687339786994255}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.8313963, y: -3.2609484, z: -13.345097}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6652829409942338968
 MonoBehaviour:
@@ -44,4 +44,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea5d2aa718039dc4fa995b8f5b5e5c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  <MousePosition>k__BackingField: {x: 0, y: 0}
+  <MouseDelta>k__BackingField: {x: 0, y: 0}
+  <MoveDir>k__BackingField: {x: 0, y: 0}
+  <DashDir>k__BackingField: {x: 0, y: 0}
+  <Attack>k__BackingField: 0
+  <RangeAttack>k__BackingField: 0
+  <Run>k__BackingField: 0
+  <Dash>k__BackingField: 0

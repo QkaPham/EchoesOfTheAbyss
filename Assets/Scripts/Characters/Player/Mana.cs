@@ -17,7 +17,7 @@ public class Mana : ScriptableObject
         private set
         {
             currentMana = Mathf.Clamp(value, 0, maxMana);
-            EventManager.Raise(EventID.ManaChange, new ManaChangeNotify(currentMana, maxMana));
+            EventManager.Instance.Raise(EventID.ManaChange, new ManaChangeNotify(currentMana, maxMana));
         }
     }
 

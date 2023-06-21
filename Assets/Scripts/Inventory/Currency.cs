@@ -15,7 +15,7 @@ public class Currency : ScriptableObject
         private set
         {
             balance = value;
-            EventManager.Raise(EventID.CurrencyChange, new CurrencyChangeNotify(balance));
+            EventManager.Instance.Raise(EventID.CurrencyChange, new CurrencyChangeNotify(balance));
         }
     }
 

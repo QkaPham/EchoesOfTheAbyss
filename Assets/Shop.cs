@@ -11,9 +11,7 @@ public class Shop : MonoBehaviour
     [SerializeField] private List<ItemProfile> itemProfiles;
     [SerializeField] private RollingConfig rollingConfig;
     [SerializeField] private Inventory inventory;
-    [SerializeField] private TextMeshProUGUI rollCostText;
-
-    [SerializeField] private Button RollButton;
+    [SerializeField] private RollButton rollButton;
 
     private List<ShopSlot> slots;
     private List<RarityChance> rollingChance;
@@ -43,17 +41,23 @@ public class Shop : MonoBehaviour
 
         OnRoundEnd = thisNotify =>
         {
-            FreeRoll();
+            Roll();
             rollingConfig.ResetRollingCost();
-            rollCostText.text = rollingConfig.RollingCost.ToString();
+            rollButton.SetPriceText(rollingConfig.RollingCost);
         };
         OnLevelChange = thisNotify => { if (thisNotify is LevelChangeNotify notify) rollingChance = rollingConfig.RollingChanceMap[notify.level]; };
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.RoundEnd, OnRoundEnd);
-        EventManager.AddListener(EventID.LevelChange, OnLevelChange);
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
     }
 
     public void Buy(int index)
@@ -186,23 +190,27 @@ public class Shop : MonoBehaviour
         }
     }
 
-    public void Roll()
+    public void OnRollButtonClick()
     {
         if (currency.Use(rollingConfig.RollingCost))
         {
             rollingConfig.IncreaseRollCost();
-            rollCostText.text = rollingConfig.RollingCost.ToString();
+            rollButton.SetPriceText(rollingConfig.RollingCost);
 
-            FreeRoll();
+            Roll();
 
-            if (rollingConfig.RollingCost > currency.Balance)
-            {
-                RollButton.interactable = false;
-            }
+            //if (rollingConfig.RollingCost > currency.Balance)
+            //{
+            //    rollButton.Insufficient();
+            //}
+            //else
+            //{
+            //    rollButton.Sufficient();
+            //}
         }
     }
 
-    public void FreeRoll()
+    public void Roll()
     {
         rollingPool.AddRange(sellItems);
         sellItems.Clear();
@@ -222,6 +230,15 @@ public class Shop : MonoBehaviour
         if (item == null) return;
         rollingPool.Add(item);
         ReturnRollingPool(item.profile, item.quantityValue - 1);
+
+        //if (rollingConfig.RollingCost > currency.Balance)
+        //{
+        //    rollButton.Insufficient();
+        //}
+        //else
+        //{
+        //    rollButton.Sufficient();
+        //}
     }
 
     protected int RandomRarity()

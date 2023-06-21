@@ -6,26 +6,26 @@ using UnityEngine;
 
 public class MainMenuView : BaseView
 {
-    [SerializeField]
-    protected UIAnimate buttons;
-    [SerializeField]
-    protected UIAnimate title;
-    [SerializeField]
-    protected UIAnimate pressAnykey;
+    [SerializeField] protected UIAnimate buttons;
+    [SerializeField] protected UIAnimate title;
+    [SerializeField] protected UIAnimate pressAnykey;
 
     public override View viewName => View.MainMenu;
 
     protected override void Awake()
     {
-        UIAnimates = new List<UIAnimate>();
-        UIAnimates.Add(title);
-        UIAnimates.Add(GetComponent<UIAnimate>());
+        UIAnimates = new List<UIAnimate>
+        {
+            GetComponent<UIAnimate>(),
+            title
+        };
         selectableContainer = GetComponentInChildren<SelectableContainer>();
     }
 
-    private void Start()
+    public override void Activate(Action onComplete = null)
     {
-        Activate(1f, 0f, ShowPressAnykey);
+        base.Activate(onComplete);
+        ShowPressAnykey();
     }
 
     protected virtual void Update()
@@ -45,7 +45,7 @@ public class MainMenuView : BaseView
     {
         if (pressAnykey != null)
         {
-            pressAnykey.Activate(.5f);
+            pressAnykey.Activate(.5f, 1f);
         }
     }
 }

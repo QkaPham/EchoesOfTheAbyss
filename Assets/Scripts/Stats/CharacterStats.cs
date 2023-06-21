@@ -17,9 +17,8 @@ public enum StatType
 public class CharacterStats : ScriptableObject
 {
     [Header("Level")]
-    public int level = 1;
-    [SerializeField]
-    private int maxLevel = 10;
+    [SerializeField] private int level = 1;
+    [SerializeField] private int maxLevel = 10;
     public bool isMaxLevel => level >= maxLevel;
     public int Level
     {
@@ -27,10 +26,10 @@ public class CharacterStats : ScriptableObject
         {
             return level;
         }
-        set
+        private set
         {
-            level = Mathf.Clamp(value, 1, 10);
-            EventManager.Raise(EventID.LevelChange, new LevelChangeNotify(level, LevelUpCost));
+            level = Mathf.Clamp(value, 1, maxLevel);
+            EventManager.Instance.Raise(EventID.LevelChange, new LevelChangeNotify(level, LevelUpCost));
         }
     }
     public int LevelUpCost => Level * 10 + 40;
@@ -87,14 +86,7 @@ public class CharacterStats : ScriptableObject
     public Stat Haste;
     public List<Item> ModifierSources = new List<Item>();
 
-    public static event Action<int, int> OnLevelChange;
-
     private Action<Notify> OnEquipmentChange;
-    private void Reset()
-    {
-        Init();
-    }
-
     private void OnEnable()
     {
         OnEquipmentChange = thisNotify =>
@@ -108,7 +100,15 @@ public class CharacterStats : ScriptableObject
                 }
             }
         };
+
+        EventManager.Instance.AddListener(EventID.EquipmentChange, OnEquipmentChange);
     }
+
+    private void OnDestroy()
+    {
+        EventManager.Instance.RemoveListener(EventID.EquipmentChange, OnEquipmentChange);
+    }
+
     public void Init()
     {
         Level = 1;
@@ -121,29 +121,27 @@ public class CharacterStats : ScriptableObject
 
         stats.AddRange(new Stat[] { Attack, Defense, MaxHealthPoint, CriticalHitChance, CriticalHitDamage, Haste });
         ClearModifier();
-
-        EventManager.AddListener(EventID.EquipmentChange, OnEquipmentChange);
     }
 
     public void AddModifiers(Item source)
     {
         ModifierSources.Add(source);
         UpdateBonusStats();
-        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
+        EventManager.Instance.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
     public void RemoveModifiers(Item source)
     {
         ModifierSources.Remove(source);
         UpdateBonusStats();
-        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
+        EventManager.Instance.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
     private void ClearModifier()
     {
         ModifierSources.Clear();
         UpdateBonusStats();
-        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
+        EventManager.Instance.Raise(EventID.StatsChange, new StatsChangeNotify(this));
     }
 
     private void UpdateBonusStats()
@@ -177,8 +175,7 @@ public class CharacterStats : ScriptableObject
         CriticalHitChance.Base += CritGrowth;
         CriticalHitDamage.Base += CritDamageGrowth;
         Haste.Base += HasteGrowth;
-        EventManager.Raise(EventID.StatsChange, new StatsChangeNotify(this));
-        OnLevelChange?.Invoke(Level, LevelUpCost);
+        EventManager.Instance.Raise(EventID.StatsChange, new StatsChangeNotify(this));
         return true;
     }
 }

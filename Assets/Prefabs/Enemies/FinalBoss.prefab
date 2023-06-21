@@ -317,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 439019775c405b2478079e3694e81921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: Suani
   enemyDescription: 
   currentState: 0
   nextState: 0
@@ -344,7 +344,7 @@ MonoBehaviour:
   laserRange: 45
   PlayerLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   bulletFirePoint: {fileID: 6508360262879965271}
   bulletRange: 12
   bulletAttackDamage: 10

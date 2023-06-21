@@ -33,15 +33,28 @@ public class Inventory : ScriptableObject
 
     private void OnEnable()
     {
-        OnLevelChange = thisNotify => { if (thisNotify is LevelChangeNotify notify) equipmentSize = notify.level; };
+        OnLevelChange = thisNotify =>
+        {
+            if (thisNotify is LevelChangeNotify notify)
+            {
+                equipmentSize = notify.level;
+            }
+        };
+
+        EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
+    }
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
     }
 
     public void Init()
     {
         if (ownedItems == null) ownedItems = new List<Item>();
         else ownedItems.Clear();
-        EventManager.AddListener(EventID.LevelChange, OnLevelChange);
+        OnChange();
     }
+
 
     public bool Add(Item item)
     {
@@ -97,8 +110,8 @@ public class Inventory : ScriptableObject
     private void OnChange()
     {
         Sort();
-        EventManager.Raise(EventID.InventoryChange, new InventoryChangeNotify(inventoryItems));
-        EventManager.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(equimentItems));
+        EventManager.Instance.Raise(EventID.InventoryChange, new InventoryChangeNotify(inventoryItems));
+        EventManager.Instance.Raise(EventID.EquipmentChange, new EquipmentChangeNotify(equimentItems));
     }
 
     public Item FindSimilarItem(Item item)

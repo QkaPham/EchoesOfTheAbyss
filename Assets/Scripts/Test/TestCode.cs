@@ -2,19 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TestCode : MonoBehaviour
 {
+    public Button button;
+    public Image image;
 
-    public string hexColor = "0x00FFFFFF";
-    public Color color = Color.white; // Default color
-
-    private void Awake()
+    private void Update()
     {
-        if (ColorUtility.TryParseHtmlString(hexColor, out Color newColor))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            color = newColor;
+            button.onClick.Invoke();
         }
+    }
+
+    public void Func()
+    {
+        Debug.Log("Click");
+        image.color = Color.gray;
     }
 }

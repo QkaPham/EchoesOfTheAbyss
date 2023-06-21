@@ -37,6 +37,8 @@ public class EnemySpawn : MonoBehaviour
     private float enemySpawnTime = 1;
     private float lastSpawnTime = float.MinValue;
 
+    public float delayOnStartRound;
+
     private bool isSpawning = true;
 
     [SerializeField]
@@ -50,6 +52,7 @@ public class EnemySpawn : MonoBehaviour
         OnRoundChange = thisNotify =>
         {
             isSpawning = true;
+            lastSpawnTime = Time.time + delayOnStartRound - enemySpawnTime;
             if (thisNotify is RoundChangeNotify notify)
             {
                 if (notify.isBossRound)
@@ -59,15 +62,21 @@ public class EnemySpawn : MonoBehaviour
             }
         };
     }
-    private void Start()
+
+    private void OnEnable()
     {
-        EventManager.AddListener(EventID.RoundEnd, StopSpawn);
-        EventManager.AddListener(EventID.RoundChange, OnRoundChange);
-        EventManager.AddListener(EventID.Victory, StopSpawn);
-        EventManager.AddListener(EventID.GameOver, StopSpawn);
-
+        EventManager.Instance.AddListener(EventID.RoundEnd, StopSpawn);
+        EventManager.Instance.AddListener(EventID.RoundChange, OnRoundChange);
+        EventManager.Instance.AddListener(EventID.Victory, StopSpawn);
+        EventManager.Instance.AddListener(EventID.GameOver, StopSpawn);
     }
-
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, StopSpawn);
+        EventManager.Instance.RemoveListener(EventID.RoundChange, OnRoundChange);
+        EventManager.Instance.RemoveListener(EventID.Victory, StopSpawn);
+        EventManager.Instance.RemoveListener(EventID.GameOver, StopSpawn);
+    }
 
     private void Update()
     {
@@ -106,7 +115,7 @@ public class EnemySpawn : MonoBehaviour
         }
         float randomValue = UnityEngine.Random.Range(0f, totalSpawnRate);
 
-        float cumulativeSpawnRate = 0f; 
+        float cumulativeSpawnRate = 0f;
 
         foreach (var enemyType in enemyTypes)
         {

@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Unity.VisualScripting;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEditor.Progress;
 
 [Serializable]
 public class Item

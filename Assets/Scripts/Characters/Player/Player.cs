@@ -62,7 +62,15 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Init();
-        EventManager.AddListener(EventID.StartGame, OnRetry);
+    }
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
     }
 
     private void Init()
