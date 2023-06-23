@@ -210,9 +210,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 698968754448084623, guid: b5e36369b2e616e468039ec0a20ccaaa, type: 2}
-  m_audioClip: {fileID: 8300000, guid: fa7d7eaec6ae05342b5c94d75ce299f0, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -354,3 +354,4 @@ MonoBehaviour:
     SerializationNodes: []
   AttachBGMSource: {fileID: 6728450353980567488}
   AttachSESource: {fileID: 6728450353638631608}
+  fadeSpeed: 0.1

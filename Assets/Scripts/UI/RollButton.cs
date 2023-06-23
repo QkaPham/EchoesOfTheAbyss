@@ -74,6 +74,7 @@ public class RollButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerClick(PointerEventData eventData)
     {
         upgradePanel.OnRollButtonClick();
+        AudioManager.Instance.PlaySFX("Click");
     }
 
     public void OnPointerEnter(PointerEventData eventData)

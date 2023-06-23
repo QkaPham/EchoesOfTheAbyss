@@ -25,6 +25,8 @@ public class SettingsPanel : BasePanel
     [SerializeField]
     private Toggle FullScreenToggle;
 
+    [SerializeField] private Button saveButton;
+
     [SerializeField]
     private SettingsProfileSO settingsProfile;
 
@@ -44,6 +46,7 @@ public class SettingsPanel : BasePanel
 
     private void Start()
     {
+        saveButton.onClick.AddListener(OnSaveButtonClick);
         LoadFromJson();
     }
 

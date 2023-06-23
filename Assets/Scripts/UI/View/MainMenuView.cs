@@ -34,6 +34,7 @@ public class MainMenuView : BaseView
         {
             if (pressAnykey != null)
             {
+                AudioManager.Instance.PlaySFX("Confirm");
                 Destroy(pressAnykey.gameObject);
                 buttons.Activate(1f);
                 UIAnimates.Add(buttons);

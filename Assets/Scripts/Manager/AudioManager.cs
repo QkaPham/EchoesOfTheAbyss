@@ -1,29 +1,22 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    private float bgmFadeSpeedRate = CONST.BGM_FADE_SPEED_RATE_HIGH;
+    public AudioSource MusicSource;
+    public AudioSource SFXSource;
 
-    private string nextBGMName;
-
-    private bool isFadeOut = false;
-
-    public AudioSource AttachBGMSource;
-    public AudioSource AttachSESource;
-
-    private Dictionary<string, AudioClip> bgmDic, seDic;
-
+    private Dictionary<string, AudioClip> bgmDic, sfxDic;
 
     protected override void Awake()
     {
         base.Awake();
 
         bgmDic = new Dictionary<string, AudioClip>();
-        seDic = new Dictionary<string, AudioClip>();
+        sfxDic = new Dictionary<string, AudioClip>();
 
         object[] bgmList = Resources.LoadAll("Audio/BGM");
         object[] seList = Resources.LoadAll("Audio/SE");
@@ -35,102 +28,75 @@ public class AudioManager : Singleton<AudioManager>
 
         foreach (AudioClip se in seList)
         {
-            seDic[se.name] = se;
+            sfxDic[se.name] = se;
         }
     }
 
     private void Start()
     {
-        AttachBGMSource.volume = PlayerPrefs.GetFloat(CONST.BGM_VOLUME_KEY, CONST.BGM_VOLUME_DEFAULT);
-        AttachSESource.volume = PlayerPrefs.GetFloat(CONST.SE_VOLUME_KEY, CONST.SE_VOLUME_DEFAULT);
+        MusicSource.volume = 0f;
+        SFXSource.volume = 1f;
     }
 
-    public void PlaySE(string seName, float delay = 0f)
+    public void PlaySFX(string sfxName, float delay = 0f)
     {
-        if (!seDic.ContainsKey(seName))
+        if (!sfxDic.ContainsKey(sfxName))
         {
-            Debug.LogError(seName + " There is no SE named");
+            Debug.LogError(sfxName + " There is no SE named");
             return;
         }
-
-        //nextSEName = seName;
-        StartCoroutine(DelayPlaySE(seName, delay));
+        StartCoroutine(DelayPlaySFX(sfxName, delay));
     }
 
-    private IEnumerator DelayPlaySE(string seName, float delay)
+    private IEnumerator DelayPlaySFX(string sfxName, float delay)
     {
         yield return new WaitForSeconds(delay);
-        AttachSESource.PlayOneShot(seDic[seName] as AudioClip);
+        SFXSource.PlayOneShot(sfxDic[sfxName]);
     }
 
-    public void PlayBGM(string bgmName, float fadeSpeedRare = CONST.BGM_FADE_SPEED_RATE_HIGH)
+
+    public void PlayMusic(string bgmName, float fadeOutDuration = 5f, float fadeInDuration = 5f)
     {
         if (!bgmDic.ContainsKey(bgmName))
         {
-            if (!seDic.ContainsKey(bgmName))
-            {
-                Debug.LogError(bgmName + "There is no BGM named");
-                return;
-            }
+            Debug.LogError(bgmName + "There is no BGM named");
+            return;
         }
 
-        if (!AttachBGMSource.isPlaying)
+        if (!MusicSource.isPlaying)
         {
-            nextBGMName = "";
-            AttachBGMSource.clip = bgmDic[bgmName] as AudioClip;
-            AttachBGMSource.Play();
+            MusicSource.volume = 0f;
+            MusicSource.clip = bgmDic[bgmName];
+            FadeMusicVolume(1, fadeInDuration);
+            MusicSource.Play();
         }
-        else if (AttachBGMSource.clip.name != bgmName)
+
+        else if (MusicSource.clip.name != bgmName)
         {
-            nextBGMName = bgmName;
-            FadeOutBGM(fadeSpeedRare);
+            //FadeMusicVolume(0, fadeOutDuration, () =>
+            //{
+                MusicSource.clip = bgmDic[bgmName];
+                MusicSource.Play();
+                FadeMusicVolume(1, fadeInDuration);
+            //});
         }
     }
 
-    public void FadeOutBGM(float fadeSpeedRate = CONST.BGM_FADE_SPEED_RATE_LOW)
+    public void FadeMusicVolume(float toValue = .5f, float duration = 4f, TweenCallback OnComplete = null)
     {
-        bgmFadeSpeedRate = fadeSpeedRate;
-        isFadeOut = true;
-    }
-
-    private void Update()
-    {
-        if (!isFadeOut) return;
-        AttachBGMSource.volume -= Time.deltaTime * bgmFadeSpeedRate;
-        if (AttachBGMSource.volume <= 0)
-        {
-            AttachBGMSource.Stop();
-            AttachBGMSource.volume = PlayerPrefs.GetFloat(CONST.BGM_VOLUME_KEY, CONST.BGM_VOLUME_DEFAULT);
-            isFadeOut = false;
-            if (!string.IsNullOrEmpty(nextBGMName))
-            {
-                PlayBGM(nextBGMName);
-            }
-        }
-
-    }
-
-    public void ChangeBGMVolume(float BGMVolume)
-    {
-        AttachBGMSource.volume = BGMVolume;
-        PlayerPrefs.SetFloat(CONST.BGM_VOLUME_KEY, BGMVolume);
-    }
-    public void ChangeSEVolume(float SEVolume)
-    {
-        AttachSESource.volume = SEVolume;
-        PlayerPrefs.SetFloat(CONST.SE_VOLUME_KEY, SEVolume);
+        MusicSource.DOFade(toValue, duration).SetUpdate(true).OnComplete(OnComplete);
     }
 }
+
 public class CONST
 {
     //key and default value for saving volume
     public const string BGM_VOLUME_KEY = "BGM_VOLUME_KEY";
     public const string SE_VOLUME_KEY = "SE_VOLUME_KEY";
-    public const float BGM_VOLUME_DEFAULT = .2f;
+    public const float BGM_VOLUME_DEFAULT = 1f;
     public const float SE_VOLUME_DEFAULT = 1f;
 
     //Time it take for the BGM to fade
     public const float BGM_FADE_SPEED_RATE_HIGH = .9f;
     public const float BGM_FADE_SPEED_RATE_LOW = .3f;
-
 }

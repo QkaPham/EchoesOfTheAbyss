@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -11,12 +12,40 @@ public class TestCode : MonoBehaviour
     public Button button;
     public Image image;
 
+    public AudioClip audioClip;
+
+    public AudioSource audioSource1;
+    public float fadeOutTime;
+    public float fadeSpeed;
+    public float audioClipTime;
+
+    public AudioSource audioSource2;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            button.onClick.Invoke();
+            audioSource1.Stop();
+            audioSource1.Play();
         }
+
+        audioClipTime = audioSource1.time;
+
+        if (audioSource1.time > fadeOutTime)
+        {
+            if (!audioSource2.isPlaying)
+            {
+                audioSource2.Play();
+            }
+            audioSource1.volume -= fadeSpeed * Time.deltaTime;
+            audioSource2.volume += fadeSpeed * Time.deltaTime;
+        }
+
+    }
+
+    private void Awake()
+    {
+        Debug.Log(audioClip.length);
     }
 
     public void Func()

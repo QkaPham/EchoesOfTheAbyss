@@ -18,12 +18,15 @@ public class GameRound : MonoBehaviour
         private set
         {
             currentRound = value;
-            EventManager.Instance.Raise(EventID.RoundChange, new RoundChangeNotify(currentRound, currentRound == roundNumber));
+            EventManager.Instance.Raise(EventID.RoundChange, new RoundChangeNotify(currentRound, currentRound == bossRound));
         }
     }
 
     [SerializeField]
     private int roundNumber = 5;
+
+    [SerializeField]
+    private int bossRound = 5;
 
     [SerializeField]
     private float duration = 10;
@@ -45,7 +48,7 @@ public class GameRound : MonoBehaviour
     }
 
     private bool stopTimer = false;
-    private Action<Notify> OnStartGame, OnStartNextRound, OnGameOver;
+    private Action<Notify> OnStartNextRound, OnGameOver;
 
     private void Awake()
     {
@@ -82,7 +85,7 @@ public class GameRound : MonoBehaviour
 
     private void RoundUpdate()
     {
-        if (CurrentRound != roundNumber && !stopTimer)
+        if (!stopTimer)
         {
             Timer -= Time.deltaTime;
         }
@@ -99,8 +102,15 @@ public class GameRound : MonoBehaviour
     {
         CurrentRound++;
         Time.timeScale = 1f;
-        Timer = duration;
-        stopTimer = false;
+        if (CurrentRound != bossRound)
+        {
+            Timer = duration;
+            stopTimer = false;
+        }
+        else
+        {
+            stopTimer = true;
+        }
     }
 
     [SerializeField]

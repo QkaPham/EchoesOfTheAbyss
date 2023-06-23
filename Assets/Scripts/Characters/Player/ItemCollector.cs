@@ -49,7 +49,7 @@ public class ItemCollector : MonoBehaviour
         Fragment fragment = collision.gameObject.GetComponent<Fragment>();
         if (fragment != null)
         {
-            AudioManager.Instance.PlaySE("Collect");
+            AudioManager.Instance.PlaySFX("Collect");
             currency.Gain(fragment.Amount);
             fragment.Release();
         }

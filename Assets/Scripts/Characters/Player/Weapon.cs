@@ -79,7 +79,7 @@ public class Weapon : MonoBehaviour
         lastAttackTime = Time.time;
         RotateToMouse();
         animator.SetTrigger("Swing");
-        AudioManager.Instance.PlaySE("Slash");
+        AudioManager.Instance.PlaySFX("Slash");
         hitbox.DealDamage(stats, damageMultifier);
     }
 

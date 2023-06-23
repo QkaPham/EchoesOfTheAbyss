@@ -39,21 +39,21 @@ public class CharacterStats : ScriptableObject
     public int LevelUpCost => Level * 10 + 40;
 
     [Header("Starting Stats")]
-    public int BaseAttack = 12;
-    public int BaseDefense = 5;
-    public int BaseMaxHealth = 100;
+    public float BaseAttack = 12;
+    public float BaseDefense = 5;
+    public float BaseMaxHealth = 100;
     public float BaseCrit = 0.1f;
     public float BaseCritDamage = 0.5f;
     public float BaseHaste = 0.5f;
     public float BaseDodge = 0.0f;
     public float BaseLuck = 0.0f;
     public float BaseRegen = 0.0f;
-
+    public float BaseSpeed = 80f;
 
     [Header("Stats Growth")]
-    public int AttackGrowth = 2;
-    public int DefenseGrowth = 1;
-    public int MaxHealthGrowth = 10;
+    public float AttackGrowth = 2;
+    public float DefenseGrowth = 1;
+    public float MaxHealthGrowth = 10;
     public float CritGrowth = 0.01f;
     public float CritDamageGrowth = 0.05f;
     public float HasteGrowth = 0.05f;

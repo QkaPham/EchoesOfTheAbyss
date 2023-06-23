@@ -44,11 +44,16 @@ public class GamePanel : BasePanel
         {
             if (thisNotify is RoundChangeNotify notify)
             {
+                Debug.Log(notify.isBossRound + " " + notify.round);
                 UpdateRoundText(notify.round);
                 if (notify.isBossRound)
                 {
                     ShowBossHPBar(true);
                     UpdateRoundtimerText("");
+                }
+                else
+                {
+                    ShowBossHPBar(false);
                 }
             }
         };
@@ -79,7 +84,7 @@ public class GamePanel : BasePanel
         EventManager.Instance.RemoveListener(EventID.RoundChange, OnRoundChange);
 
         EventManager.Instance.RemoveListener(EventID.BossHealthChange, OnBossHealthChange);
-    }   
+    }
 
     private void Update()
     {

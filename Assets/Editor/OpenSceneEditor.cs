@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
-public class OpenScenEditor : EditorWindow
+public class OpenSceneEditor : EditorWindow
 {
     private static string _scenePath = "Assets/Scenes/{0}.unity";
     [MenuItem("OpenScene/Starting", false, 1)]
@@ -22,7 +22,7 @@ public class OpenScenEditor : EditorWindow
         EditorSceneManager.OpenScene
            (string.Format(_scenePath, "MainMenu"), OpenSceneMode.Single);
     }
-    [MenuItem("OpenScene/GameLevel", false, 1)]
+    [MenuItem("OpenScene/Game", false, 1)]
     public static void Demo()
     {
         EditorSceneManager.SaveScene(SceneManager.GetActiveScene());

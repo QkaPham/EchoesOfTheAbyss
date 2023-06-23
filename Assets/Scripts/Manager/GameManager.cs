@@ -9,14 +9,34 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] private SceneLoader sceneLoader;
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
+    private void Start()
+    {
+        
+        sceneLoader.LoadScene("MainMenu", () =>
+        {
+            UIManager.Instance.Show(View.MainMenu);
+            AudioManager.Instance.PlayMusic("WhenInDoubt", 0, 4);
+        });
+    }
+
+
     public void StartGame()
     {
+        AudioManager.Instance.FadeMusicVolume(0, 2);
+       
         sceneLoader.LoadScene("Game", () =>
         {
             InputManager.Instance.EnablePlayerInput(true);
             EventManager.Instance.Raise(EventID.StartGame, null);
             UIManager.Instance.Show(View.Game, null, false);
             SceneManager.UnloadSceneAsync("MainMenu");
+            AudioManager.Instance.PlayMusic("BeforeItAllBegan", 2, 2);
         });
     }
 
@@ -46,24 +66,28 @@ public class GameManager : Singleton<GameManager>
 
     public void ReturnToMainMenu()
     {
+        AudioManager.Instance.FadeMusicVolume(0, 2);
         sceneLoader.LoadScene("MainMenu", () =>
         {
             InputManager.Instance.EnablePlayerInput(false);
             UIManager.Instance.Show(View.MainMenu, null, false);
             UIManager.Instance.ActiveDepthOfField(false);
             SceneManager.UnloadSceneAsync("Game");
+            AudioManager.Instance.PlayMusic("WhenInDoubt", 2, 4);
         });
     }
 
     public void RoundEnd()
     {
         UIManager.Instance.Show(View.Upgrade);
+        AudioManager.Instance.FadeMusicVolume(0.5f);
         InputManager.Instance.EnablePlayerInput(false);
         EventManager.Instance.Raise(EventID.RoundEnd, null);
     }
 
     public void StartNextRound()
     {
+        AudioManager.Instance.FadeMusicVolume(1f);
         UIManager.Instance.ShowLast();
         EventManager.Instance.Raise(EventID.StartNextRound, null);
         InputManager.Instance.EnablePlayerInput(true);

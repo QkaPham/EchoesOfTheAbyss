@@ -11,15 +11,15 @@ public class UIElement : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IS
 
     public void OnSelect(BaseEventData eventData)
     {
-        AudioManager.Instance.PlaySE("Select");
+        AudioManager.Instance.PlaySFX("Select");
     }
 
     public void OnSubmit(BaseEventData eventData)
     {
-        AudioManager.Instance.PlaySE("Confirm");
+        AudioManager.Instance.PlaySFX("Confirm");
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        AudioManager.Instance.PlaySE("Confirm");
+        AudioManager.Instance.PlaySFX("Confirm");
     }
 }

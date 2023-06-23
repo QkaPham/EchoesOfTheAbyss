@@ -5,6 +5,17 @@ using UnityEngine.UI;
 
 public class MainMenuPanel : BasePanel
 {
+    [SerializeField] protected Button StartGameButton;
+    [SerializeField] protected Button SettingsButton;
+    [SerializeField] protected Button QuitButton;
+
+    private void Start()
+    {
+        StartGameButton.onClick.AddListener(OnStartGameButtonClick);
+        SettingsButton.onClick.AddListener(OnSettingsButtonClick);
+        QuitButton.onClick.AddListener(OnQuitButtonClick);
+    }
+
     public void OnStartGameButtonClick()
     {
         GameManager.Instance.StartGame();

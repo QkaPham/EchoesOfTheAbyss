@@ -8,14 +8,6 @@ public class SceneLoader : MonoBehaviour
 {
     private Action TempAction;
 
-    private void Start()
-    {
-        LoadScene("MainMenu", () =>
-        {
-            UIManager.Instance.Show(View.MainMenu);
-        });
-    }
-
     public void LoadScene(string scene, Action onSceneLoaded = null, bool showLoadScene = true)
     {
         TempAction = onSceneLoaded;

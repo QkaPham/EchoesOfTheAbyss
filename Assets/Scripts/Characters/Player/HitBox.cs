@@ -44,7 +44,7 @@ public class HitBox : MonoBehaviour
     {
         int count = DamageableObjects.Count;
         if (count == 0) return;
-        AudioManager.Instance.PlaySE("Hit");
+        AudioManager.Instance.PlaySFX("Hit");
         for (int i = count - 1; i >= 0; i--)
         {
             float damage = DamageCalculate(out bool isCrit, stats.Attack.Total, stats.CriticalHitChance.Total, stats.CriticalHitDamage.Total, multifier);
