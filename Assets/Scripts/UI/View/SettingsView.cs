@@ -5,20 +5,17 @@ using UnityEngine;
 
 public class SettingsView : BaseView
 {
-    public string str;
     public override View viewName => View.Settings;
 
     public override void Activate(Action onComplete = null)
     {
         base.Activate(onComplete);
         UIManager.Instance.ActiveDepthOfField(true);
-        AudioManager.Instance.PlaySFX(str);
     }
 
-    public override void DeActivate(Action onComplete = null)
+    public override void DeActivate(Action onComplete = null, bool playSFX = true)
     {
         base.DeActivate(onComplete);
         UIManager.Instance.ActiveDepthOfField(false);
-        AudioManager.Instance.PlaySFX(str);
     }
 }

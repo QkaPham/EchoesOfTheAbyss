@@ -50,7 +50,7 @@ public abstract class BaseEnemy : MonoBehaviour
     public EnemyStats stats;
     private bool stopAttack;
 
-    protected Action<Notify> OnPlayerDeath;
+    protected Action<Notify> OnPlayerDeath, OnRetry;
 
     protected virtual void Awake()
     {
@@ -58,7 +58,12 @@ public abstract class BaseEnemy : MonoBehaviour
         animator = GetComponent<Animator>();
         health = GetComponentInChildren<EnemyHealth>();
 
-        OnPlayerDeath = thisNotify => StopAttack();
+        OnPlayerDeath = thisNotify =>
+        {
+            StopAttack();
+        };
+
+        OnRetry = thisNotify => Destroy();
     }
 
     protected virtual void Start()
@@ -66,14 +71,16 @@ public abstract class BaseEnemy : MonoBehaviour
         stats.Init();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.PlayerDeath, OnPlayerDeath);
+        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
     protected virtual void Update()
@@ -146,10 +153,10 @@ public abstract class BaseEnemy : MonoBehaviour
     /// <summary>
     /// Function will be call when death animation done.
     /// </summary>
-    public virtual void Destroy()
+    public virtual void Destroy(float time = 0f)
     {
         Drop();
-        Destroy(gameObject);
+        Destroy(gameObject, time);
     }
 
     public virtual void Hurt()

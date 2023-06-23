@@ -6,27 +6,29 @@ using UnityEngine.Pool;
 
 public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
 {
-    Action<Notify> OnRetry, OnRoundEnd, OnVictory;
+    Action<Notify> OnRoundEnd, OnVictory;
     protected override void Awake()
     {
         base.Awake();
         OnRoundEnd = thisNotify => Death();
         OnVictory = thisNotify => Death();
-        OnRetry = thisNotify => Destroy();
+        //OnRetry = thisNotify => Destroy();
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
         EventManager.Instance.AddListener(EventID.Victory, OnVictory);
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        //EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
-    protected void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         animator.SetTrigger("Reset");
         EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
         EventManager.Instance.RemoveListener(EventID.Victory, OnVictory);
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        //EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;
@@ -36,13 +38,13 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         this.pool = pool;
     }
 
-    public override void Destroy()
+    public override void Destroy(float time = 0f)
     {
         if (health.isDeath)
         {
             Drop();
         }
-        Realease();
+        Realease(time);
     }
 
     public virtual void Realease(float delay = 0f)

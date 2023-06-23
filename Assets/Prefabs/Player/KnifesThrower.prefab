@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangeWeaponPrefab: {fileID: 5207439744757054850, guid: d70e8063d283bac4185f363243cc4446, type: 3}
   firePoint: {fileID: 0}
+  throwKnifeSFX: ThrowKnife
   baseAttackCooldown: 1
   manaConsume: 20
   range: 10

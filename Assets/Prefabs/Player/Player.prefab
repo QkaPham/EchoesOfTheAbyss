@@ -15447,6 +15447,7 @@ MonoBehaviour:
   stamina: {fileID: 11400000, guid: 41f00deacf68db94b87cde362ab9aae7, type: 2}
   weapon: {fileID: 6303552142035690746}
   rangeWeapon: {fileID: 2456548263356282122}
+  hurtSFX: Hurt
 --- !u!95 &1695829787
 Animator:
   serializedVersion: 5

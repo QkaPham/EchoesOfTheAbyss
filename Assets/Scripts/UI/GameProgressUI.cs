@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameProgressUI : MonoBehaviour
 {
-    [SerializeField]
-    protected Sprite pin;
+    [SerializeField] protected Sprite pin;
+    [SerializeField] protected Sprite normal;
+    [SerializeField] protected Sprite defeat;
 
-    [SerializeField]
-    protected Sprite defeat;
+    [SerializeField] protected Color bossRoundColor;
+    [SerializeField] protected Color normalColor;
+    [SerializeField] protected Color defeatColor;
 
-    [SerializeField]
-    private Color defeatColor;
+    public void Reset()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Image image = transform.GetChild(i).GetChild(0).GetComponent<Image>();
+            if (i == 4)
+            {
+                image.color = bossRoundColor;
+                image.sprite = normal;
+            }
+            else
+            {
+                image.color = normalColor;
+            }
+        }
+    }
 
     public void UpdateProgress(int round)
     {

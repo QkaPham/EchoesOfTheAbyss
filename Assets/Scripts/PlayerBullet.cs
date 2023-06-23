@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class PlayerBullet : MonoBehaviour
 {
-    [SerializeField]
-    protected Rigidbody2D rb;
-
-    public CharacterStats stats;
+    [SerializeField] protected Rigidbody2D rb;
+    [SerializeField] protected string stabSFX;
+    [HideInInspector] public CharacterStats stats;
     public float damageMultifier;
 
     private void Awake()
@@ -31,6 +30,7 @@ public class PlayerBullet : MonoBehaviour
         EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
         if (enemyHealth != null)
         {
+            AudioManager.Instance.PlaySFX(stabSFX);
             float damage = DamageCalculate(out bool isCrit, stats, damageMultifier);
             enemyHealth.TakeDamage(damage, isCrit);
             Destroy(gameObject);

@@ -27,6 +27,8 @@ public abstract class BaseView : MonoBehaviour
     protected SelectableContainer selectableContainer;
     public float defaultDuration = 1f;
     public float defaultDelay = 0f;
+    public string ActiveSFX = "Pump";
+
     protected virtual void Awake()
     {
         UIAnimates = GetComponentsInChildren<UIAnimate>().ToList();
@@ -35,12 +37,16 @@ public abstract class BaseView : MonoBehaviour
 
     public virtual void Activate(Action onComplete = null)
     {
+        Debug.Log(gameObject.name + "active");
         Activate(defaultDuration, defaultDelay, onComplete);
+        AudioManager.Instance.PlaySFX(ActiveSFX);
     }
 
-    public virtual void DeActivate(Action onComplete = null)
+    public virtual void DeActivate(Action onComplete = null, bool playSFX = true)
     {
+        Debug.Log(gameObject.name + "deactive");
         DeActivate(defaultDuration, defaultDelay, onComplete);
+        if (playSFX) AudioManager.Instance.PlaySFX(ActiveSFX);
     }
 
     public virtual void Activate(float duration, float delay = 0f, Action onComplete = null)

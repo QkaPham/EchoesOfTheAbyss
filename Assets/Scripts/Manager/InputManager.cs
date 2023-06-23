@@ -96,7 +96,10 @@ public class InputManager : Singleton<InputManager>
 
     private void MousePos(InputAction.CallbackContext ctx)
     {
-        MousePosition = ctx.ReadValue<Vector2>();
+        if (ctx.ReadValue<Vector2>() != Vector2.zero)
+        {
+            MousePosition = ctx.ReadValue<Vector2>();
+        }
     }
     private void MouseMove(InputAction.CallbackContext ctx)
     {

@@ -20,7 +20,6 @@ public class Dash : State
     public override void OnStateEnter()
     {
         base.OnStateEnter();
-        
         LastDashTime = Time.time;
         dashDir = InputManager.Instance.DashDir;
         player.PlayDashEffect(dashDir);

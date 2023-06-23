@@ -33,9 +33,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Weapon weapon;
     [SerializeField] private RangeWeapon rangeWeapon;
     private StateMachine stateMachine;
+    protected string dashSFX = "Dash";
+    [SerializeField] protected string hurtSFX = "Hurt";
 
     private Action<Notify> OnRetry;
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,16 +66,17 @@ public class Player : MonoBehaviour
     }
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
+        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
     private void Init()
     {
+        Debug.Log("Init");
         animator.SetTrigger("Reset");
         currency.Init();
         stats.Init();
@@ -119,6 +121,7 @@ public class Player : MonoBehaviour
     public void Hurt()
     {
         animator.SetTrigger("Hurt");
+        AudioManager.Instance.PlaySFX(hurtSFX);
     }
 
     private void PlayHurtParticle()
@@ -129,6 +132,7 @@ public class Player : MonoBehaviour
     public void Death()
     {
         GameManager.Instance.GameOver();
+        EventManager.Instance.Raise(EventID.PlayerDeath, null);
         animator.SetTrigger("Death");
         DeathParticle.Play();
         weapon.Destroy();
@@ -144,5 +148,6 @@ public class Player : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, dashDirection);
         dashParticle.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         dashParticle.Play();
+        AudioManager.Instance.PlaySFX(dashSFX);
     }
 }

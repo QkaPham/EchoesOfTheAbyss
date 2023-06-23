@@ -1,12 +1,22 @@
-using UnityEngine;
-using UnityEngine.Rendering;
 using System.Collections;
-using UnityEngine.EventSystems;
-using DG.Tweening;
-using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PausePanel : BasePanel
 {
+    [SerializeField] protected Button resumeButton;
+    [SerializeField] protected Button settingsButton;
+    [SerializeField] protected Button mainmenuButton;
+    [SerializeField] protected Button quitButton;
+
+    private void Start()
+    {
+        resumeButton.onClick.AddListener(OnResumeButtonClick);
+        settingsButton.onClick.AddListener(OnSettingsButtonClick);
+        mainmenuButton.onClick.AddListener(OnMainMenuButtonClick);
+        quitButton.onClick.AddListener(OnQuitButtonClick);
+    }
+
     private void Update()
     {
         if (InputManager.Instance.Cancel)

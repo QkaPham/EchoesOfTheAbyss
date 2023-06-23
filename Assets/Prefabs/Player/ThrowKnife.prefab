@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  stabSFX: Stab1
   stats: {fileID: 11400000, guid: b0e5917c561a06b4c825554028170112, type: 2}
   damageMultifier: 0.6
 --- !u!50 &5207439744757054849

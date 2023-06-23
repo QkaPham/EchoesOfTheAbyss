@@ -448,9 +448,9 @@ public class BossEnemy : BaseEnemy
         GameManager.Instance.Victory();
     }
 
-    public override void Destroy()
+    public override void Destroy(float time = 0f)
     {
-        Destroy(gameObject);
+        Destroy(gameObject, time);
     }
 
     protected override void Flip()

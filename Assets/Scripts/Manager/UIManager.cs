@@ -72,14 +72,15 @@ public class UIManager : Singleton<UIManager>
         history.Clear();
     }
 
-    public void Show(View viewName, Action onComplete = null, bool remember = true)
+    public void Show(View viewName, Action onComplete = null, bool remember = true, float delayTime = 0f)
     {
-        StartCoroutine(DelayShow(viewName, onComplete, remember));
+        StartCoroutine(DelayShow(viewName, onComplete, remember, delayTime));
     }
 
-    private IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true)
+    private IEnumerator DelayShow(View viewName, Action onComplete = null, bool remember = true, float delayTime = 0f)
     {
         yield return null;
+        yield return new WaitForSeconds(delayTime);
         viewsMap.TryGetValue(viewName, out BaseView view);
         if (view != null)
         {

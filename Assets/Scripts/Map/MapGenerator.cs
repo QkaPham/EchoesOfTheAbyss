@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] propPrefabs;
+    [SerializeField] private GameObject[] propPrefabs;
     public float propRate = 0.05f;
-    [SerializeField]
-    private GameObject borderPrefabs;
+    [SerializeField] private GameObject borderPrefabs;
 
-
-    public GameObject obstaclePrefab;
+    // public GameObject obstaclePrefab;
     public float obstacleRate = 0.05f;
 
     public int width = 10;
@@ -21,26 +18,24 @@ public class MapGenerator : MonoBehaviour
     public bool isUseSeed;
     public int seed = 12345;
 
-    Action<Notify> OnStartGame;
+    protected Action<Notify> OnRetry;
     private void Awake()
     {
-        //OnStartGame = thisNotify => GenerateObstacles();
+        OnRetry = thisNotify => GenerateObstacles();
+
         GenerateObstacles();
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        //EventManager.AddListiener(EventName.StartGame, OnStartGame);
+        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
-    //private void OnEnable()
-    //{
-    //    GameManager.OnStartGame += GenerateObstacles;
-    //}
 
-    //private void OnDisable()
-    //{
-    //    GameManager.OnStartGame -= GenerateObstacles;
-    //}
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+    }
+
     private void GenerateObstacles()
     {
         DestroyAllChild();
@@ -68,7 +63,7 @@ public class MapGenerator : MonoBehaviour
 
                 if (rand >= propRate && rand < propRate + obstacleRate)
                 {
-                    Instantiate(obstaclePrefab, new Vector2(x, y) + UnityEngine.Random.insideUnitCircle, Quaternion.identity, transform);
+                    // Instantiate(obstaclePrefab, new Vector2(x, y) + UnityEngine.Random.insideUnitCircle, Quaternion.identity, transform);
                 }
             }
         }

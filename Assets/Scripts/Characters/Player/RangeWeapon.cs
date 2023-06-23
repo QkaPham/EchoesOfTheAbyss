@@ -17,6 +17,9 @@ public class RangeWeapon : MonoBehaviour
     protected Vector3 fireDirection => (InputManager.Instance.MouseOnWorld - (Vector2)firePoint.position).normalized;
 
     [SerializeField]
+    protected string throwKnifeSFX = "ThrowKnife";
+
+    [SerializeField]
     protected float baseAttackCooldown;
     [SerializeField]
     protected float manaConsume;
@@ -67,6 +70,7 @@ public class RangeWeapon : MonoBehaviour
             float randAngle = Random.Range(-angle/2,angle/2);
             Vector2 direction = Quaternion.Euler(0f, 0f, randAngle) * fireDirection;
             playerBullet.Init(firePoint.position, direction, range, speed);
+            AudioManager.Instance.PlaySFX(throwKnifeSFX);
             yield return new WaitForSeconds(delayPerFire);
         }
     }

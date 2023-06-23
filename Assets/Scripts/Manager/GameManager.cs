@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        
+
         sceneLoader.LoadScene("MainMenu", () =>
         {
             UIManager.Instance.Show(View.MainMenu);
@@ -29,7 +29,7 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         AudioManager.Instance.FadeMusicVolume(0, 2);
-       
+
         sceneLoader.LoadScene("Game", () =>
         {
             InputManager.Instance.EnablePlayerInput(true);
@@ -79,7 +79,7 @@ public class GameManager : Singleton<GameManager>
 
     public void RoundEnd()
     {
-        UIManager.Instance.Show(View.Upgrade);
+        UIManager.Instance.Show(View.Upgrade, null, true, 1f);
         AudioManager.Instance.FadeMusicVolume(0.5f);
         InputManager.Instance.EnablePlayerInput(false);
         EventManager.Instance.Raise(EventID.RoundEnd, null);
@@ -95,7 +95,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GameOver()
     {
-        UIManager.Instance.Show(View.GameOver);
+        UIManager.Instance.Show(View.GameOver, null, true, 1f);
         EventManager.Instance.Raise(EventID.GameOver, null);
         InputManager.Instance.EnablePlayerInput(false);
     }

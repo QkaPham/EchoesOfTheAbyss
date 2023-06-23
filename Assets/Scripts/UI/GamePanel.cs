@@ -44,7 +44,6 @@ public class GamePanel : BasePanel
         {
             if (thisNotify is RoundChangeNotify notify)
             {
-                Debug.Log(notify.isBossRound + " " + notify.round);
                 UpdateRoundText(notify.round);
                 if (notify.isBossRound)
                 {
