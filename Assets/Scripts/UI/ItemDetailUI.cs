@@ -5,10 +5,10 @@ using UnityEngine.UI;
 public class ItemDetailUI : MonoBehaviour
 {
     [SerializeField] private CanvasGroup contents;
+
     [SerializeField] private Image itemIcon;
     [SerializeField] private Image itemBackGround;
     [SerializeField] private Image itemLight;
-    [SerializeField] private RarityColor colors;
 
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI modifierStatsText;
@@ -19,7 +19,6 @@ public class ItemDetailUI : MonoBehaviour
     [SerializeField] private UnequipButton unequipButton;
     [SerializeField] private RecycleButton recycleButton;
     [SerializeField] private TextMeshProUGUI recyclePrice;
-
 
     private void Awake()
     {
@@ -36,8 +35,8 @@ public class ItemDetailUI : MonoBehaviour
 
             itemIcon.color = Color.white;
             itemIcon.sprite = item.profile.icon;
-            itemBackGround.color = colors.DarkColor(item.Rarity);
-            itemLight.color = colors.LightColor(item.Rarity);
+            itemBackGround.color = item.DarkColor;
+            itemLight.color = item.LightColor;
 
             modifierStatsText.text = item.ModifierStat();
             modifierValuesText.text = item.ModifierValue();
@@ -45,25 +44,12 @@ public class ItemDetailUI : MonoBehaviour
             equipButton.gameObject.SetActive(!item.isEquip);
             unequipButton.gameObject.SetActive(item.isEquip);
             recycleButton.gameObject.SetActive(true);
-            recycleButton.SetPriceText(item.price);
+            recycleButton.SetPriceText(item.RecyclePrice);
 
         }
         else
         {
             contents.alpha = 0;
-            //itemName.text = "";
-            //stars.ShowStar(0);
-
-            //itemIcon.color = Color.clear;
-            //itemBackGround.color = Color.clear;
-            //itemLight.color = Color.clear;
-
-            //modifierStatsText.text = "";
-            //modifierValuesText.text = "";
-
-            //equipButton.gameObject.SetActive(false);
-            //unequipButton.gameObject.SetActive(false);
-            //recycleButton.gameObject.SetActive(false);
         }
     }
 

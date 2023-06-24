@@ -9,7 +9,6 @@ public class ItemSlotUI : MonoBehaviour, ISelectHandler
     [SerializeField] private Image lightImage;
     [SerializeField] private Image border;
     [SerializeField] private ItemStars stars;
-    [SerializeField] private RarityColor colors;
     [HideInInspector] public ItemDetailUI itemDetailUI;
     private Item item;
     public Item Item { get; private set; }
@@ -26,8 +25,8 @@ public class ItemSlotUI : MonoBehaviour, ISelectHandler
             Icon.sprite = item.profile.icon;
 
             stars.ShowStar(item.Rarity);
-            backGround.color = colors.DarkColor(item.Rarity);
-            lightImage.color = colors.LightColor(item.Rarity);
+            backGround.color = item.DarkColor;
+            lightImage.color = item.LightColor;
         }
         else
         {

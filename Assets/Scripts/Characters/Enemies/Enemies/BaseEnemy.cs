@@ -68,7 +68,6 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        stats.Init();
     }
 
     protected virtual void OnEnable()
@@ -166,7 +165,7 @@ public abstract class BaseEnemy : MonoBehaviour
 
     public virtual void EndHurt()
     {
-        if (!health.isDeath)
+        if (currentState == EnemyState.Hurt && nextState != EnemyState.Death)
         {
             nextState = EnemyState.Idle;
         }

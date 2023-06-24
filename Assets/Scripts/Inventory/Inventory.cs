@@ -29,7 +29,7 @@ public class Inventory : ScriptableObject
     public bool isInventoryFull => inventorySize <= ownedItems.Where(item => !item.isEquip).Count();
     public bool isEquipmentFull => equipmentSize <= ownedItems.Where(item => item.isEquip).Count();
 
-    private Action<Notify> OnLevelChange;
+    public Action<Notify> OnLevelChange;
 
     private void OnEnable()
     {
@@ -40,12 +40,6 @@ public class Inventory : ScriptableObject
                 equipmentSize = notify.level;
             }
         };
-
-        EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
-    }
-    private void OnDisable()
-    {
-        EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
     }
 
     public void Init()
@@ -98,7 +92,7 @@ public class Inventory : ScriptableObject
     {
         if (item == null) return 0;
         Remove(item);
-        return item.price;
+        return item.Price;
     }
 
     public void Upgrade(Item item)

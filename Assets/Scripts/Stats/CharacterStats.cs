@@ -36,7 +36,8 @@ public class CharacterStats : ScriptableObject
             EventManager.Instance.Raise(EventID.LevelChange, new LevelChangeNotify(level, LevelUpCost));
         }
     }
-    public int LevelUpCost => Level * 10 + 40;
+    public int LevelUpCost => LevelUpCosts[Level - 1];
+    public int[] LevelUpCosts = { 100, 260, 570, 980, 1420, 2170, 2940, 3720, 4650, 5900 };
 
     [Header("Starting Stats")]
     public float BaseAttack = 12;
@@ -94,7 +95,8 @@ public class CharacterStats : ScriptableObject
     public Stat Haste;
     public List<Item> ModifierSources = new List<Item>();
 
-    private Action<Notify> OnEquipmentChange;
+    public Action<Notify> OnEquipmentChange;
+
     private void OnEnable()
     {
         OnEquipmentChange = thisNotify =>
@@ -107,14 +109,7 @@ public class CharacterStats : ScriptableObject
                     AddModifiers(item);
                 }
             }
-        };
-
-        EventManager.Instance.AddListener(EventID.EquipmentChange, OnEquipmentChange);
-    }
-
-    private void OnDestroy()
-    {
-        EventManager.Instance.RemoveListener(EventID.EquipmentChange, OnEquipmentChange);
+        };       
     }
 
     public void Init()

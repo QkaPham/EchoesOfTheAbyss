@@ -17,10 +17,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-
         sceneLoader.LoadScene("MainMenu", () =>
         {
             UIManager.Instance.Show(View.MainMenu);
+            AudioManager.Instance.UnMuteSFX();
             AudioManager.Instance.PlayMusic("WhenInDoubt", 0, 4);
         });
     }
@@ -32,10 +32,10 @@ public class GameManager : Singleton<GameManager>
 
         sceneLoader.LoadScene("Game", () =>
         {
+            sceneLoader.UnloadScene("MainMenu");
             InputManager.Instance.EnablePlayerInput(true);
             EventManager.Instance.Raise(EventID.StartGame, null);
             UIManager.Instance.Show(View.Game, null, false);
-            SceneManager.UnloadSceneAsync("MainMenu");
             AudioManager.Instance.PlayMusic("BeforeItAllBegan", 2, 2);
         });
     }
@@ -69,10 +69,10 @@ public class GameManager : Singleton<GameManager>
         AudioManager.Instance.FadeMusicVolume(0, 2);
         sceneLoader.LoadScene("MainMenu", () =>
         {
+            sceneLoader.UnloadScene("Game");
             InputManager.Instance.EnablePlayerInput(false);
             UIManager.Instance.Show(View.MainMenu, null, false);
             UIManager.Instance.ActiveDepthOfField(false);
-            SceneManager.UnloadSceneAsync("Game");
             AudioManager.Instance.PlayMusic("WhenInDoubt", 2, 4);
         });
     }

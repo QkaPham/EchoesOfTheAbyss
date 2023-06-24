@@ -5,14 +5,11 @@ public class ItemCollector : MonoBehaviour
 {
     [SerializeField] private Currency currency;
     [SerializeField] private CircleCollider2D magnetCollider;
-    private float magnetRadius;
 
     private Action<Notify> OnRoundEnd, OnStartNextRound;
 
     private void Awake()
     {
-        magnetRadius = magnetCollider.radius;
-
         OnRoundEnd = thisNotify => ExpandMagnetRadius();
         OnStartNextRound = thisNotify => ResetMagnetRadius();
     }
@@ -31,12 +28,12 @@ public class ItemCollector : MonoBehaviour
 
     private void ExpandMagnetRadius()
     {
-        magnetCollider.radius = 100;
+        magnetCollider.radius += 1000;
     }
 
     private void ResetMagnetRadius()
     {
-        magnetCollider.radius = magnetRadius;
+        magnetCollider.radius -= 1000;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

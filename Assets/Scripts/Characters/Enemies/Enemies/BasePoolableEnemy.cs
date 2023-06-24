@@ -12,14 +12,12 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         base.Awake();
         OnRoundEnd = thisNotify => Death();
         OnVictory = thisNotify => Death();
-        //OnRetry = thisNotify => Destroy();
     }
     protected override void OnEnable()
     {
         base.OnEnable();
         EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
         EventManager.Instance.AddListener(EventID.Victory, OnVictory);
-        //EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
     protected override void OnDisable()
@@ -28,7 +26,6 @@ public class BasePoolableEnemy : BaseEnemy, PoolableObject<BasePoolableEnemy>
         animator.SetTrigger("Reset");
         EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
         EventManager.Instance.RemoveListener(EventID.Victory, OnVictory);
-        //EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
     protected ObjectPool<BasePoolableEnemy> pool;

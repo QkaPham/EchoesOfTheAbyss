@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Mana", menuName = "Scriptable Object/Mana")]
-public class Mana : ScriptableObject
+public class Mana : MonoBehaviour
 {
     [SerializeField]
     private float currentMana;
@@ -29,6 +28,36 @@ public class Mana : ScriptableObject
     private bool recoverMana => Time.time >= delayManaRecoverTime + LastTimeConsumeMana;
     private bool fullyRecovered => currentMana == maxMana;
     private float manaRecovery;
+
+    private Action<Notify> OnRoundEnd, OnStartNextRound;
+
+    private void Awake()
+    {
+        OnRoundEnd = thisNotify =>
+        {
+            LastTimeConsumeMana = float.MinValue;
+            manaRecovery *= 10;
+        };
+        OnStartNextRound = thisNotify => manaRecovery /= 10;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void Update()
+    {
+        Regenerate();
+    }
+
     public void Init(CharacterStats stats)
     {
         maxMana = stats.MaxMana;

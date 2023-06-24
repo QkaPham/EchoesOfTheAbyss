@@ -67,9 +67,9 @@ public class Shop : MonoBehaviour
 
         Item similarItem = inventory.FindSimilarItem(newItem);
 
-        if (!inventory.isFull && (similarItem == null || similarItem.isMaxUpgrade))
+        if (!inventory.isFull && (similarItem == null || similarItem.IsMaxUpgrade))
         {
-            if (currency.Use(newItem.price))
+            if (currency.Use(newItem.Price))
             {
                 slots[index].UpdateShopSlot(null);
                 BuyNewItem(newItem);
@@ -78,9 +78,9 @@ public class Shop : MonoBehaviour
         }
 
         // buy upgrade
-        if (similarItem != null && !newItem.isMaxUpgrade)
+        if (similarItem != null && !newItem.IsMaxUpgrade)
         {
-            if (currency.Use(newItem.price))
+            if (currency.Use(newItem.Price))
             {
                 slots[index].UpdateShopSlot(null);
                 Upgrade(similarItem);
@@ -92,7 +92,7 @@ public class Shop : MonoBehaviour
         }
 
         // try buy higher upgrade 
-        if (inventory.isFull && similarItem == null && !newItem.isMaxUpgrade)
+        if (inventory.isFull && similarItem == null && !newItem.IsMaxUpgrade)
         {
             for (int i = 0; i < 4; i++) // 4 is (MaxRarity - 1)
             {
@@ -101,7 +101,7 @@ public class Shop : MonoBehaviour
                 similarItem = inventory.FindSimilarItem(new Item(newItem.profile, i + 1));
                 if (upgradeRequires != null && similarItem != null)
                 {
-                    if (currency.Use(upgradeRequires.Sum(i => i.price)))
+                    if (currency.Use(upgradeRequires.Sum(i => i.Price)))
                     {
                         foreach (var item in upgradeRequires)
                         {
@@ -176,7 +176,7 @@ public class Shop : MonoBehaviour
     private void Upgrade(Item item)
     {
         inventory.Upgrade(item);
-        if (item.isMaxUpgrade) return;
+        if (item.IsMaxUpgrade) return;
 
         inventory.Remove(item);
         Item similarItem = inventory.FindSimilarItem(item);

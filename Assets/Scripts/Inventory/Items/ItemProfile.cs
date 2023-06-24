@@ -1,19 +1,20 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "Scriptable Object/Item Profile")]
-public class ItemProfile : ScriptableObject
+public class ItemProfile : SerializedScriptableObject
 {
     public ItemID id;
     public string itemName;
     public string description;
     public Sprite icon;
-    public int maxRarity;
-    public int[] recyclePrice;
-    public int[] price;
-    public Color[] backGroundColor;
+    //public int maxRarity;
+    //public int[] recyclePrice;
+    //public int[] price;
+    //public Color[] backGroundColor;
     public List<ModiferConfig> modifierConfig;
 
     [Serializable]
@@ -30,5 +31,5 @@ public enum ItemID
     NoneItem = -1,
     Feather,
     Chalice,
-    Necklace
+    Talisman
 }

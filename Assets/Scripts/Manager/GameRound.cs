@@ -84,6 +84,8 @@ public class GameRound : MonoBehaviour
         Time.timeScale = 1f;
         Timer = duration;
         stopTimer = false;
+
+        ResetEnemyStats();
     }
 
     private void RoundUpdate()
@@ -127,4 +129,11 @@ public class GameRound : MonoBehaviour
         }
     }
 
+    private void ResetEnemyStats()
+    {
+        foreach (var enemyStats in enemiesStats)
+        {
+            enemyStats.Init();
+        }
+    }
 }

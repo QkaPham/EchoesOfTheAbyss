@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
     {
         Init();
     }
+
     private void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.Retry, OnRetry);
@@ -76,11 +77,10 @@ public class Player : MonoBehaviour
 
     private void Init()
     {
-        Debug.Log("Init");
         animator.SetTrigger("Reset");
         currency.Init();
         stats.Init();
-        health.Init(stats, Death, Hurt);
+        health.Init( Death, Hurt);
         mana.Init(stats);
         stamina.Init(stats);
         newInventory.Init();
@@ -92,8 +92,6 @@ public class Player : MonoBehaviour
     {
         stateMachine.OnFSMUpdate();
         Flip();
-        stamina.Regenerate();
-        mana.Regenerate();
     }
 
     public void SetPosition(Vector2 position)

@@ -15075,6 +15075,82 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &5613372764119213961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9161338342421961457}
+  - component: {fileID: 541198468824385461}
+  - component: {fileID: 3811865112246230752}
+  - component: {fileID: 8000684763928445964}
+  m_Layer: 8
+  m_Name: Health_Mana_Stamina
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9161338342421961457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613372764119213961}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7671312196939594498}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &541198468824385461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613372764119213961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef5aeefb7be0044ba4886025e9d2e98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 0
+--- !u!114 &3811865112246230752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613372764119213961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 651e567d42760ee4dbb827503a5e2805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMana: 0
+  maxMana: 0
+--- !u!114 &8000684763928445964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5613372764119213961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30d54876f40c044cbbae076e277b6b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStamina: 0
+  maxStamina: 0
 --- !u!1 &6835966447825474172
 GameObject:
   m_ObjectHideFlags: 0
@@ -15416,8 +15492,9 @@ Transform:
   - {fileID: 612305157954798338}
   - {fileID: 7396084980963128963}
   - {fileID: 1940461669336794908}
+  - {fileID: 9161338342421961457}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7671312196939594496
 MonoBehaviour:
@@ -15442,12 +15519,12 @@ MonoBehaviour:
   newInventory: {fileID: 11400000, guid: 4134167394c078448b8fc5d278cbed26, type: 2}
   currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
   stats: {fileID: 11400000, guid: b0e5917c561a06b4c825554028170112, type: 2}
-  health: {fileID: 11400000, guid: 7a1f95a479d42a94cb7502b5f1aa08fb, type: 2}
-  mana: {fileID: 11400000, guid: df7b01cb566e42846b7b24172f417e5c, type: 2}
-  stamina: {fileID: 11400000, guid: 41f00deacf68db94b87cde362ab9aae7, type: 2}
+  health: {fileID: 541198468824385461}
+  mana: {fileID: 3811865112246230752}
+  stamina: {fileID: 8000684763928445964}
   weapon: {fileID: 6303552142035690746}
   rangeWeapon: {fileID: 2456548263356282122}
-  hurtSFX: Hurt
+  hurtSFX: Stab3
 --- !u!95 &1695829787
 Animator:
   serializedVersion: 5

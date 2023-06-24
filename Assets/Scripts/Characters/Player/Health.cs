@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Health", menuName = "Scriptable Object/Health")]
-public class Health : ScriptableObject
+public class Health : MonoBehaviour
 {
     [SerializeField] private float currentHealth;
     [SerializeField] private float maxHealth;
-    private float Recovery;
+    private float recovery;
     private float deffense;
+    private bool stopRegenerate;
 
     public float CurrentHealth
     {
@@ -41,41 +42,58 @@ public class Health : ScriptableObject
     }
 
     private event Action Death, Hurt;
-    private Action<Notify> OnStatsChange;
+    private Action<Notify> OnStatsChange, OnRoundEnd, OnStartNextRound;
 
-    public void Init(CharacterStats stats, Action OnDeath, Action OnHurt)
+    private void Awake()
     {
-        MaxHealth = stats.MaxHealthPoint.Total;
-        CurrentHealth = MaxHealth;
-        Recovery = stats.HPRecovery;
-        Death = OnDeath;
-        Hurt = OnHurt;
+        OnStatsChange = thisNotify =>
+        {
+            if (thisNotify is StatsChangeNotify notify) UpdateStats(notify.stats);
+        };
+        OnRoundEnd = thisNotify => stopRegenerate = true;
+        OnStartNextRound = thisNotify => stopRegenerate = false;
     }
 
     private void OnEnable()
     {
-        OnStatsChange = thisNotify => { if (thisNotify is StatsChangeNotify notify) UpdateStats(notify.stats); };
         EventManager.Instance.AddListener(EventID.StatsChange, OnStatsChange);
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.StatsChange, OnStatsChange);
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void Update()
+    {
+        Regenerate();
+    }
+
+    public void Init(Action OnDeath, Action OnHurt)
+    {
+        CurrentHealth = MaxHealth;
+        Death = OnDeath;
+        Hurt = OnHurt;
     }
 
     private void UpdateStats(CharacterStats stats)
     {
         MaxHealth = stats.MaxHealthPoint.Total;
         deffense = stats.Defense.Total;
+        recovery = stats.HPRecovery;
     }
 
     private bool fullyRecovered => currentHealth == maxHealth;
 
     public void Regenerate()
     {
-        if (!fullyRecovered)
+        if (!fullyRecovered && !stopRegenerate)
         {
-            CurrentHealth += Recovery * Time.deltaTime;
+            CurrentHealth += recovery * Time.deltaTime;
         }
     }
 

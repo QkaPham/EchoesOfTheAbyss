@@ -31,7 +31,6 @@ public class ShopSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     [SerializeField] public TextMeshProUGUI itemStatsValueText;
 
     [SerializeField] public TextMeshProUGUI priceText;
-    [SerializeField] public RarityColor colors;
 
     [SerializeField] private Color sufficientColor = Color.white;
     [SerializeField] private Color insufficientColor = new Color(127 / 255f, 127 / 255f, 127 / 255f, 255 / 255f);
@@ -51,7 +50,7 @@ public class ShopSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
             if (thisNotify is CurrencyChangeNotify notify)
             {
                 if (item == null) return;
-                if (item.price > notify.balance)
+                if (item.Price > notify.balance)
                 {
                     Insufficient();
                 }
@@ -85,26 +84,16 @@ public class ShopSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
             itemNameText.text = item.profile.itemName;
             iconImage.sprite = item.profile.icon;
-            itemBackGround.color = colors.DarkColor(item.Rarity);
-            itemLight.color = colors.LightColor(item.Rarity);
+            itemBackGround.color = item.DarkColor;
+            itemLight.color = item.LightColor;
             star.ShowStar(item.Rarity);
             itemStatsText.text = item.ModifierStat();
             itemStatsValueText.text = item.ModifierValue();
-            priceText.text = item.price.ToString();
+            priceText.text = item.Price.ToString();
         }
         else
         {
             contents.alpha = 0;
-            //require.SetActive(false);
-            //itemNameText.text = "";
-
-            //iconImage.color = Color.clear;
-            //itemBackGround.color = Color.clear;
-            //itemLight.color = Color.clear;
-
-            //star.ShowStar(0);
-            //itemStatsText.text = "";
-            //itemStatsValueText.text = "";
         }
     }
 

@@ -37,14 +37,12 @@ public abstract class BaseView : MonoBehaviour
 
     public virtual void Activate(Action onComplete = null)
     {
-        Debug.Log(gameObject.name + "active");
         Activate(defaultDuration, defaultDelay, onComplete);
         AudioManager.Instance.PlaySFX(ActiveSFX);
     }
 
     public virtual void DeActivate(Action onComplete = null, bool playSFX = true)
     {
-        Debug.Log(gameObject.name + "deactive");
         DeActivate(defaultDuration, defaultDelay, onComplete);
         if (playSFX) AudioManager.Instance.PlaySFX(ActiveSFX);
     }

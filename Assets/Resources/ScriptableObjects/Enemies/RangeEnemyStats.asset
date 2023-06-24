@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb83015f2a8d5dd40bae07e0b871d2a1, type: 3}
   m_Name: RangeEnemyStats
   m_EditorClassIdentifier: 
-  baseAttack: 1
+  baseAttack: 2
   baseMaxHealth: 15
-  baseFragment: 700
+  baseFragment: 54
   attackGrowth: 2
-  maxHealthGrowth: 2
-  fragmentGrowth: 2
+  maxHealthGrowth: 5
+  fragmentGrowth: 59
   totalAttack: 2
   totalMaxHealth: 30
   totalfragment: 10000

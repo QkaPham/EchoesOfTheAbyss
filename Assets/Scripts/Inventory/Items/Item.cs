@@ -10,9 +10,7 @@ public class Item
 {
     public ItemProfile profile;
     public bool isEquip;
-
-    [SerializeField]
-    private int rarity;
+    [SerializeField] private int rarity;
     public int Rarity
     {
         get
@@ -25,14 +23,13 @@ public class Item
             UpDateModifiers(rarity);
         }
     }
-
-    public int quantityValue => (int)Mathf.Pow(2, Rarity - 1);
     public List<Modifier> modifiers;
-    public int recyclePrice => profile.recyclePrice[Rarity - 1];
-    public int price => profile.price[Rarity - 1];
-    public bool isMaxUpgrade => Rarity >= profile.maxRarity;
-    public Color backGroundColor => profile.backGroundColor[Rarity - 1];
-
+    public int quantityValue => (int)Mathf.Pow(2, Rarity - 1);
+    public int RecyclePrice => ItemConfig.GetRecyclePrice(Rarity);
+    public int Price => ItemConfig.GetPrice(Rarity);
+    public bool IsMaxUpgrade => Rarity >= ItemConfig.maxRarity;
+    public Color DarkColor => ItemConfig.GetDarkColor(Rarity);
+    public Color LightColor => ItemConfig.GetLightColor(Rarity);
     public Item(ItemProfile profile, int rarity)
     {
         this.profile = profile;
@@ -52,7 +49,7 @@ public class Item
 
     public bool Upgrade()
     {
-        if (isMaxUpgrade) return false;
+        if (IsMaxUpgrade) return false;
         Rarity++;
         return true;
     }
@@ -126,7 +123,6 @@ public class Item
         }
         return builder.ToString();
     }
-
 }
 
 

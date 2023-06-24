@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb83015f2a8d5dd40bae07e0b871d2a1, type: 3}
   m_Name: BossStats
   m_EditorClassIdentifier: 
-  baseAttack: 10
-  baseMaxHealth: 3000
-  baseFragment: 5000
-  attackGrowth: 1
-  maxHealthGrowth: 2
-  fragmentGrowth: 1.5
-  totalAttack: 1
-  totalMaxHealth: 15
-  totalfragment: 5000
+  baseAttack: 30
+  baseMaxHealth: 4000
+  baseFragment: 0
+  attackGrowth: 0
+  maxHealthGrowth: 0
+  fragmentGrowth: 0
+  totalAttack: 0
+  totalMaxHealth: 0
+  totalfragment: 0

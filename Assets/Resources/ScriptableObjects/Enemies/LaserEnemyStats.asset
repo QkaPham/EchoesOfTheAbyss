@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb83015f2a8d5dd40bae07e0b871d2a1, type: 3}
   m_Name: LaserEnemyStats
   m_EditorClassIdentifier: 
-  baseAttack: 1
+  baseAttack: 3
   baseMaxHealth: 18
-  baseFragment: 700
-  attackGrowth: 2
-  maxHealthGrowth: 2
-  fragmentGrowth: 2
+  baseFragment: 54
+  attackGrowth: 3
+  maxHealthGrowth: 6
+  fragmentGrowth: 59
   totalAttack: 1
   totalMaxHealth: 18
   totalfragment: 1500

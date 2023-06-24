@@ -29,6 +29,11 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
+    public void UnloadScene(string scene)
+    {
+        SceneManager.UnloadSceneAsync(scene);
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;

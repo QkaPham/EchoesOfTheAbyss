@@ -1,10 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Stamina", menuName = "Scriptable Object/Stamina")]
-public class Stamina : ScriptableObject
+public class Stamina : MonoBehaviour
 {
     [SerializeField] private float currentStamina;
     [SerializeField] private float maxStamina;
@@ -27,6 +27,35 @@ public class Stamina : ScriptableObject
     public float MaxStanima { get => maxStamina; private set => maxStamina = value; }
     private bool recoverStamina => Time.time >= delayStaminaRecoverTime + lastTimeConsumeStamina;
     private bool fullyRecovered => CurrentStamina == maxStamina;
+
+    private Action<Notify> OnRoundEnd, OnStartNextRound;
+
+    private void Awake()
+    {
+        OnRoundEnd = thisNotify =>
+        {
+            lastTimeConsumeStamina = float.MinValue;
+            staminaRecovery *= 10;
+        };
+        OnStartNextRound = thisNotify => staminaRecovery /= 10;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.Instance.AddListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.RemoveListener(EventID.RoundEnd, OnRoundEnd);
+        EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
+    }
+
+    private void Update()
+    {
+        Regenerate();
+    }
 
     public void Init(CharacterStats stats)
     {

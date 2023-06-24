@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttack: 2
   baseMaxHealth: 12
-  baseFragment: 500
+  baseFragment: 39
   attackGrowth: 2
-  maxHealthGrowth: 2
-  fragmentGrowth: 2
-  totalAttack: 4
-  totalMaxHealth: 24
-  totalfragment: 2000
+  maxHealthGrowth: 4
+  fragmentGrowth: 44
+  totalAttack: 2
+  totalMaxHealth: 12
+  totalfragment: 39

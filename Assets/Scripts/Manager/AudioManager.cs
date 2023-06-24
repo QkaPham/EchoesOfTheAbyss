@@ -34,7 +34,22 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Start()
     {
+        MuteAll();
+    }
+
+    public void MuteAll()
+    {
         MusicSource.volume = 0f;
+        MuteSFX();
+    }
+
+    public void MuteSFX()
+    {
+        SFXSource.volume = 0f;
+    }
+
+    public void UnMuteSFX()
+    {
         SFXSource.volume = 1f;
     }
 
@@ -73,12 +88,9 @@ public class AudioManager : Singleton<AudioManager>
 
         else if (MusicSource.clip.name != bgmName)
         {
-            //FadeMusicVolume(0, fadeOutDuration, () =>
-            //{
-                MusicSource.clip = bgmDic[bgmName];
-                MusicSource.Play();
-                FadeMusicVolume(1, fadeInDuration);
-            //});
+            MusicSource.clip = bgmDic[bgmName];
+            MusicSource.Play();
+            FadeMusicVolume(1, fadeInDuration);
         }
     }
 
@@ -88,15 +100,15 @@ public class AudioManager : Singleton<AudioManager>
     }
 }
 
-public class CONST
-{
-    //key and default value for saving volume
-    public const string BGM_VOLUME_KEY = "BGM_VOLUME_KEY";
-    public const string SE_VOLUME_KEY = "SE_VOLUME_KEY";
-    public const float BGM_VOLUME_DEFAULT = 1f;
-    public const float SE_VOLUME_DEFAULT = 1f;
+//public class CONST
+//{
+//    //key and default value for saving volume
+//    public const string BGM_VOLUME_KEY = "BGM_VOLUME_KEY";
+//    public const string SE_VOLUME_KEY = "SE_VOLUME_KEY";
+//    public const float BGM_VOLUME_DEFAULT = 1f;
+//    public const float SE_VOLUME_DEFAULT = 1f;
 
-    //Time it take for the BGM to fade
-    public const float BGM_FADE_SPEED_RATE_HIGH = .9f;
-    public const float BGM_FADE_SPEED_RATE_LOW = .3f;
-}
+//    //Time it take for the BGM to fade
+//    public const float BGM_FADE_SPEED_RATE_HIGH = .9f;
+//    public const float BGM_FADE_SPEED_RATE_LOW = .3f;
+//}

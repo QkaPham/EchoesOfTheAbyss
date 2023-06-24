@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,17 +13,18 @@ public class EnemyStats : ScriptableObject
 
     [Header("Stats Growth")]
     [SerializeField]
-    private float attackGrowth = 1;
+    private float attackGrowth = 5;
     [SerializeField]
-    private float maxHealthGrowth = 2f;
+    private float maxHealthGrowth = 10;
     [SerializeField]
-    public float fragmentGrowth = 1.5f;
+    public int fragmentGrowth = 54;
 
     [Header("Stats")]
     public float totalAttack;
     public float totalMaxHealth;
     public int totalfragment;
 
+    private Action<Notify> OnRetry, OnRoundChange;
 
     private void Reset()
     {
@@ -38,8 +40,8 @@ public class EnemyStats : ScriptableObject
 
     public void StatsGrowth()
     {
-        totalAttack *= attackGrowth;
-        totalMaxHealth *= maxHealthGrowth;
-        totalfragment = (int)(totalfragment * fragmentGrowth);
+        totalAttack += attackGrowth;
+        totalMaxHealth += maxHealthGrowth;
+        totalfragment += fragmentGrowth;
     }
 }
