@@ -9,10 +9,15 @@ public class GameProgressUI : MonoBehaviour
     [SerializeField] protected Sprite pin;
     [SerializeField] protected Sprite normal;
     [SerializeField] protected Sprite defeat;
+    [SerializeField] protected Sprite boss;
 
     [SerializeField] protected Color bossRoundColor;
     [SerializeField] protected Color normalColor;
     [SerializeField] protected Color defeatColor;
+    private void Awake()
+    {
+        Reset();
+    }
 
     public void Reset()
     {
@@ -22,10 +27,11 @@ public class GameProgressUI : MonoBehaviour
             if (i == 4)
             {
                 image.color = bossRoundColor;
-                image.sprite = normal;
+                image.sprite = boss;
             }
             else
             {
+                image.sprite = normal;
                 image.color = normalColor;
             }
         }

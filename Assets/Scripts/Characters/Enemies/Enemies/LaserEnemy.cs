@@ -157,6 +157,13 @@ public class LaserEnemy : BasePoolableEnemy
     public override void Death()
     {
         base.Death();
+
+    }
+    public override void Destroy(float time = 0)
+    {
+        elapsedAimingTime = 0;
+        elapsedDelayAttackTime = 0;
+        base.Destroy(time);
     }
 
     protected override void Flip()

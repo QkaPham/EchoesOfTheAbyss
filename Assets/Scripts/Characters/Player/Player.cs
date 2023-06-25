@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private ParticleSystem dashParticle;
     [SerializeField] protected ParticleSystem hurtParticle;
     [SerializeField] protected ParticleSystem DeathParticle;
-    [SerializeField] private Inventory newInventory;
+    [SerializeField] private Inventory inventory;
     [SerializeField] private Currency currency;
     [SerializeField] public CharacterStats stats;
     [SerializeField] public Health health;
@@ -68,11 +68,15 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.LevelChange, inventory.OnLevelChange);
+        EventManager.Instance.AddListener(EventID.EquipmentChange, stats.OnEquipmentChange);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.LevelChange, inventory.OnLevelChange);
+        EventManager.Instance.RemoveListener(EventID.EquipmentChange, stats.OnEquipmentChange);
     }
 
     private void Init()
@@ -80,12 +84,13 @@ public class Player : MonoBehaviour
         animator.SetTrigger("Reset");
         currency.Init();
         stats.Init();
-        health.Init( Death, Hurt);
+        health.Init(Death, Hurt);
         mana.Init(stats);
         stamina.Init(stats);
-        newInventory.Init();
+        inventory.Init();
         weapon.Init();
         rangeWeapon.firePoint = firePoint;
+        transform.position = Vector3.zero;
     }
 
     private void Update()

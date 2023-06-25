@@ -19,6 +19,7 @@ public class InventoryUI : SelectableContainer
         {
             slot.UpdateUISlot(null);
             slot.itemDetailUI = itemDetailUI;
+            slot.Unclock();
         }
 
         OnInventoryChange = thisNotify => { if (thisNotify is InventoryChangeNotify notify) UpdateInventoryUI(notify.items); };

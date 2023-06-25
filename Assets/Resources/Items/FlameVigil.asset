@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 009a6dd8e9b9716429d7647f50cddebf, type: 3}
-  m_Name: Talisman
+  m_Name: FlameVigil
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -22,17 +22,17 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   id: 2
-  itemName: Talisman
+  itemName: Flame Vigil
   description: 
-  icon: {fileID: 21300000, guid: c8e77f0db68087e4d8db55b719f07c00, type: 3}
+  icon: {fileID: 21300000, guid: b37f78fb3b2369044b7934ec8402ad8f, type: 3}
   modifierConfig:
-  - growth: 0.05
+  - growth: 0.07
     modifier:
       statType: 5
       modifierType: 2
-      amount: 0.05
-  - growth: 0.05
+      amount: 0.07
+  - growth: 0.08
     modifier:
       statType: 2
       modifierType: 1
-      amount: 0.05
+      amount: 0.08

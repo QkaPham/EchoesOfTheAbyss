@@ -57,10 +57,10 @@ public class BossEnemy : BaseEnemy
     protected Vector3 rushPositon;
 
     [SerializeField]
-    protected float rushAttackDamage = 1;
+    protected float rushAttackMultify = 1f;
 
     [SerializeField]
-    protected float attackCooldownTime = 0.5f;
+    protected float attackCooldownTime = 2.5f;
     protected bool canAttack => Time.time >= lastAttackTime + attackCooldownTime;
 
     [SerializeField]
@@ -85,7 +85,7 @@ public class BossEnemy : BaseEnemy
     protected float elapsedLaserDelayAttackTime = 0f;
 
     [SerializeField]
-    protected float laserAttackDamage = 20;
+    protected float laserAttackMultify = 1.2f;
 
     [SerializeField]
     protected float laserRange = 15f;
@@ -103,7 +103,7 @@ public class BossEnemy : BaseEnemy
     protected float bulletRange = 12f;
 
     [SerializeField]
-    protected float bulletAttackDamage = 10f;
+    protected float bulletAttackMultify = .6f;
     protected Vector3 targetDirection => (playerPositon + new Vector3(0f, 0.5f, 0f) - transform.position).normalized;
 
     [SerializeField]
@@ -307,7 +307,7 @@ public class BossEnemy : BaseEnemy
 
         if (playerDistance < rushDamageDistance && elapsedTimeBetweenEachRushDamage >= timeBetweenEachRushDamage)
         {
-            player.health.TakeDamage(rushAttackDamage);
+            player.health.TakeDamage(rushAttackMultify * stats.totalAttack);
             elapsedTimeBetweenEachRushDamage = 0;
         }
 
@@ -409,7 +409,7 @@ public class BossEnemy : BaseEnemy
         float minAngel = -bulletAngle / 2;
         for (int i = 0; i < bulletNumber; i++)
         {
-            FireBullet(bulletFirePoint.position, targetDirection, minAngel + (i * deltaAngel), bulletAttackDamage);
+            FireBullet(bulletFirePoint.position, targetDirection, minAngel + (i * deltaAngel), stats.totalAttack * bulletAttackMultify);
         }
         lastAttackTime = Time.time;
     }
@@ -433,7 +433,7 @@ public class BossEnemy : BaseEnemy
 
         if (hit.transform.TryGetComponent<Player>(out Player player))
         {
-            player.health.TakeDamage(laserAttackDamage);
+            player.health.TakeDamage(laserAttackMultify * stats.totalAttack);
         }
     }
 

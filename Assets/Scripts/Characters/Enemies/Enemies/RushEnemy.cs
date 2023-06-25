@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class RushEnemy : BasePoolableEnemy
 {
-    [SerializeField]   protected LineRenderer lineRenderer;
-    [SerializeField]   protected RushEnemyConfig config;
+    [SerializeField] protected LineRenderer lineRenderer;
+    [SerializeField] protected RushEnemyConfig config;
     protected float elapsedAimingTime = 0;
     protected float elapsedDelayAttackTime = 0f;
     protected Vector3 rushDirection;
@@ -157,6 +157,13 @@ public class RushEnemy : BasePoolableEnemy
     public override void Death()
     {
         base.Death();
+    }
+
+    public override void Destroy(float time = 0)
+    {
+        elapsedAimingTime = 0;
+        elapsedDelayAttackTime = 0f;
+        base.Destroy(time);
     }
 
     protected override void Flip()

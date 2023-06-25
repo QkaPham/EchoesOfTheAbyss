@@ -14,7 +14,7 @@ public class ItemConfig : SerializedScriptableObject
     [ShowInInspector]
     public static Color[] darkColors = { new Color(128 / 255f, 128 / 255f, 128 / 255f, 1),
                                          new Color(0 / 255f, 76 / 255f, 54 / 255f, 1),
-                                         new Color(0 / 255f, 85 / 255f, 89 / 255f, 1),
+                                         new Color(0 / 255f, 45 / 255f, 89 / 255f, 1),
                                          new Color(71 / 255f, 23 / 255f, 102 / 255f, 1),
                                          new Color(115 / 255f, 45 / 255f, 31 / 255f, 1)};
     [ShowInInspector]

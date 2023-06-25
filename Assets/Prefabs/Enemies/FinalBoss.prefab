@@ -333,21 +333,21 @@ MonoBehaviour:
   rushDelayAttackTime: 0.5
   rushSpeed: 25
   rushRange: 16
-  rushAttackDamage: 10
-  attackCooldownTime: 3
+  rushAttackMultify: 1
+  attackCooldownTime: 2.5
   rushDamageDistance: 1.6
   timeBetweenEachRushDamage: 1
   laserAimingRange: 10
   laserAimingTime: 2
   laserDelayAttackTime: 0.2
-  laserAttackDamage: 20
+  laserAttackMultify: 1.2
   laserRange: 45
   PlayerLayerMask:
     serializedVersion: 2
     m_Bits: 256
   bulletFirePoint: {fileID: 6508360262879965271}
   bulletRange: 12
-  bulletAttackDamage: 10
+  bulletAttackMultify: 0.6
   waveNumber: 4
   bulletNumber: 4
   bulletAngle: 60

@@ -1652,7 +1652,6 @@ MonoBehaviour:
   itemStatsText: {fileID: 9001129668085147314}
   itemStatsValueText: {fileID: 6069820859101293924}
   priceText: {fileID: 5302889350629182464}
-  colors: {fileID: 11400000, guid: c4a8afac252f90a4eb86088bc69cb025, type: 2}
   sufficientColor: {r: 1, g: 1, b: 1, a: 1}
   insufficientColor: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
   contents: {fileID: 4232041143702066077}
@@ -2322,7 +2321,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
-  m_wordSpacing: 0
+  m_wordSpacing: 20
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0

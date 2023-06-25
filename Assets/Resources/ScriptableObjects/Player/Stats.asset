@@ -12,13 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fca6f0164ab6c7b4b831b99459c90c42, type: 3}
   m_Name: Stats
   m_EditorClassIdentifier: 
-  Level: 1
+  level: 1
+  maxLevel: 10
+  LevelUpCosts: 64000000040100003a020000d40300008c0500007a0800007c0b0000880e00002a1200000c170000
   BaseAttack: 12
   BaseDefense: 5
-  BaseMaxHealth: 100
+  BaseMaxHealth: 50
   BaseCrit: 0.1
   BaseCritDamage: 0.5
   BaseHaste: 0.5
+  BaseDodge: 0
+  BaseLuck: 0
+  BaseRegen: 0
+  BaseSpeed: 80
   AttackGrowth: 2
   DefenseGrowth: 1
   MaxHealthGrowth: 10
@@ -69,3 +75,4 @@ MonoBehaviour:
     Base: 0.5
     Modifier: 0
     total: 0.5
+  ModifierSources: []

@@ -11,10 +11,6 @@ public class ItemProfile : SerializedScriptableObject
     public string itemName;
     public string description;
     public Sprite icon;
-    //public int maxRarity;
-    //public int[] recyclePrice;
-    //public int[] price;
-    //public Color[] backGroundColor;
     public List<ModiferConfig> modifierConfig;
 
     [Serializable]
@@ -29,7 +25,10 @@ public class ItemProfile : SerializedScriptableObject
 public enum ItemID
 {
     NoneItem = -1,
-    Feather,
-    Chalice,
-    Talisman
+    RedFeather,
+    RedChalice,
+    RedTalisman,
+    RedChessPiece,
+    RedKey,
+    GoldenCrown
 }

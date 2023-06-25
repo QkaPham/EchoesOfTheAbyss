@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 009a6dd8e9b9716429d7647f50cddebf, type: 3}
-  m_Name: Chalice
+  m_Name: WorldRelight
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   id: 1
-  itemName: Chalice
+  itemName: World Relight
   description: 
   icon: {fileID: 21300000, guid: 4d66edd20490d35488a0f838858e1f1f, type: 3}
-  maxRarity: 5
-  recyclePrice: 0100000002000000030000000400000005000000
-  price: 0100000002000000030000000400000005000000
-  backGroundColor:
-  - {r: 0.9686275, g: 0.9686275, b: 0.9686275, a: 1}
-  - {r: 0.1137255, g: 0.9686275, b: 0, a: 1}
-  - {r: 0, g: 0.42352945, b: 0.83921576, a: 1}
-  - {r: 0.61960787, g: 0.20000002, b: 0.9058824, a: 1}
-  - {r: 0.9725491, g: 0.37647063, b: 0.25882354, a: 1}
   modifierConfig:
+  - growth: 0.07
+    modifier:
+      statType: 0
+      modifierType: 1
+      amount: 0.07
   - growth: 0.1
     modifier:
-      statType: 2
-      modifierType: 1
-      amount: 0.1
-  - growth: 0.05
-    modifier:
-      statType: 3
+      statType: 4
       modifierType: 2
-      amount: 0.05
+      amount: 0.1

@@ -49,7 +49,7 @@ MonoBehaviour:
   throwKnifeSFX: ThrowKnife
   baseAttackCooldown: 1
   manaConsume: 20
-  range: 10
+  range: 20
   speed: 10
   damageMultifier: 0.6
   angle: 10

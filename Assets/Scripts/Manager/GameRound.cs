@@ -48,12 +48,12 @@ public class GameRound : MonoBehaviour
     }
 
     private bool stopTimer = false;
-    private Action<Notify> OnRetry, OnStartNextRound, OnGameOver;
+    private Action<Notify> OnRetry, OnStartNextRound, OnPlayerDeath;
 
     private void Awake()
     {
         OnStartNextRound = thisNotify => StartNextRound();
-        OnGameOver = thisNotify => stopTimer = true;
+        OnPlayerDeath = thisNotify => stopTimer = true;
         OnRetry = thisNotify => Init();
 
         Init();
@@ -62,14 +62,14 @@ public class GameRound : MonoBehaviour
     private void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
-        EventManager.Instance.AddListener(EventID.GameOver, OnGameOver);
+        EventManager.Instance.AddListener(EventID.PlayerDeath, OnPlayerDeath);
         EventManager.Instance.AddListener(EventID.Retry, OnRetry);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
-        EventManager.Instance.RemoveListener(EventID.GameOver, OnGameOver);
+        EventManager.Instance.RemoveListener(EventID.GameOver, OnPlayerDeath);
         EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
     }
 
@@ -98,7 +98,6 @@ public class GameRound : MonoBehaviour
         if (Timer <= 0f && !stopTimer)
         {
             stopTimer = true;
-            EnemyPowerUp();
             GameManager.Instance.RoundEnd();
         }
     }
@@ -106,6 +105,7 @@ public class GameRound : MonoBehaviour
     public void StartNextRound()
     {
         CurrentRound++;
+        EnemyPowerUp();
         Time.timeScale = 1f;
         if (CurrentRound != bossRound)
         {
@@ -126,6 +126,10 @@ public class GameRound : MonoBehaviour
         foreach (var enemyStats in enemiesStats)
         {
             enemyStats.StatsGrowth();
+            if (currentRound == bossRound)
+            {
+                enemyStats.StopDropFragment();
+            }
         }
     }
 

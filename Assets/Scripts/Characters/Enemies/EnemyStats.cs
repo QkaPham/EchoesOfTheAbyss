@@ -24,18 +24,16 @@ public class EnemyStats : ScriptableObject
     public float totalMaxHealth;
     public int totalfragment;
 
-    private Action<Notify> OnRetry, OnRoundChange;
-
-    private void Reset()
-    {
-        Init();
-    }
-
     public void Init()
     {
         totalAttack = baseAttack;
         totalMaxHealth = baseMaxHealth;
         totalfragment = baseFragment;
+    }
+
+    public void StopDropFragment()
+    {
+        totalfragment = 0;
     }
 
     public void StatsGrowth()

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using static Unity.Collections.AllocatorManager;
+using Unity.VisualScripting;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -12,6 +14,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Texture2D customCursor;
     [SerializeField] private Volume volume;
     private DepthOfField depthOfField;
+    private Bloom bloom;
 
     [SerializeField] private View startView;
     private BaseView currentView;
@@ -43,15 +46,9 @@ public class UIManager : Singleton<UIManager>
         }
         currentView = viewsMap.GetValueOrDefault(startView);
 
-        if (volume.profile.TryGet(out DepthOfField dof))
-        {
-            depthOfField = dof;
-        }
-    }
-
-    private void Start()
-    {
-        depthOfField.active = false;
+        volume = FindObjectOfType<Volume>();
+        volume.profile.TryGet(out depthOfField);
+        volume.profile.TryGet(out bloom);
     }
 
     private void ActiveAllPanel()
@@ -64,7 +61,33 @@ public class UIManager : Singleton<UIManager>
 
     public void ActiveDepthOfField(bool active)
     {
-        depthOfField.active = active;
+        if (depthOfField == null) return;
+        StartCoroutine(DelayActiveDepthOfField(active));
+    }
+    public void ActiveBloom(bool active)
+    {
+        if (bloom == null) return;
+        bloom.active = active;
+    }
+
+    private IEnumerator DelayActiveDepthOfField(bool active)
+    {
+        if (active)
+        {
+            while (depthOfField.focalLength.value < 50)
+            {
+                depthOfField.focalLength.value += Time.deltaTime * 50;
+                yield return new WaitForSecondsRealtime(Time.deltaTime);
+            }
+        }
+        else
+        {
+            while (depthOfField.focalLength.value > 1)
+            {
+                depthOfField.focalLength.value -= Time.deltaTime * 50;
+                yield return new WaitForSecondsRealtime(Time.deltaTime);
+            }
+        }
     }
 
     public void ClearHistoryViews()
@@ -99,8 +122,10 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowLast(Action onComplete = null)
     {
-        var view = history.Pop();
-        Show(view.viewName, onComplete, false);
+        if (history.Peek() != null)
+        {
+            Show(history.Pop().viewName, onComplete, false);
+        }
     }
 
     public bool CompareCurrentView(View view) => currentView.viewName == view;

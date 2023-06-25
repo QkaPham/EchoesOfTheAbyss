@@ -52,7 +52,6 @@ public class GameManager : Singleton<GameManager>
         UIManager.Instance.ShowLast(() =>
         {
             Time.timeScale = 1f;
-            InputManager.Instance.EnablePlayerInput(true);
         });
     }
 

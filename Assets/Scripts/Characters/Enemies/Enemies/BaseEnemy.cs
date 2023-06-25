@@ -185,6 +185,8 @@ public abstract class BaseEnemy : MonoBehaviour
 
     protected void Drop()
     {
+        if (stats.totalfragment == 0) return;
+
         var fragment = fragmentPool.Get();
         fragment.transform.position = transform.position;
         fragment.Amount = stats.totalfragment;

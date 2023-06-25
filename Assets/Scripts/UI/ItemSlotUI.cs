@@ -9,8 +9,10 @@ public class ItemSlotUI : MonoBehaviour, ISelectHandler
     [SerializeField] private Image lightImage;
     [SerializeField] private Image border;
     [SerializeField] private ItemStars stars;
+    [SerializeField] private Color lockedColor = new Color(35 / 255f, 35 / 255f, 35 / 255f, 1);
+    [SerializeField] private Color unlockedColor = new Color(69 / 255f, 69 / 255f, 69 / 255f, 1);
     [HideInInspector] public ItemDetailUI itemDetailUI;
-    private Item item;
+    private bool unlocked;
     public Item Item { get; private set; }
     private void Start()
     {
@@ -32,9 +34,22 @@ public class ItemSlotUI : MonoBehaviour, ISelectHandler
         {
             Icon.color = Color.clear;
             stars.ShowStar(0);
-            backGround.color = Color.black;
+            if (unlocked)
+            {
+                backGround.color = unlockedColor;
+            }
+            else
+            {
+                backGround.color = lockedColor;
+            }
             lightImage.color = Color.clear;
         }
+    }
+
+    public void Unclock()
+    {
+        unlocked = true;
+        backGround.color = unlockedColor;
     }
 
     public void OnSelect(BaseEventData eventData)

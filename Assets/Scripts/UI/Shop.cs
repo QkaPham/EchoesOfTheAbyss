@@ -31,8 +31,8 @@ public class Shop : MonoBehaviour
         rollingPool.Clear();
         foreach (var profile in itemProfiles)
         {
-            // Each profile add 20 Item copies to rolling pool
-            for (int i = 0; i < 20; i++)
+            // Each profile add 32 Item copies to rolling pool
+            for (int i = 0; i < 32; i++)
             {
                 rollingPool.Add(new Item(profile, 1));
             }

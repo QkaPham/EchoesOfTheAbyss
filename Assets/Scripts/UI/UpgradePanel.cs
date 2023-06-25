@@ -20,9 +20,7 @@ public class UpgradePanel : BasePanel
     [SerializeField]
     private ItemDetailUI itemDetailUI;
 
-    [SerializeField]
     private GameObject currentSelectedObject = null;
-    [SerializeField]
     private GameObject previousSelectedObject = null;
 
     [SerializeField]
@@ -138,6 +136,10 @@ public class UpgradePanel : BasePanel
             if (InputManager.Instance.Roll)
             {
                 shop.OnRollButtonClick();
+            }
+            if(InputManager.Instance.Cancel)
+            {
+                UIManager.Instance.Show(View.Pause);
             }
         }
     }

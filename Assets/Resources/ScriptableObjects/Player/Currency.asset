@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3030b9b8a8603d94db914ee799f7f75f, type: 3}
   m_Name: Currency
   m_EditorClassIdentifier: 
-  balance: 0
+  balance: 1159

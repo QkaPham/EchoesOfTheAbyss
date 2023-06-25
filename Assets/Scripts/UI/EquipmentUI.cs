@@ -9,7 +9,7 @@ public class EquipmentUI : MonoBehaviour
 {
     [SerializeField] private ItemDetailUI itemDetailUI;
     [SerializeField] private List<ItemSlotUI> slots;
-    private Action<Notify> OnEquipmentChange;
+    private Action<Notify> OnEquipmentChange, OnLevelChange;
     public void Awake()
     {
         slots = new List<ItemSlotUI>();
@@ -21,16 +21,25 @@ public class EquipmentUI : MonoBehaviour
         }
 
         OnEquipmentChange = thisNotify => { if (thisNotify is EquipmentChangeNotify notify) UpdateEquipmentUI(notify.items); };
+        OnLevelChange = thisNotify =>
+        {
+            if (thisNotify is LevelChangeNotify notify)
+            {
+                slots[notify.level - 1].Unclock();
+            }
+        };
     }
 
     private void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.EquipmentChange, OnEquipmentChange);
+        EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.EquipmentChange, OnEquipmentChange);
+        EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
     }
 
     private void UpdateEquipmentUI(List<Item> items)

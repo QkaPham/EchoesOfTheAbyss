@@ -15494,7 +15494,7 @@ Transform:
   - {fileID: 1940461669336794908}
   - {fileID: 9161338342421961457}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7671312196939594496
 MonoBehaviour:
@@ -15516,7 +15516,7 @@ MonoBehaviour:
   dashParticle: {fileID: 351464224740314304}
   hurtParticle: {fileID: 7891627297193795599}
   DeathParticle: {fileID: 2501287290097980328}
-  newInventory: {fileID: 11400000, guid: 4134167394c078448b8fc5d278cbed26, type: 2}
+  inventory: {fileID: 11400000, guid: 4134167394c078448b8fc5d278cbed26, type: 2}
   currency: {fileID: 11400000, guid: 08522794e2171a0439b0e5d5d6a1a286, type: 2}
   stats: {fileID: 11400000, guid: b0e5917c561a06b4c825554028170112, type: 2}
   health: {fileID: 541198468824385461}

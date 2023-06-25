@@ -16,7 +16,7 @@ public class VictoryPanel : BasePanel
 
     public void OnNewGameButtonClick()
     {
-        UIManager.Instance.ShowLast();
+        GameManager.Instance.RetryGame();
     }
 
     public void OnMainMenuButtonClick()

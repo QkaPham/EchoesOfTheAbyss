@@ -138,7 +138,8 @@ public class EnemySpawn : MonoBehaviour
     {
         GameObject gBoss = Instantiate(BossPrefabs, transform);
         BossEnemy bossEnemy = gBoss.GetComponent<BossEnemy>();
-        bossEnemy.Init(player, player.transform.position + Vector3.up * 16f, bulletPool);
+        Vector3 spawnPosition = player.transform.position.normalized * (-16) + player.transform.position;
+        bossEnemy.Init(player, player.transform.position + spawnPosition, bulletPool);
         StartCoroutine(SetCameraFollow(bossEnemy));
         return bossEnemy;
     }
