@@ -59,7 +59,7 @@ public class GameManager : Singleton<GameManager>
     {
         UIManager.Instance.ShowLast();
         InputManager.Instance.EnablePlayerInput(true);
-        EventManager.Instance.Raise(EventID.Retry, null);
+        EventManager.Instance.Raise(EventID.StartGame, null);
         Time.timeScale = 1f;
     }
 

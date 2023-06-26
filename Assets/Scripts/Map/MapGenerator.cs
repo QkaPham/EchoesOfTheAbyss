@@ -28,12 +28,12 @@ public class MapGenerator : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
     }
 
     private void GenerateObstacles()

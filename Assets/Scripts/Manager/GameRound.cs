@@ -63,14 +63,14 @@ public class GameRound : MonoBehaviour
     {
         EventManager.Instance.AddListener(EventID.StartNextRound, OnStartNextRound);
         EventManager.Instance.AddListener(EventID.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.StartNextRound, OnStartNextRound);
         EventManager.Instance.RemoveListener(EventID.GameOver, OnPlayerDeath);
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
     }
 
     void Update()

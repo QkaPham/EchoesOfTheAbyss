@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c92be78a4ffa29468a0d825ddcaa305, type: 3}
   m_Name: SettingsProfile
   m_EditorClassIdentifier: 
-  MasterVolume: 0
-  MusicVolume: 0
-  SFXVolume: 0
-  Resolution: 0
-  FullScreen: 0
+  settingsProfile:
+    MasterVolume: 8
+    MusicVolume: 8
+    SFXVolume: 6
+    Resolution: 0
+    FullScreen: 1

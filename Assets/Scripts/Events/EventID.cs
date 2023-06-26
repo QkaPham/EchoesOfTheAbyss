@@ -6,7 +6,6 @@ public enum EventID
     RoundChange,
     Victory,
     GameOver,
-    Retry,
 
     TimerChange,
 

@@ -65,7 +65,7 @@ public class EnemySpawn : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventID.Retry, OnRoundChange);
+        EventManager.Instance.AddListener(EventID.StartGame, OnRoundChange);
         EventManager.Instance.AddListener(EventID.RoundChange, OnRoundChange);
 
         EventManager.Instance.AddListener(EventID.RoundEnd, StopSpawn);
@@ -74,7 +74,7 @@ public class EnemySpawn : MonoBehaviour
     }
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRoundChange);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRoundChange);
         EventManager.Instance.RemoveListener(EventID.RoundChange, OnRoundChange);
 
         EventManager.Instance.RemoveListener(EventID.RoundEnd, StopSpawn);
