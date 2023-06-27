@@ -26,8 +26,7 @@ public class LevelUpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     [SerializeField] CharacterStats stats;
 
-    private Action<Notify> OnCurrencyChange;
-
+    private Action<Notify> OnCurrencyChange, OnStartGame;
 
     private void Awake()
     {
@@ -36,9 +35,9 @@ public class LevelUpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         OnCurrencyChange = thisNotify =>
         {
-            if (thisNotify is CurrencyChangeNotify notify) 
+            if (thisNotify is CurrencyChangeNotify notify)
             {
-                if(stats.LevelUpCost > notify.balance)
+                if (stats.LevelUpCost > notify.balance)
                 {
                     Insufficient();
                 }
@@ -49,16 +48,25 @@ public class LevelUpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             }
         };
 
+        OnStartGame = thisNotify => Init();
     }
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);    
+        EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.Instance.AddListener(EventID.StartGame, OnStartGame);
     }
 
     private void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnStartGame);
+    }
+
+    private void Init()
+    {
+        (content as TextMeshProUGUI).text = "Level Up";
+        Enable();
     }
 
     public void MaxLevel()

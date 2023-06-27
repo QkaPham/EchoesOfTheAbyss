@@ -66,7 +66,7 @@ public class UpgradePanel : BasePanel
 
         OnCurrencyChange = thisNotify => { if (thisNotify is CurrencyChangeNotify notify) UpdateFragmentText(notify.balance); };
         OnRoundChange = thisNotify => { if (thisNotify is RoundChangeNotify notify) UpdateGameProgress(notify.round); };
-        OnRetry = thisNotify => gameProgress.Reset();
+        OnRetry = thisNotify => gameProgress.Init();
     }
 
     private void OnEnable()
@@ -75,7 +75,7 @@ public class UpgradePanel : BasePanel
         EventManager.Instance.AddListener(EventID.LevelChange, OnLevelChange);
         EventManager.Instance.AddListener(EventID.CurrencyChange, OnCurrencyChange);
         EventManager.Instance.AddListener(EventID.RoundChange, OnRoundChange);
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
     }
 
     private void OnDisable()
@@ -84,7 +84,7 @@ public class UpgradePanel : BasePanel
         EventManager.Instance.RemoveListener(EventID.LevelChange, OnLevelChange);
         EventManager.Instance.RemoveListener(EventID.CurrencyChange, OnCurrencyChange);
         EventManager.Instance.RemoveListener(EventID.RoundChange, OnRoundChange);
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
     }
 
     private void Update()

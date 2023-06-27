@@ -52,6 +52,12 @@ public class ItemSlotUI : MonoBehaviour, ISelectHandler
         backGround.color = unlockedColor;
     }
 
+    public void Clock()
+    {
+        unlocked = false;
+        backGround.color = lockedColor;
+    }
+
     public void OnSelect(BaseEventData eventData)
     {
         itemDetailUI.UpdateItemDetailUI(Item);

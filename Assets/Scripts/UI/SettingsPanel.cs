@@ -30,6 +30,7 @@ public class SettingsPanel : BasePanel
     [SerializeField]
     private SettingsProfileSO settingsProfile;
 
+    [SerializeField]
     private string FilePath;
 
     protected virtual void Awake()
@@ -63,7 +64,9 @@ public class SettingsPanel : BasePanel
 
     private void SetDisplay(bool toggle)
     {
+        Debug.Log("Set display "+ toggle);
         Screen.fullScreen = toggle;
+        settingsProfile.settingsProfile.FullScreen = toggle;
     }
 
     private void SetResolution(int index)
@@ -80,6 +83,7 @@ public class SettingsPanel : BasePanel
                 Screen.SetResolution(1600, 900, settingsProfile.settingsProfile.FullScreen);
                 break;
         }
+        settingsProfile.settingsProfile.Resolution = index;
     }
 
     private void SetMasterVolume(float value)
@@ -115,19 +119,19 @@ public class SettingsPanel : BasePanel
     {
         settingsProfile.Load(FilePath);
 
-        var settingDatas = settingsProfile.settingsProfile;
+        var profile = settingsProfile.settingsProfile;
 
-        MasterSlider.value = settingDatas.MasterVolume;
-        MusicSlider.value = settingDatas.MusicVolume;
-        SFXSlider.value = settingDatas.SFXVolume;
-        ResolutionDropDown.value = settingDatas.Resolution;
-        FullScreenToggle.isOn = settingDatas.FullScreen;
+        MasterSlider.value = profile.MasterVolume;
+        MusicSlider.value = profile.MusicVolume;
+        SFXSlider.value = profile.SFXVolume;
+        ResolutionDropDown.value = profile.Resolution;
+        FullScreenToggle.isOn = profile.FullScreen;
 
-        SetMasterVolume(settingDatas.MasterVolume);
-        SetMusicVolume(settingDatas.MusicVolume);
-        SetSFXVolume(settingDatas.SFXVolume);
-        SetResolution(settingDatas.Resolution);
-        SetDisplay(settingDatas.FullScreen);
+        SetMasterVolume(profile.MasterVolume);
+        SetMusicVolume(profile.MusicVolume);
+        SetSFXVolume(profile.SFXVolume);
+        SetResolution(profile.Resolution);
+        SetDisplay(profile.FullScreen);
     }
 
     /// <summary>

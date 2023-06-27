@@ -73,13 +73,13 @@ public abstract class BaseEnemy : MonoBehaviour
     protected virtual void OnEnable()
     {
         EventManager.Instance.AddListener(EventID.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.StartGame, OnRetry);
     }
 
     protected virtual void OnDisable()
     {
         EventManager.Instance.RemoveListener(EventID.PlayerDeath, OnPlayerDeath);
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnRetry);
     }
 
     protected virtual void Update()

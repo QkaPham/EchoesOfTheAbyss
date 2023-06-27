@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     protected string dashSFX = "Dash";
     [SerializeField] protected string hurtSFX = "Hurt";
 
-    private Action<Notify> OnRetry;
+    private Action<Notify> OnStartGame;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         stateMachine.AddTransition(run, idle, () => !InputManager.Instance.Run || !InputManager.Instance.Move);
         stateMachine.AddTransition(run, walk, () => stamina.CurrentStamina == 0f);
 
-        OnRetry = thisNotify => Init();
+        OnStartGame = thisNotify => Init();
     }
 
     private void Start()
@@ -67,14 +67,14 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.Instance.AddListener(EventID.Retry, OnRetry);
+        EventManager.Instance.AddListener(EventID.StartGame, OnStartGame);
         EventManager.Instance.AddListener(EventID.LevelChange, inventory.OnLevelChange);
         EventManager.Instance.AddListener(EventID.EquipmentChange, stats.OnEquipmentChange);
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.RemoveListener(EventID.Retry, OnRetry);
+        EventManager.Instance.RemoveListener(EventID.StartGame, OnStartGame);
         EventManager.Instance.RemoveListener(EventID.LevelChange, inventory.OnLevelChange);
         EventManager.Instance.RemoveListener(EventID.EquipmentChange, stats.OnEquipmentChange);
     }
