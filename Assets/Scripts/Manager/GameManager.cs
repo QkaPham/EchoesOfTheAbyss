@@ -25,7 +25,6 @@ public class GameManager : Singleton<GameManager>
         });
     }
 
-
     public void StartGame()
     {
         AudioManager.Instance.FadeMusicVolume(0, 2);

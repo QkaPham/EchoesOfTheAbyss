@@ -2,10 +2,12 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using TMPro;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public enum AnimationType
 {
@@ -36,15 +38,19 @@ public class UIAnimate : MonoBehaviour
     [Range(0f, 1f)]
     public float slideDistance = 1;
 
-    protected Vector3 originalPosition;
-    protected Vector3 deactivePosition;
+
+    protected Vector3 startPosition;
+    protected float startSolution;
+
+    protected Vector3 activePosition => startPosition * Screen.width / startSolution;
+    protected Vector3 deactivePosition => CalculateDeactivePosition(direction);
     protected bool isActive;
 
     protected virtual void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        originalPosition = rectTransform.position;
-        deactivePosition = CalculateDeactivePosition(direction);
+        startPosition = transform.position;
+        startSolution = Screen.width;
         canvasGroup = GetComponent<CanvasGroup>();
         Deactivate(0f);
     }
@@ -136,7 +142,7 @@ public class UIAnimate : MonoBehaviour
     protected virtual void SlideIn(float duration, float delay = 0f, Action onComplete = null)
     {
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.Append(rectTransform.DOMove(activePosition, duration).SetDelay(delay));
         sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
@@ -184,7 +190,7 @@ public class UIAnimate : MonoBehaviour
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(canvasGroup.DOFade(1f, duration).SetEase(Ease.OutExpo).SetDelay(delay));
-        sequence.Join(rectTransform.DOMove(originalPosition, duration).SetDelay(delay));
+        sequence.Join(rectTransform.DOMove(activePosition, duration).SetDelay(delay));
         sequence.SetUpdate(true);
         sequence.OnComplete(() => onComplete());
     }
@@ -202,17 +208,17 @@ public class UIAnimate : MonoBehaviour
         switch (direction)
         {
             case AnimationDirection.None:
-                return originalPosition;
+                return activePosition;
             case AnimationDirection.Up:
-                return originalPosition + Screen.height * Vector3.down * slideDistance;
+                return activePosition + Screen.height * Vector3.down * slideDistance;
             case AnimationDirection.Down:
-                return originalPosition + Screen.height * Vector3.up * slideDistance;
+                return activePosition + Screen.height * Vector3.up * slideDistance;
             case AnimationDirection.Left:
-                return originalPosition + Screen.width * Vector3.right * slideDistance;
+                return activePosition + Screen.width * Vector3.right * slideDistance;
             case AnimationDirection.Right:
-                return originalPosition + Screen.width * Vector3.left * slideDistance;
+                return activePosition + Screen.width * Vector3.left * slideDistance;
             default:
-                return originalPosition;
+                return activePosition;
         }
     }
 }

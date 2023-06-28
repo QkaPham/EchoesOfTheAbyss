@@ -64,7 +64,6 @@ public class SettingsPanel : BasePanel
 
     private void SetDisplay(bool toggle)
     {
-        Debug.Log("Set display "+ toggle);
         Screen.fullScreen = toggle;
         settingsProfile.settingsProfile.FullScreen = toggle;
     }
@@ -74,13 +73,13 @@ public class SettingsPanel : BasePanel
         switch (index)
         {
             case 0:
-                Screen.SetResolution(1920, 1080, settingsProfile.settingsProfile.FullScreen);
+                Screen.SetResolution(1920, 1080, FullScreenToggle.isOn);
                 break;
             case 1:
-                Screen.SetResolution(1760, 990, settingsProfile.settingsProfile.FullScreen);
+                Screen.SetResolution(1760, 990, FullScreenToggle.isOn);
                 break;
             case 2:
-                Screen.SetResolution(1600, 900, settingsProfile.settingsProfile.FullScreen);
+                Screen.SetResolution(1600, 900, FullScreenToggle.isOn);
                 break;
         }
         settingsProfile.settingsProfile.Resolution = index;
